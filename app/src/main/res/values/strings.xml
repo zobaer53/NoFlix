@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Tmdb Movies</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+</resources>
