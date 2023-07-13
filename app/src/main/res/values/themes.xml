@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.TmdbMovies" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+    <style name="Theme.zedMovies" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/primaryLight</item>
+        <item name="android:navigationBarColor">@color/primaryLight</item>
+        <item name="android:windowLightStatusBar" >true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:dialogTheme">@style/Theme.zedMovies.Dialog</item>
     </style>
+
+    <style name="Theme.zedMovies.Splash">
+        <item name="android:windowSplashScreenBackground">@color/primaryDark</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/zed_movies</item>
+    </style>
+
+    <style name="Theme.zedMovies.Dialog" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 </resources>

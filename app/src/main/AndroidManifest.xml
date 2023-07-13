@@ -1,40 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".TmdbMoviesApp"
+        android:name=".zedMoviesApplication"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/zed_movies_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/zed_movies_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TmdbMovies"
-        tools:targetApi="31">
+        android:theme="@style/Theme.zedMovies.Splash">
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
+
         <activity
-            android:name=".ui.webview.WebViewActivity"
+            android:name=".core.ui.webview.WebViewActivity"
             android:exported="false"
-            android:label="@string/title_activity_web_view"
-            android:theme="@style/Theme.TmdbMovies" />
+            android:theme="@style/Theme.zedMovies" />
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.TmdbMovies">
+            android:name=".zedMoviesActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
     </application>
-
 </manifest>
