@@ -2,9 +2,9 @@
 
 package com.zobaer53.zedmovies.data.database.source
 
-import com.zobaer53.zedmovies.core.database.dao.movie.MovieDetailsDao
-import com.zobaer53.zedmovies.core.database.model.movie.MovieDetailsEntity
-import com.zobaer53.zedmovies.core.database.util.zedMoviesDatabaseTransactionProvider
+import com.zobaer53.zedmovies.data.database.dao.movie.MovieDetailsDao
+import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
+import com.zobaer53.zedmovies.data.database.util.zedMoviesDatabaseTransactionProvider
 import javax.inject.Inject
 
 class MovieDetailsDatabaseDataSource @Inject constructor(

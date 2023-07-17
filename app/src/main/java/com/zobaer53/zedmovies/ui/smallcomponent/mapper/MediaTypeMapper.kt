@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.ui.smallcomponent.mapper
 
-import com.zobaer53.zedmovies.core.domain.model.MediaTypeModel
+import com.zobaer53.zedmovies.domain.model.MediaTypeModel
 import com.zobaer53.zedmovies.data.model.MediaType
 
 fun MediaType.Movie.asMediaTypeModel() = MediaTypeModel.Movie[mediaType]

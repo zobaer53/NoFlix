@@ -4,10 +4,10 @@ package com.zobaer53.zedmovies.data.network.source
 import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
 import com.zobaer53.zedmovies.data.common.result.isFailure
 import com.zobaer53.zedmovies.data.common.result.isSuccess
-import com.zobaer53.zedmovies.core.network.api.service.MovieService
-import com.zobaer53.zedmovies.core.network.model.movie.NetworkMovieDetails
-import com.zobaer53.zedmovies.core.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
-import com.zobaer53.zedmovies.core.network.util.MESSAGE_UNHANDLED_STATE
+import com.zobaer53.zedmovies.data.network.api.service.MovieService
+import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
+import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
+import com.zobaer53.zedmovies.data.network.util.MESSAGE_UNHANDLED_STATE
 import javax.inject.Inject
 
 class MovieDetailsNetworkDataSource @Inject constructor(private val movieService: MovieService) {

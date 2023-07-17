@@ -6,9 +6,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.model.wishlist.WishlistEntity
-import com.zobaer53.zedmovies.core.database.util.Constants.Tables.WISHLIST
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
+import com.zobaer53.zedmovies.data.database.util.Constants.Tables.WISHLIST
 import kotlinx.coroutines.flow.Flow
 
 @Dao

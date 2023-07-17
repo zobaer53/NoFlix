@@ -2,8 +2,8 @@
 
 package com.zobaer53.zedmovies.ui.smallcomponent.mapper
 
-import com.zobaer53.zedmovies.core.domain.model.MovieDetailsModel
-import com.zobaer53.zedmovies.core.domain.model.MovieModel
+import com.zobaer53.zedmovies.domain.model.MovieDetailsModel
+import com.zobaer53.zedmovies.domain.model.MovieModel
 import com.zobaer53.zedmovies.data.model.Movie
 import com.zobaer53.zedmovies.data.model.MovieDetails
 import com.zobaer53.zedmovies.data.model.ReleaseDate

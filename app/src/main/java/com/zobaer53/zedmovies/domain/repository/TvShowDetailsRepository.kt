@@ -2,7 +2,7 @@
 package com.zobaer53.zedmovies.domain.repository
 
 import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
-import com.zobaer53.zedmovies.core.domain.model.TvShowDetailsModel
+import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
 import kotlinx.coroutines.flow.Flow
 
 interface TvShowDetailsRepository {

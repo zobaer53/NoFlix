@@ -7,13 +7,13 @@ import androidx.paging.PagingState
 import com.zobaer53.zedmovies.data.common.result.HttpException
 import com.zobaer53.zedmovies.data.common.result.isFailure
 import com.zobaer53.zedmovies.data.common.result.isSuccess
-import com.zobaer53.zedmovies.core.data.mapper.asMovieModel
-import com.zobaer53.zedmovies.core.data.util.Constants
+import com.zobaer53.zedmovies.data.mapper.asMovieModel
+import com.zobaer53.zedmovies.data.util.Constants
 import com.zobaer53.zedmovies.data.datastore.PreferencesDataStoreDataSource
-import com.zobaer53.zedmovies.core.domain.model.MovieModel
-import com.zobaer53.zedmovies.core.network.model.movie.NetworkMovie
-import com.zobaer53.zedmovies.core.network.source.MovieNetworkDataSource
-import com.zobaer53.zedmovies.core.network.util.DEFAULT_PAGE
+import com.zobaer53.zedmovies.domain.model.MovieModel
+import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovie
+import com.zobaer53.zedmovies.data.network.source.MovieNetworkDataSource
+import com.zobaer53.zedmovies.data.network.util.DEFAULT_PAGE
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 

@@ -6,8 +6,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.zobaer53.zedmovies.core.database.model.movie.MovieDetailsEntity
-import com.zobaer53.zedmovies.core.database.util.Constants.Tables.MOVIE_DETAILS
+import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
+import com.zobaer53.zedmovies.data.database.util.Constants.Tables.MOVIE_DETAILS
 import kotlinx.coroutines.flow.Flow
 
 @Dao

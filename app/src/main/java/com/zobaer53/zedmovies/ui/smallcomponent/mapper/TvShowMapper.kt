@@ -2,8 +2,8 @@
 
 package com.zobaer53.zedmovies.ui.smallcomponent.mapper
 
-import com.zobaer53.zedmovies.core.domain.model.TvShowDetailsModel
-import com.zobaer53.zedmovies.core.domain.model.TvShowModel
+import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
+import com.zobaer53.zedmovies.domain.model.TvShowModel
 import com.zobaer53.zedmovies.data.model.ReleaseDate
 import com.zobaer53.zedmovies.data.model.TvShow
 import com.zobaer53.zedmovies.data.model.TvShowDetails

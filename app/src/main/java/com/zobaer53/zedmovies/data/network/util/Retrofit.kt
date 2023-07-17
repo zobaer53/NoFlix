@@ -3,9 +3,9 @@
 package com.zobaer53.zedmovies.data.network.util
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.zobaer53.zedmovies.core.network.api.zedMoviesApiKeyProvider
-import com.zobaer53.zedmovies.core.network.api.zedMoviesAuthInterceptor
-import com.zobaer53.zedmovies.core.network.retrofit.ResultAdapterFactory
+import com.zobaer53.zedmovies.data.network.api.zedMoviesApiKeyProvider
+import com.zobaer53.zedmovies.data.network.api.zedMoviesAuthInterceptor
+import com.zobaer53.zedmovies.data.network.retrofit.ResultAdapterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

@@ -1,8 +1,8 @@
 package com.zobaer53.zedmovies.data.database.source
 
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowDetailsDao
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowDetailsEntity
-import com.zobaer53.zedmovies.core.database.util.zedMoviesDatabaseTransactionProvider
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDetailsDao
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowDetailsEntity
+import com.zobaer53.zedmovies.data.database.util.zedMoviesDatabaseTransactionProvider
 import javax.inject.Inject
 
 class TvShowDetailsDatabaseDataSource @Inject constructor(

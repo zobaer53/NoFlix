@@ -1,9 +1,9 @@
 
 package com.zobaer53.zedmovies.data.network.api
 
-import com.zobaer53.zedmovies.core.network.api.service.MovieService
-import com.zobaer53.zedmovies.core.network.api.service.TvShowService
-import com.zobaer53.zedmovies.core.network.util.retrofit
+import com.zobaer53.zedmovies.data.network.api.service.MovieService
+import com.zobaer53.zedmovies.data.network.api.service.TvShowService
+import com.zobaer53.zedmovies.data.network.util.retrofit
 import retrofit2.create
 import javax.inject.Inject
 

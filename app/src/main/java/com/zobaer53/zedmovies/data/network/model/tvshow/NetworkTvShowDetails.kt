@@ -2,13 +2,13 @@
 
 package com.zobaer53.zedmovies.data.network.model.tvshow
 
-import com.zobaer53.zedmovies.core.network.model.common.NetworkCredits
-import com.zobaer53.zedmovies.core.network.model.common.NetworkGenre
-import com.zobaer53.zedmovies.core.network.model.common.NetworkProductionCompany
-import com.zobaer53.zedmovies.core.network.model.common.NetworkProductionCountry
-import com.zobaer53.zedmovies.core.network.model.common.NetworkSpokenLanguage
-import com.zobaer53.zedmovies.core.network.serializer.LocalDateSerializer
-import com.zobaer53.zedmovies.core.network.util.Constants
+import com.zobaer53.zedmovies.data.network.model.common.NetworkCredits
+import com.zobaer53.zedmovies.data.network.model.common.NetworkGenre
+import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCompany
+import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCountry
+import com.zobaer53.zedmovies.data.network.model.common.NetworkSpokenLanguage
+import com.zobaer53.zedmovies.data.network.serializer.LocalDateSerializer
+import com.zobaer53.zedmovies.data.network.util.Constants
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

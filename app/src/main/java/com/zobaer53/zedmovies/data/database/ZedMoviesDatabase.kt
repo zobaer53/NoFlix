@@ -4,23 +4,23 @@ package com.zobaer53.zedmovies.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.zobaer53.zedmovies.core.database.converter.CreditsConverter
-import com.zobaer53.zedmovies.core.database.converter.ListConverter
-import com.zobaer53.zedmovies.core.database.converter.LocalDateConverter
-import com.zobaer53.zedmovies.core.database.dao.movie.MovieDao
-import com.zobaer53.zedmovies.core.database.dao.movie.MovieDetailsDao
-import com.zobaer53.zedmovies.core.database.dao.movie.MovieRemoteKeyDao
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowDao
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowDetailsDao
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowRemoteKeyDao
-import com.zobaer53.zedmovies.core.database.dao.wishlist.WishlistDao
-import com.zobaer53.zedmovies.core.database.model.movie.MovieDetailsEntity
-import com.zobaer53.zedmovies.core.database.model.movie.MovieEntity
-import com.zobaer53.zedmovies.core.database.model.movie.MovieRemoteKeyEntity
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowDetailsEntity
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowEntity
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowRemoteKeyEntity
-import com.zobaer53.zedmovies.core.database.model.wishlist.WishlistEntity
+import com.zobaer53.zedmovies.data.database.converter.CreditsConverter
+import com.zobaer53.zedmovies.data.database.converter.ListConverter
+import com.zobaer53.zedmovies.data.database.converter.LocalDateConverter
+import com.zobaer53.zedmovies.data.database.dao.movie.MovieDao
+import com.zobaer53.zedmovies.data.database.dao.movie.MovieDetailsDao
+import com.zobaer53.zedmovies.data.database.dao.movie.MovieRemoteKeyDao
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDao
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDetailsDao
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowRemoteKeyDao
+import com.zobaer53.zedmovies.data.database.dao.wishlist.WishlistDao
+import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
+import com.zobaer53.zedmovies.data.database.model.movie.MovieEntity
+import com.zobaer53.zedmovies.data.database.model.movie.MovieRemoteKeyEntity
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowDetailsEntity
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowEntity
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowRemoteKeyEntity
+import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
 
 @Database(
     entities = [

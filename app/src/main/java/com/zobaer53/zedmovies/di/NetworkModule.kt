@@ -1,7 +1,7 @@
 package com.zobaer53.zedmovies.di
 
-import com.zobaer53.zedmovies.core.network.api.zedMoviesApi
-import com.zobaer53.zedmovies.core.network.api.zedMoviesApiKeyProvider
+import com.zobaer53.zedmovies.data.network.api.zedMoviesApi
+import com.zobaer53.zedmovies.data.network.api.zedMoviesApiKeyProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

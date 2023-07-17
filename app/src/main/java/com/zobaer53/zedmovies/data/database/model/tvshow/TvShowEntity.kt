@@ -4,9 +4,9 @@ package com.zobaer53.zedmovies.data.database.model.tvshow
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.zobaer53.zedmovies.core.database.model.common.Genre
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.util.Constants
+import com.zobaer53.zedmovies.data.database.model.common.Genre
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.util.Constants
 import kotlinx.datetime.LocalDate
 
 @Entity(tableName = Constants.Tables.TV_SHOWS)

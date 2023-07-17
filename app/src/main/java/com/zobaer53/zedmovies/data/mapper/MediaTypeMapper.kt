@@ -1,9 +1,9 @@
 
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.domain.model.MediaTypeModel
-import com.zobaer53.zedmovies.core.network.model.common.NetworkMediaType
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.domain.model.MediaTypeModel
+import com.zobaer53.zedmovies.data.network.model.common.NetworkMediaType
 
 internal fun MediaTypeModel.Movie.asMediaType() = MediaType.Movie[mediaType]
 internal fun MediaTypeModel.TvShow.asMediaType() = MediaType.TvShow[mediaType]

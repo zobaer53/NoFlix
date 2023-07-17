@@ -3,17 +3,17 @@
 package com.zobaer53.zedmovies.data.repository
 
 import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
-import com.zobaer53.zedmovies.core.data.mapper.asTvShowDetailsEntity
-import com.zobaer53.zedmovies.core.data.mapper.asTvShowDetailsModel
-import com.zobaer53.zedmovies.core.data.mapper.listMap
-import com.zobaer53.zedmovies.core.database.source.TvShowDetailsDatabaseDataSource
-import com.zobaer53.zedmovies.core.database.source.WishlistDatabaseDataSource
+import com.zobaer53.zedmovies.data.mapper.asTvShowDetailsEntity
+import com.zobaer53.zedmovies.data.mapper.asTvShowDetailsModel
+import com.zobaer53.zedmovies.data.mapper.listMap
+import com.zobaer53.zedmovies.data.database.source.TvShowDetailsDatabaseDataSource
+import com.zobaer53.zedmovies.data.database.source.WishlistDatabaseDataSource
 import com.zobaer53.zedmovies.data.datastore.PreferencesDataStoreDataSource
-import com.zobaer53.zedmovies.core.domain.model.TvShowDetailsModel
-import com.zobaer53.zedmovies.core.domain.repository.TvShowDetailsRepository
-import com.zobaer53.zedmovies.core.network.common.networkBoundResource
-import com.zobaer53.zedmovies.core.network.model.tvshow.NetworkTvShowDetails
-import com.zobaer53.zedmovies.core.network.source.TvShowDetailsNetworkDataSource
+import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
+import com.zobaer53.zedmovies.domain.repository.TvShowDetailsRepository
+import com.zobaer53.zedmovies.data.network.common.networkBoundResource
+import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
+import com.zobaer53.zedmovies.data.network.source.TvShowDetailsNetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

@@ -4,8 +4,8 @@ package com.zobaer53.zedmovies.di
 
 import android.content.Context
 import androidx.room.Room
-import com.zobaer53.zedmovies.core.database.zedMoviesDatabase
-import com.zobaer53.zedmovies.core.database.util.zedMoviesVersionProvider
+import com.zobaer53.zedmovies.data.database.zedMoviesDatabase
+import com.zobaer53.zedmovies.data.database.util.zedMoviesVersionProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

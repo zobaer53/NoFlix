@@ -1,7 +1,7 @@
 
 package com.zobaer53.zedmovies.data.network.model.response
 
-import com.zobaer53.zedmovies.core.network.util.Constants
+import com.zobaer53.zedmovies.data.network.util.Constants
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -2,12 +2,12 @@
 
 package com.zobaer53.zedmovies.data.repository
 
-import com.zobaer53.zedmovies.core.data.mapper.asWishlistModel
-import com.zobaer53.zedmovies.core.data.mapper.listMap
-import com.zobaer53.zedmovies.core.database.model.wishlist.WishlistEntity
-import com.zobaer53.zedmovies.core.database.source.WishlistDatabaseDataSource
-import com.zobaer53.zedmovies.core.domain.model.WishlistModel
-import com.zobaer53.zedmovies.core.domain.repository.WishlistRepository
+import com.zobaer53.zedmovies.data.mapper.asWishlistModel
+import com.zobaer53.zedmovies.data.mapper.listMap
+import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
+import com.zobaer53.zedmovies.data.database.source.WishlistDatabaseDataSource
+import com.zobaer53.zedmovies.domain.model.WishlistModel
+import com.zobaer53.zedmovies.domain.repository.WishlistRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

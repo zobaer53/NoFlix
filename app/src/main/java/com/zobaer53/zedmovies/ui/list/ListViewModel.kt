@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.zobaer53.zedmovies.core.domain.model.MovieModel
-import com.zobaer53.zedmovies.core.domain.model.TvShowModel
-import com.zobaer53.zedmovies.core.domain.usecase.GetMoviesPagingUseCase
-import com.zobaer53.zedmovies.core.domain.usecase.GetTvShowsPagingUseCase
+import com.zobaer53.zedmovies.domain.model.MovieModel
+import com.zobaer53.zedmovies.domain.model.TvShowModel
+import com.zobaer53.zedmovies.domain.usecase.GetMoviesPagingUseCase
+import com.zobaer53.zedmovies.domain.usecase.GetTvShowsPagingUseCase
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMediaTypeModel
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMovie
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMovieMediaType

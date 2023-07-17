@@ -2,10 +2,9 @@
 
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.database.model.common.Genre
-import com.zobaer53.zedmovies.domain.model.GenreModel
-import com.zobaer53.zedmovies.core.network.model.common.NetworkGenre
-import com.zobaer53.zedmovies.core.network.model.common.NetworkGenreWithId
+import com.zobaer53.zedmovies.data.database.model.common.Genre
+import com.zobaer53.zedmovies.data.network.model.common.NetworkGenre
+import com.zobaer53.zedmovies.data.network.model.common.NetworkGenreWithId
 
 internal fun NetworkGenre.asGenre() = id.asGenre()
 internal fun List<NetworkGenre>.asGenres() = map(NetworkGenre::asGenre)

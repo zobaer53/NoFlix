@@ -1,10 +1,10 @@
 
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.network.model.tvshow.NetworkTvShow
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowEntity
-import com.zobaer53.zedmovies.core.domain.model.TvShowModel
+import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShow
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowEntity
+import com.zobaer53.zedmovies.domain.model.TvShowModel
 
 internal fun NetworkTvShow.asTvShowEntity(mediaType: MediaType.TvShow) = TvShowEntity(
     mediaType = mediaType,

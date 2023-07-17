@@ -4,7 +4,7 @@ package com.zobaer53.zedmovies.data.util
 
 import androidx.paging.PagingConfig
 import androidx.paging.PagingState
-import com.zobaer53.zedmovies.core.network.util.PAGE_SIZE
+import com.zobaer53.zedmovies.data.network.util.PAGE_SIZE
 
 internal object PagingUtils {
     internal suspend fun <T : Any, R> getRemoteKeyClosestToCurrentPosition(

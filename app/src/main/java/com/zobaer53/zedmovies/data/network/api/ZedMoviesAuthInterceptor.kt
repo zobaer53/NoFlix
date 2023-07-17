@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.data.network.api
 
-import com.zobaer53.zedmovies.core.network.util.Constants
+import com.zobaer53.zedmovies.data.network.util.Constants
 import okhttp3.Interceptor
 import okhttp3.Response
 

@@ -1,8 +1,8 @@
 
 package com.zobaer53.zedmovies.data.network.model.movie
 
-import com.zobaer53.zedmovies.core.network.serializer.LocalDateSerializer
-import com.zobaer53.zedmovies.core.network.util.Constants
+import com.zobaer53.zedmovies.data.network.serializer.LocalDateSerializer
+import com.zobaer53.zedmovies.data.network.util.Constants
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

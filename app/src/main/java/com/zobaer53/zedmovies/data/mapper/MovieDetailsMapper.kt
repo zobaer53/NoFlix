@@ -2,9 +2,9 @@
 
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.network.model.movie.NetworkMovieDetails
-import com.zobaer53.zedmovies.core.database.model.movie.MovieDetailsEntity
-import com.zobaer53.zedmovies.core.domain.model.MovieDetailsModel
+import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
+import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
+import com.zobaer53.zedmovies.domain.model.MovieDetailsModel
 
 fun NetworkMovieDetails.asMovieDetailsEntity() = MovieDetailsEntity(
     id = id,

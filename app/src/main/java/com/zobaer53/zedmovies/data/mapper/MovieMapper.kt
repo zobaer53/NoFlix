@@ -2,10 +2,10 @@
 
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.network.model.movie.NetworkMovie
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.model.movie.MovieEntity
-import com.zobaer53.zedmovies.core.domain.model.MovieModel
+import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovie
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.model.movie.MovieEntity
+import com.zobaer53.zedmovies.domain.model.MovieModel
 
 internal fun NetworkMovie.asMovieEntity(mediaType: MediaType.Movie) = MovieEntity(
     mediaType = mediaType,

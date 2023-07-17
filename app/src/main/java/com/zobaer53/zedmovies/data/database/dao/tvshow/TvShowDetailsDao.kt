@@ -5,8 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowDetailsEntity
-import com.zobaer53.zedmovies.core.database.util.Constants.Tables.TV_SHOW_DETAILS
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowDetailsEntity
+import com.zobaer53.zedmovies.data.database.util.Constants.Tables.TV_SHOW_DETAILS
 import kotlinx.coroutines.flow.Flow
 
 @Dao

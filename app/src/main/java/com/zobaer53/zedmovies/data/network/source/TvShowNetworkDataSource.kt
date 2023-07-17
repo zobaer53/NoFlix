@@ -1,10 +1,10 @@
 package com.zobaer53.zedmovies.data.network.source
 
 import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
-import com.zobaer53.zedmovies.core.network.api.service.TvShowService
-import com.zobaer53.zedmovies.core.network.model.common.NetworkMediaType
-import com.zobaer53.zedmovies.core.network.model.response.TvShowResponseDto
-import com.zobaer53.zedmovies.core.network.util.Constants.DEFAULT_PAGE
+import com.zobaer53.zedmovies.data.network.api.service.TvShowService
+import com.zobaer53.zedmovies.data.network.model.common.NetworkMediaType
+import com.zobaer53.zedmovies.data.network.model.response.TvShowResponseDto
+import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
 import javax.inject.Inject
 
 class TvShowNetworkDataSource @Inject constructor(private val tvShowService: TvShowService) {

@@ -3,12 +3,12 @@
 package com.zobaer53.zedmovies.data.database.source
 
 import androidx.paging.PagingSource
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowDao
-import com.zobaer53.zedmovies.core.database.dao.tvshow.TvShowRemoteKeyDao
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowEntity
-import com.zobaer53.zedmovies.core.database.model.tvshow.TvShowRemoteKeyEntity
-import com.zobaer53.zedmovies.core.database.util.zedMoviesDatabaseTransactionProvider
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDao
+import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowRemoteKeyDao
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowEntity
+import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowRemoteKeyEntity
+import com.zobaer53.zedmovies.data.database.util.zedMoviesDatabaseTransactionProvider
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

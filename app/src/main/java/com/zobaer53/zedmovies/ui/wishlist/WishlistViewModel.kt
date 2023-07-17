@@ -5,10 +5,10 @@ package com.zobaer53.zedmovies.ui.wishlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zobaer53.zedmovies.data.common.result.handle
-import com.zobaer53.zedmovies.core.domain.model.MovieDetailsModel
-import com.zobaer53.zedmovies.core.domain.model.TvShowDetailsModel
-import com.zobaer53.zedmovies.core.domain.usecase.GetWishlistMoviesUseCase
-import com.zobaer53.zedmovies.core.domain.usecase.GetWishlistTvShowsUseCase
+import com.zobaer53.zedmovies.domain.model.MovieDetailsModel
+import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
+import com.zobaer53.zedmovies.domain.usecase.GetWishlistMoviesUseCase
+import com.zobaer53.zedmovies.domain.usecase.GetWishlistTvShowsUseCase
 import com.zobaer53.zedmovies.ui.smallcomponent.common.EventHandler
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMovieDetails
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asTvShowDetails

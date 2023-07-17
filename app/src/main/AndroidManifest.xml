@@ -17,7 +17,7 @@
             tools:targetApi="29" />
 
         <activity
-            android:name=".core.ui.webview.WebViewActivity"
+            android:name=".ui.webview.WebViewActivity"
             android:exported="false"
             android:theme="@style/Theme.zedMovies" />
         <activity

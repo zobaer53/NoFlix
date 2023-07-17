@@ -2,16 +2,16 @@
 
 package com.zobaer53.zedmovies.di
 
-import com.zobaer53.zedmovies.core.data.repository.MovieDetailsRepositoryImpl
-import com.zobaer53.zedmovies.core.data.repository.MovieRepositoryImpl
-import com.zobaer53.zedmovies.core.data.repository.TvShowDetailsRepositoryImpl
-import com.zobaer53.zedmovies.core.data.repository.TvShowRepositoryImpl
-import com.zobaer53.zedmovies.core.data.repository.WishlistRepositoryImpl
-import com.zobaer53.zedmovies.core.domain.repository.MovieDetailsRepository
-import com.zobaer53.zedmovies.core.domain.repository.MovieRepository
-import com.zobaer53.zedmovies.core.domain.repository.TvShowDetailsRepository
-import com.zobaer53.zedmovies.core.domain.repository.TvShowRepository
-import com.zobaer53.zedmovies.core.domain.repository.WishlistRepository
+import com.zobaer53.zedmovies.data.repository.MovieDetailsRepositoryImpl
+import com.zobaer53.zedmovies.data.repository.MovieRepositoryImpl
+import com.zobaer53.zedmovies.data.repository.TvShowDetailsRepositoryImpl
+import com.zobaer53.zedmovies.data.repository.TvShowRepositoryImpl
+import com.zobaer53.zedmovies.data.repository.WishlistRepositoryImpl
+import com.zobaer53.zedmovies.domain.repository.MovieDetailsRepository
+import com.zobaer53.zedmovies.domain.repository.MovieRepository
+import com.zobaer53.zedmovies.domain.repository.TvShowDetailsRepository
+import com.zobaer53.zedmovies.domain.repository.TvShowRepository
+import com.zobaer53.zedmovies.domain.repository.WishlistRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

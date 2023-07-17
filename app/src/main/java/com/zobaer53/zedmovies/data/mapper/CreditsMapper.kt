@@ -1,14 +1,11 @@
 package com.zobaer53.zedmovies.data.mapper
 
-import com.zobaer53.zedmovies.core.database.model.common.Cast
-import com.zobaer53.zedmovies.core.database.model.common.Credits
-import com.zobaer53.zedmovies.core.database.model.common.Crew
-import com.zobaer53.zedmovies.domain.model.CastModel
-import com.zobaer53.zedmovies.domain.model.CreditsModel
-import com.zobaer53.zedmovies.domain.model.CrewModel
-import com.zobaer53.zedmovies.core.network.model.common.NetworkCast
-import com.zobaer53.zedmovies.core.network.model.common.NetworkCredits
-import com.zobaer53.zedmovies.core.network.model.common.NetworkCrew
+import com.zobaer53.zedmovies.data.database.model.common.Cast
+import com.zobaer53.zedmovies.data.database.model.common.Credits
+import com.zobaer53.zedmovies.data.database.model.common.Crew
+import com.zobaer53.zedmovies.data.network.model.common.NetworkCast
+import com.zobaer53.zedmovies.data.network.model.common.NetworkCredits
+import com.zobaer53.zedmovies.data.network.model.common.NetworkCrew
 
 fun NetworkCredits.asCredits() = Credits(
     cast = cast.map(NetworkCast::asCast),

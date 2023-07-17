@@ -6,10 +6,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zobaer53.zedmovies.data.common.result.handle
-import com.zobaer53.zedmovies.core.domain.model.MovieModel
-import com.zobaer53.zedmovies.core.domain.model.TvShowModel
-import com.zobaer53.zedmovies.core.domain.usecase.GetMoviesUseCase
-import com.zobaer53.zedmovies.core.domain.usecase.GetTvShowsUseCase
+import com.zobaer53.zedmovies.domain.model.MovieModel
+import com.zobaer53.zedmovies.domain.model.TvShowModel
+import com.zobaer53.zedmovies.domain.usecase.GetMoviesUseCase
+import com.zobaer53.zedmovies.domain.usecase.GetTvShowsUseCase
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.Movie
 import com.zobaer53.zedmovies.data.model.TvShow

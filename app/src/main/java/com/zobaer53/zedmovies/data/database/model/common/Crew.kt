@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.data.database.model.common
 
-import com.zobaer53.zedmovies.core.database.util.Constants
+import com.zobaer53.zedmovies.data.database.util.Constants
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

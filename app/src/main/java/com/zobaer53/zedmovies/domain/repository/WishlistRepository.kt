@@ -1,7 +1,7 @@
 
 package com.zobaer53.zedmovies.domain.repository
 
-import com.zobaer53.zedmovies.core.domain.model.WishlistModel
+import com.zobaer53.zedmovies.domain.model.WishlistModel
 import kotlinx.coroutines.flow.Flow
 
 interface WishlistRepository {

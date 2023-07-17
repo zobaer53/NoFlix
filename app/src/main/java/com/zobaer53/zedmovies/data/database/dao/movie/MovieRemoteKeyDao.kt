@@ -6,9 +6,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.zobaer53.zedmovies.core.database.model.common.MediaType
-import com.zobaer53.zedmovies.core.database.model.movie.MovieRemoteKeyEntity
-import com.zobaer53.zedmovies.core.database.util.Constants.Tables.MOVIES_REMOTE_KEYS
+import com.zobaer53.zedmovies.data.database.model.common.MediaType
+import com.zobaer53.zedmovies.data.database.model.movie.MovieRemoteKeyEntity
+import com.zobaer53.zedmovies.data.database.util.Constants.Tables.MOVIES_REMOTE_KEYS
 
 @Dao
 interface MovieRemoteKeyDao {
