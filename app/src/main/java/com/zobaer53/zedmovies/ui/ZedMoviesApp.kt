@@ -23,9 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.zobaer53.zedmovies.core.designsystem.component.zedMoviesSnackbarHost
-import com.zobaer53.zedmovies.core.designsystem.component.LocalSnackbarHostState
-import com.zobaer53.zedmovies.core.designsystem.theme.zedMoviesTheme
+import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSnackbarHost
+import com.zobaer53.zedmovies.ui.designsystem.component.LocalSnackbarHostState
+import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import com.zobaer53.zedmovies.navigation.zedMoviesNavHost
 import com.zobaer53.zedmovies.ui.component.zedMoviesBottomBar
 

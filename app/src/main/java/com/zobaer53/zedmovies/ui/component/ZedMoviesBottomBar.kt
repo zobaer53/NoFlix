@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.zobaer53.zedmovies.core.designsystem.theme.zedMoviesTheme
+import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import com.zobaer53.zedmovies.navigation.TopLevelDestination
 
 @Composable

@@ -5,14 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.zobaer53.zedmovies.core.navigation.zedMoviesNavigationDestination
-import com.zobaer53.zedmovies.feature.details.navigation.DetailsDestination
-import com.zobaer53.zedmovies.feature.details.navigation.detailsGraph
-import com.zobaer53.zedmovies.feature.home.navigation.homeGraph
-import com.zobaer53.zedmovies.feature.list.navigation.ListDestination
-import com.zobaer53.zedmovies.feature.list.navigation.listGraph
-import com.zobaer53.zedmovies.feature.search.navigation.searchGraph
-import com.zobaer53.zedmovies.feature.wishlist.navigation.wishlistGraph
+import com.zobaer53.zedmovies.ui.details.navigation.DetailsDestination
+import com.zobaer53.zedmovies.ui.details.navigation.detailsGraph
+import com.zobaer53.zedmovies.ui.home.navigation.homeGraph
+import com.zobaer53.zedmovies.ui.list.navigation.ListDestination
+import com.zobaer53.zedmovies.ui.list.navigation.listGraph
+import com.zobaer53.zedmovies.ui.search.navigation.searchGraph
+import com.zobaer53.zedmovies.ui.wishlist.navigation.wishlistGraph
 
 @Composable
 fun zedMoviesNavHost(

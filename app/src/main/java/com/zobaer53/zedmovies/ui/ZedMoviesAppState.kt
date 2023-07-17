@@ -18,7 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.zobaer53.zedmovies.core.navigation.zedMoviesNavigationDestination
+import com.zobaer53.zedmovies.navigation.zedMoviesNavigationDestination
 import com.zobaer53.zedmovies.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
