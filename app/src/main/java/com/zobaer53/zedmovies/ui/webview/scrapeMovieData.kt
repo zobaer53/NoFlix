@@ -5,14 +5,18 @@ import org.jsoup.Jsoup
 
 fun scrapeMovieData(url: String):String? {
     val doc = Jsoup.connect(url).get()
+    if (doc.body().data().isNotEmpty()){
     val link = getLink(doc.html())
-    Log.i("movieLink2","Link URL---------------: $link")
+        Log.i("movieLink2","Link URL---------------: $link")
 
-    // Select the appropriate HTML elements that contain movie data
-    val movieElements = doc.select(".film-poster")
-    Log.i("movieLink2",".film-poster $movieElements")
+        // Select the appropriate HTML elements that contain movie data
+        val movieElements = doc.select(".film-poster")
+        Log.i("movieLink2",".film-poster $movieElements")
+        return link
+    }
 
-    return link
+
+    return null
 }
 fun getLink(html: String): String? {
     val doc = Jsoup.parse(html)

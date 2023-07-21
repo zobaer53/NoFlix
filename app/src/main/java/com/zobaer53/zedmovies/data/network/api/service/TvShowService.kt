@@ -1,6 +1,6 @@
 package com.zobaer53.zedmovies.data.network.api.service
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.model.response.TvShowResponseDto
 import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
@@ -26,43 +26,43 @@ interface TvShowService {
     suspend fun getTopRated(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 
     @GET(POPULAR_TV_SHOW)
     suspend fun getPopular(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 
     @GET(ON_THE_AIR_TV_SHOW)
     suspend fun getOnTheAir(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 
     @GET(DISCOVER_TV_SHOW)
     suspend fun getDiscover(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 
     @GET(TRENDING_TV_SHOW)
     suspend fun getTrending(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 
     @GET(DETAILS_TV_SHOW)
     suspend fun getDetailsById(
         @Path(ID) id: Int,
-        @Query(LANGUAGE) language: String,
-        @Query(APPEND_TO_RESPONSE) appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<NetworkTvShowDetails>
+        @Query(APPEND_TO_RESPONSE) appendToResponse: String = DETAILS_APPEND_TO_RESPONSE,
+        @Query(LANGUAGE) language: String
+    ): ZedMoviesResult<NetworkTvShowDetails>
 
     @GET(SEARCH_TV_SHOW)
     suspend fun search(
         @Query(QUERY) query: String,
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto>
+    ): ZedMoviesResult<TvShowResponseDto>
 }

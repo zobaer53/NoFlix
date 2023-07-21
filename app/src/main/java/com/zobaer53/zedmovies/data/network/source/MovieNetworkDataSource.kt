@@ -1,7 +1,7 @@
 
 package com.zobaer53.zedmovies.data.network.source
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.api.service.MovieService
 import com.zobaer53.zedmovies.data.network.model.common.NetworkMediaType
 import com.zobaer53.zedmovies.data.network.model.response.MovieResponseDto
@@ -13,7 +13,7 @@ class MovieNetworkDataSource @Inject constructor(private val movieService: Movie
         mediaType: NetworkMediaType.Movie,
         language: String,
         page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto> = when (mediaType) {
+    ): ZedMoviesResult<MovieResponseDto> = when (mediaType) {
         NetworkMediaType.Movie.UPCOMING -> movieService.getUpcoming(language, page)
         NetworkMediaType.Movie.TOP_RATED -> movieService.getTopRated(language, page)
         NetworkMediaType.Movie.POPULAR -> movieService.getPopular(language, page)
@@ -26,5 +26,5 @@ class MovieNetworkDataSource @Inject constructor(private val movieService: Movie
         query: String,
         language: String,
         page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto> = movieService.search(query, language, page)
+    ): ZedMoviesResult<MovieResponseDto> = movieService.search(query, language, page)
 }

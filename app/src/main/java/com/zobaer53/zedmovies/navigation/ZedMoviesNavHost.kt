@@ -14,7 +14,7 @@ import com.zobaer53.zedmovies.ui.search.navigation.searchGraph
 import com.zobaer53.zedmovies.ui.wishlist.navigation.wishlistGraph
 
 @Composable
-fun zedMoviesNavHost(
+fun ZedMoviesNavHost(
     navController: NavHostController,
     startDestination: zedMoviesNavigationDestination,
     onNavigateToDestination: (zedMoviesNavigationDestination, String) -> Unit,

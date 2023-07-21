@@ -47,6 +47,10 @@ class TvShowDatabaseDataSource @Inject constructor(
             tvShowRemoteKeyDao.deleteByMediaType(mediaType)
         }
         tvShowRemoteKeyDao.insertAll(remoteKeys)
-        tvShowDao.insertAll(tvShows)
+        try {
+            tvShowDao.insertAll(tvShows)
+        } catch (e: Exception) {
+           // e
+        }
     }
 }

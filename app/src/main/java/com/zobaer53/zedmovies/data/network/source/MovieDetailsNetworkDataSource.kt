@@ -1,7 +1,7 @@
 
 package com.zobaer53.zedmovies.data.network.source
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.common.result.isFailure
 import com.zobaer53.zedmovies.data.common.result.isSuccess
 import com.zobaer53.zedmovies.data.network.api.service.MovieService
@@ -15,24 +15,24 @@ class MovieDetailsNetworkDataSource @Inject constructor(private val movieService
         id: Int,
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<NetworkMovieDetails> =
+    ): ZedMoviesResult<NetworkMovieDetails> =
         movieService.getDetailsById(id, language, appendToResponse)
 
     suspend fun getByIds(
         ids: List<Int>,
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<List<NetworkMovieDetails>> {
+    ): ZedMoviesResult<List<NetworkMovieDetails>> {
         val movies = ids.map { id ->
             val response = movieService.getDetailsById(id, language, appendToResponse)
 
             when {
                 response.isSuccess() -> response.value
-                response.isFailure() -> return zedMoviesResult.failure(response.error)
+                response.isFailure() -> return ZedMoviesResult.failure(response.error)
                 else -> error("$MESSAGE_UNHANDLED_STATE $response")
             }
         }
 
-        return zedMoviesResult.success(movies)
+        return ZedMoviesResult.success(movies)
     }
 }

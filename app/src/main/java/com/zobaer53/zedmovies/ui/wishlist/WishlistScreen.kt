@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesMessage
-import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSwipeRefresh
+import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import com.zobaer53.zedmovies.data.model.MovieDetails
 import com.zobaer53.zedmovies.data.model.TvShowDetails
@@ -108,7 +108,7 @@ private fun MoviesContainer(
         )
     }
 ) {
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier,
         isRefreshing = isLoading,
         onRefresh = onRefresh
@@ -148,7 +148,7 @@ private fun TvShowsContainer(
         )
     }
 ) {
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier,
         isRefreshing = isLoading,
         onRefresh = onRefresh

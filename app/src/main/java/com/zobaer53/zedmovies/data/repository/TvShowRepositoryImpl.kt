@@ -5,7 +5,7 @@ package com.zobaer53.zedmovies.data.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingData
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.mapper.asMediaType
 import com.zobaer53.zedmovies.data.mapper.asNetworkMediaType
 import com.zobaer53.zedmovies.data.mapper.asTvShowEntity
@@ -35,7 +35,7 @@ class TvShowRepositoryImpl @Inject constructor(
 ) : TvShowRepository {
     override fun getByMediaType(
         mediaTypeModel: MediaTypeModel.TvShow
-    ): Flow<zedMoviesResult<List<TvShowModel>>> {
+    ): Flow<ZedMoviesResult<List<TvShowModel>>> {
         val mediaType = mediaTypeModel.asMediaType()
         return networkBoundResource(
             query = {
@@ -53,7 +53,8 @@ class TvShowRepositoryImpl @Inject constructor(
             saveFetchResult = { response ->
                 databaseDataSource.deleteByMediaTypeAndInsertAll(
                     mediaType = mediaType,
-                    tvShows = response.results.map { it.asTvShowEntity(mediaType) }
+                    tvShows = response.results.map {
+                        it.asTvShowEntity(mediaType) }
                 )
             }
         )

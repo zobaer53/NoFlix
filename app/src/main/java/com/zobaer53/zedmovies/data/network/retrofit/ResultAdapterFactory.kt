@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.data.network.retrofit
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
@@ -19,7 +19,7 @@ internal class ResultAdapterFactory : CallAdapter.Factory() {
         val rawReturnType: Class<*> = getRawType(returnType)
         if (rawReturnType == Call::class.java && returnType is ParameterizedType) {
             val callInnerType: Type = getParameterUpperBound(0, returnType)
-            if (getRawType(callInnerType) == zedMoviesResult::class.java) {
+            if (getRawType(callInnerType) == ZedMoviesResult::class.java) {
                 if (callInnerType is ParameterizedType) {
                     val resultInnerType = getParameterUpperBound(0, callInnerType)
                     return ResultCallAdapter<Any?>(resultInnerType)
@@ -33,7 +33,7 @@ internal class ResultAdapterFactory : CallAdapter.Factory() {
 }
 
 private class ResultCallAdapter<T>(private val type: Type) :
-    CallAdapter<T, Call<zedMoviesResult<T>>> {
+    CallAdapter<T, Call<ZedMoviesResult<T>>> {
     override fun responseType(): Type = type
-    override fun adapt(call: Call<T>): Call<zedMoviesResult<T>> = ResultCall(call)
+    override fun adapt(call: Call<T>): Call<ZedMoviesResult<T>> = ResultCall(call)
 }

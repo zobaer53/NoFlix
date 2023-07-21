@@ -9,7 +9,7 @@ interface zedMoviesResultHandler<T> {
     fun onFailure(block: (Throwable) -> Unit)
 }
 
-fun <T> zedMoviesResult<T>.handle(builder: zedMoviesResultHandler<T>.() -> Unit) {
+fun <T> ZedMoviesResult<T>.handle(builder: zedMoviesResultHandler<T>.() -> Unit) {
     val resultHandler = object : zedMoviesResultHandler<T> {
         override fun onLoading(block: (T?) -> Unit) {
             if (isLoading()) block(value)
@@ -27,5 +27,5 @@ fun <T> zedMoviesResult<T>.handle(builder: zedMoviesResultHandler<T>.() -> Unit)
     builder(resultHandler)
 }
 
-suspend fun <T> Flow<zedMoviesResult<T>>.handle(builder: zedMoviesResultHandler<T>.() -> Unit) =
+suspend fun <T> Flow<ZedMoviesResult<T>>.handle(builder: zedMoviesResultHandler<T>.() -> Unit) =
     collect { result -> result.handle(builder = builder) }

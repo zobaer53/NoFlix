@@ -9,7 +9,7 @@ data class MovieDetailsModel(
     val adult: Boolean,
     val backdropPath: String?,
     val budget: Int,
-    val genres: List<com.zobaer53.zedmovies.domain.model.GenreModel>,
+    val genres: List<GenreModel>,
     val homepage: String?,
     val imdbId: String?,
     val originalLanguage: String,
@@ -26,6 +26,6 @@ data class MovieDetailsModel(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
-    val credits: com.zobaer53.zedmovies.domain.model.CreditsModel,
+    val credits: CreditsModel,
     val isWishlisted: Boolean
 )

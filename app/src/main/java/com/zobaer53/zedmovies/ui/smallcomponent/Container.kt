@@ -41,7 +41,7 @@ import com.zobaer53.zedmovies.ui.smallcomponent.util.isFinished
 import com.zobaer53.zedmovies.ui.smallcomponent.util.isLoading
 import com.zobaer53.zedmovies.ui.smallcomponent.util.isNotEmpty
 import com.zobaer53.zedmovies.R
-import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSwipeRefresh
+import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 
 @Composable
 fun MoviesAndTvShowsContainer(
@@ -111,7 +111,7 @@ fun MoviesContainer(
         )
     }
 ) {
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier,
         isRefreshing = isLoading,
         onRefresh = movies::refresh
@@ -191,7 +191,7 @@ fun TvShowsContainer(
         )
     }
 ) {
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier,
         isRefreshing = isLoading,
         onRefresh = tvShows::refresh

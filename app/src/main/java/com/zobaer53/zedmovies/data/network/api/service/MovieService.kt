@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.data.network.api.service
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
 import com.zobaer53.zedmovies.data.network.model.response.MovieResponseDto
 import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
@@ -29,49 +29,49 @@ interface MovieService {
     suspend fun getUpcoming(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(TOP_RATED_MOVIE)
     suspend fun getTopRated(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(POPULAR_MOVIE)
     suspend fun getPopular(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(NOW_PLAYING_MOVIE)
     suspend fun getNowPlaying(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(DISCOVER_MOVIE)
     suspend fun getDiscover(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(TRENDING_MOVIE)
     suspend fun getTrending(
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 
     @GET(DETAILS_MOVIE)
     suspend fun getDetailsById(
         @Path(ID) id: Int,
         @Query(LANGUAGE) language: String,
         @Query(APPEND_TO_RESPONSE) appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<NetworkMovieDetails>
+    ): ZedMoviesResult<NetworkMovieDetails>
 
     @GET(SEARCH_MOVIE)
     suspend fun search(
         @Query(QUERY) query: String,
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<MovieResponseDto>
+    ): ZedMoviesResult<MovieResponseDto>
 }

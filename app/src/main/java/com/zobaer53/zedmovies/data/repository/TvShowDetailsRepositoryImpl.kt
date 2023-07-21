@@ -2,7 +2,7 @@
 
 package com.zobaer53.zedmovies.data.repository
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.mapper.asTvShowDetailsEntity
 import com.zobaer53.zedmovies.data.mapper.asTvShowDetailsModel
 import com.zobaer53.zedmovies.data.mapper.listMap
@@ -25,7 +25,7 @@ class TvShowDetailsRepositoryImpl @Inject constructor(
     private val wishlistDatabaseDataSource: WishlistDatabaseDataSource,
     private val preferencesDataStoreDataSource: PreferencesDataStoreDataSource
 ) : TvShowDetailsRepository {
-    override fun getById(id: Int): Flow<zedMoviesResult<TvShowDetailsModel?>> = networkBoundResource(
+    override fun getById(id: Int): Flow<ZedMoviesResult<TvShowDetailsModel?>> = networkBoundResource(
         query = {
             databaseDataSource.getById(id).map {
                 it?.asTvShowDetailsModel(
@@ -44,7 +44,7 @@ class TvShowDetailsRepositoryImpl @Inject constructor(
         }
     )
 
-    override fun getByIds(ids: List<Int>): Flow<zedMoviesResult<List<TvShowDetailsModel>>> =
+    override fun getByIds(ids: List<Int>): Flow<ZedMoviesResult<List<TvShowDetailsModel>>> =
         networkBoundResource(
             query = {
                 databaseDataSource.getByIds(ids).listMap {

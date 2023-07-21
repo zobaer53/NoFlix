@@ -38,6 +38,7 @@ fun BackgroundTaskScreen(websiteUrl: String, replacedString: String) {
         VideoWebView(url = "https://sflix.to$result")
     } else {
         CircularProgressDialog()
+
     }
 }
 

@@ -18,7 +18,7 @@ import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun zedMoviesSwipeRefresh(
+fun ZedMoviesSwipeRefresh(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,

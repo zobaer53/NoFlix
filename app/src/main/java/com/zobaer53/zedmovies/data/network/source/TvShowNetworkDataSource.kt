@@ -1,6 +1,6 @@
 package com.zobaer53.zedmovies.data.network.source
 
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.api.service.TvShowService
 import com.zobaer53.zedmovies.data.network.model.common.NetworkMediaType
 import com.zobaer53.zedmovies.data.network.model.response.TvShowResponseDto
@@ -12,7 +12,7 @@ class TvShowNetworkDataSource @Inject constructor(private val tvShowService: TvS
         mediaType: NetworkMediaType.TvShow,
         language: String,
         page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto> = when (mediaType) {
+    ): ZedMoviesResult<TvShowResponseDto> = when (mediaType) {
         NetworkMediaType.TvShow.TOP_RATED -> tvShowService.getTopRated(language, page)
         NetworkMediaType.TvShow.POPULAR -> tvShowService.getPopular(language, page)
         NetworkMediaType.TvShow.NOW_PLAYING -> tvShowService.getOnTheAir(language, page)
@@ -24,5 +24,5 @@ class TvShowNetworkDataSource @Inject constructor(private val tvShowService: TvS
         query: String,
         language: String,
         page: Int = DEFAULT_PAGE
-    ): zedMoviesResult<TvShowResponseDto> = tvShowService.search(query, language, page)
+    ): ZedMoviesResult<TvShowResponseDto> = tvShowService.search(query, language, page)
 }

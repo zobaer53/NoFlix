@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zobaer53.zedmovies.R
-import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSwipeRefresh
+import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.Movie
@@ -56,7 +56,7 @@ private fun HomeScreen(
     onOfflineModeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         isRefreshing = uiState.isLoading,
         onRefresh = onRefresh

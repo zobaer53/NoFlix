@@ -11,7 +11,7 @@ data class TvShowDetailsModel(
     val backdropPath: String?,
     val episodeRunTime: List<Int>,
     val firstAirDate: LocalDate?,
-    val genres: List<com.zobaer53.zedmovies.domain.model.GenreModel>,
+    val genres: List<GenreModel>,
     val homepage: String,
     val inProduction: Boolean,
     val languages: List<String>,
@@ -29,6 +29,6 @@ data class TvShowDetailsModel(
     val type: String,
     val voteAverage: Double,
     val voteCount: Int,
-    val credits: com.zobaer53.zedmovies.domain.model.CreditsModel,
+    val credits: CreditsModel,
     val isWishlisted: Boolean
 )

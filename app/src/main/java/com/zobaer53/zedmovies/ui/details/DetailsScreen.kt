@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSwipeRefresh
+import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesTopAppBar
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.UserMessage
@@ -78,7 +78,7 @@ private fun DetailsScreen(
         onShowMessage = onShowMessage,
         onDismiss = onUserMessageDismiss
     )
-    zedMoviesSwipeRefresh(
+    ZedMoviesSwipeRefresh(
         modifier = modifier,
         isRefreshing = uiState.isLoading,
         onRefresh = onRefresh,

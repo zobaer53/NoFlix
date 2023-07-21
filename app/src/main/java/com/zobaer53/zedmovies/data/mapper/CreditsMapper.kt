@@ -6,6 +6,9 @@ import com.zobaer53.zedmovies.data.database.model.common.Crew
 import com.zobaer53.zedmovies.data.network.model.common.NetworkCast
 import com.zobaer53.zedmovies.data.network.model.common.NetworkCredits
 import com.zobaer53.zedmovies.data.network.model.common.NetworkCrew
+import com.zobaer53.zedmovies.domain.model.CastModel
+import com.zobaer53.zedmovies.domain.model.CreditsModel
+import com.zobaer53.zedmovies.domain.model.CrewModel
 
 fun NetworkCredits.asCredits() = Credits(
     cast = cast.map(NetworkCast::asCast),
@@ -41,12 +44,12 @@ fun NetworkCrew.asCrew() = Crew(
     profilePath = profilePath?.asImageUrl()
 )
 
-fun Credits.asCreditsModel() = com.zobaer53.zedmovies.domain.model.CreditsModel(
+fun Credits.asCreditsModel() = CreditsModel(
     cast = cast.map(Cast::asCastModel),
     crew = crew.map(Crew::asCrewModel)
 )
 
-fun Cast.asCastModel() = com.zobaer53.zedmovies.domain.model.CastModel(
+fun Cast.asCastModel() = CastModel(
     id = id,
     name = name,
     adult = adult,
@@ -61,7 +64,7 @@ fun Cast.asCastModel() = com.zobaer53.zedmovies.domain.model.CastModel(
     profilePath = profilePath
 )
 
-fun Crew.asCrewModel() = com.zobaer53.zedmovies.domain.model.CrewModel(
+fun Crew.asCrewModel() = CrewModel(
     id = id,
     adult = adult,
     creditId = creditId,

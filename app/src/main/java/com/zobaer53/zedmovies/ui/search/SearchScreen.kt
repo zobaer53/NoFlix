@@ -36,7 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesIconButton
-import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSwipeRefresh
+import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesTextField
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import com.zobaer53.zedmovies.data.model.MediaType
@@ -110,7 +110,7 @@ private fun SearchScreen(
                     }
                 )
             } else {
-                zedMoviesSwipeRefresh(
+                ZedMoviesSwipeRefresh(
                     isRefreshing = uiState.isLoading,
                     onRefresh = onRefresh
                 ) {

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesSnackbarHost
 import com.zobaer53.zedmovies.ui.designsystem.component.LocalSnackbarHostState
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
-import com.zobaer53.zedmovies.navigation.zedMoviesNavHost
+import com.zobaer53.zedmovies.navigation.ZedMoviesNavHost
 import com.zobaer53.zedmovies.ui.component.zedMoviesBottomBar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -73,7 +73,7 @@ fun zedMoviesApp(appState: zedMoviesAppState = rememberzedMoviesAppState()) {
                     bottom = 0.dp
                 )
             ) { innerPadding ->
-                zedMoviesNavHost(
+                ZedMoviesNavHost(
                     modifier = Modifier
                         .padding(paddingValues = innerPadding)
                         .consumeWindowInsets(paddingValues = innerPadding),

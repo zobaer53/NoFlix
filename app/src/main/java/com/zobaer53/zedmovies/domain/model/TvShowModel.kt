@@ -9,7 +9,7 @@ data class TvShowModel(
     val overview: String,
     val popularity: Double,
     val firstAirDate: LocalDate?,
-    val genres: List<com.zobaer53.zedmovies.domain.model.GenreModel>,
+    val genres: List<GenreModel>,
     val originalName: String,
     val originalLanguage: String,
     val originCountry: List<String>,

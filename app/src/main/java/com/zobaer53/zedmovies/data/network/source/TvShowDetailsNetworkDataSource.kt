@@ -2,7 +2,7 @@
 package com.zobaer53.zedmovies.data.network.source
 
 import android.util.Log
-import com.zobaer53.zedmovies.data.common.result.zedMoviesResult
+import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.common.result.isFailure
 import com.zobaer53.zedmovies.data.common.result.isSuccess
 import com.zobaer53.zedmovies.data.network.api.service.TvShowService
@@ -16,27 +16,30 @@ class TvShowDetailsNetworkDataSource @Inject constructor(private val tvShowServi
         id: Int,
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<NetworkTvShowDetails> =
-        tvShowService.getDetailsById(id, language, appendToResponse)
+    ): ZedMoviesResult<NetworkTvShowDetails> =
+        tvShowService.getDetailsById(id,  appendToResponse,language)
 
     suspend fun getByIds(
         ids: List<Int>,
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
-    ): zedMoviesResult<List<NetworkTvShowDetails>> {
+    ): ZedMoviesResult<List<NetworkTvShowDetails>> {
         val tvShows = ids.map { id ->
-            val response = tvShowService.getDetailsById(id, language, appendToResponse)
+            val response = tvShowService.getDetailsById(id, appendToResponse, language)
 
-            Log.i("tvDetails1","tv details id $id ")
+           // Log.i("tvDetails1","tv details id $id ")
             when {
-                response.isSuccess() -> response.value
-                response.isFailure() ->
-                    return zedMoviesResult.failure(response.error)
+                response.isSuccess() -> {
+                    Log.i("Success1","TvShowDetailsNetworkDataSource ${response.value} ")
+                    response.value}
+                response.isFailure() -> {
+                    Log.i("Success1","TvShowDetailsNetworkDataSource ${response.error} ")
+                    return ZedMoviesResult.failure(response.error)}
                 else ->
                     error("$MESSAGE_UNHANDLED_STATE $response")
             }
         }
 
-        return zedMoviesResult.success(tvShows)
+        return ZedMoviesResult.success(tvShows)
     }
 }

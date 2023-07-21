@@ -11,7 +11,7 @@ data class MovieModel(
     val popularity: Double,
     val releaseDate: LocalDate?,
     val adult: Boolean,
-    val genres: List<com.zobaer53.zedmovies.domain.model.GenreModel>,
+    val genres: List<GenreModel>,
     val originalTitle: String,
     val originalLanguage: String,
     val voteAverage: Double,
