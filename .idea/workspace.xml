@@ -16,56 +16,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c45060-120d-4e0a-99a3-3a477dbce6f2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/Operators.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/Operators.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/ZedMoviesResult.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/ZedMoviesResult.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/ZedMoviesResultHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/common/result/ZedMoviesResultHandler.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/source/TvShowDatabaseDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/source/TvShowDatabaseDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/mapper/CreditsMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/mapper/CreditsMapper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/api/service/MovieService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/api/service/MovieService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/api/service/TvShowService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/api/service/TvShowService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/common/NetworkBoundResource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/common/NetworkBoundResource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/retrofit/ResultAdapterFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/retrofit/ResultAdapterFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/retrofit/ResultCall.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/retrofit/ResultCall.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/MovieDetailsNetworkDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/MovieDetailsNetworkDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/MovieNetworkDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/MovieNetworkDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/TvShowDetailsNetworkDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/TvShowDetailsNetworkDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/TvShowNetworkDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/source/TvShowNetworkDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/paging/TvShowRemoteMediator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/paging/TvShowRemoteMediator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/MovieDetailsRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/MovieDetailsRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/MovieRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/MovieRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/TvShowDetailsRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/TvShowDetailsRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/TvShowRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/repository/TvShowRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/CreditsModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/CreditsModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/MovieDetailsModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/MovieDetailsModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/MovieModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/MovieModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/TvShowDetailsModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/TvShowDetailsModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/TvShowModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/model/TvShowModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/MovieDetailsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/MovieDetailsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/MovieRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/MovieRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/TvShowDetailsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/TvShowDetailsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/TvShowRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/domain/repository/TvShowRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/navigation/CinemaxNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/navigation/ZedMoviesNavHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/ZedMoviesApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/ZedMoviesApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/SwipeRefresh.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/SwipeRefresh.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/details/DetailsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/details/DetailsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/home/HomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/search/SearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/search/SearchScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Container.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Container.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/wishlist/WishlistScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/wishlist/WishlistScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\USER\.android\avd\Pixel_6_API_33.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[24131JEGR04342]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
