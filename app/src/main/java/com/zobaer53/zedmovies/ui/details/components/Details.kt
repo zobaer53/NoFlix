@@ -158,13 +158,14 @@ internal fun DetailsItem(
                         if (isPlaceholder) {
                             RatingItem(
                                 title,
+                                releaseDate.year,
                                 modifier = Modifier.zedMoviesPlaceholder(
                                     color = zedMoviesTheme.colors.secondaryVariant
                                 ),
                                 rating = PlaceholderRating
                             )
                         } else {
-                            RatingItem(title,rating = voteAverage)
+                            RatingItem(title,releaseDate.year,rating = voteAverage)
                         }
                     }
                 }

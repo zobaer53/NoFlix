@@ -16,8 +16,6 @@ data class NetworkCast(
     @SerialName(Constants.Fields.ADULT)
     val adult: Boolean,
 
-    @SerialName(Constants.Fields.CAST_ID)
-    val castId: Int?,
 
     @SerialName(Constants.Fields.CHARACTER)
     val character: String,

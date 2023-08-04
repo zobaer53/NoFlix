@@ -2,26 +2,34 @@ package com.zobaer53.zedmovies.ui.webview
 
 import android.util.Log
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 
-fun scrapeMovieData(url: String):String? {
-    val doc = Jsoup.connect(url).get()
-    if (doc.body().data().isNotEmpty()){
-    val link = getLink(doc.html())
-        Log.i("movieLink2","Link URL---------------: $link")
+suspend fun scrapeMovieData(url: String, movieYear: String, movieName: String): Triple<String, String, String>? {
+    val movieList = Triple("","","")
+    var movieNameReplaced = movieName.trim().replace("-"," ")
+    try {
+        val doc: Document = Jsoup.connect(url).get()
+        val flwItems: Elements = doc.select(".flw-item")
 
-        // Select the appropriate HTML elements that contain movie data
-        val movieElements = doc.select(".film-poster")
-        Log.i("movieLink2",".film-poster $movieElements")
-        return link
+        for (i in 0 until flwItems.size) {
+            val flwItem = flwItems[i]
+            val year = flwItem.select(".fdi-item").first()?.text() ?: ""
+            val type = flwItem.select(".fdi-item strong").first()?.text() ?: ""
+            val title = flwItem.select(".film-name a").first()?.text() ?: "".lowercase()
+            val movieUrl = flwItem.select(".film-name a").first()?.attr("href") ?: ""
+
+            Log.i("movieLink3", "link ------------------------------ sflix.to{$movieUrl $year ${title.lowercase()} main $movieNameReplaced $movieYear}")
+            if(title.trim().lowercase().contains(movieNameReplaced) && movieYear == year) {
+                Log.i("movieLink3", "------------------------------link 0 sflix.to{$movieUrl $year $title}")
+                return movieList.copy(year, title, movieUrl)
+            }
+
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
-
-
     return null
 }
-fun getLink(html: String): String? {
-    val doc = Jsoup.parse(html)
-    val filmPosterElement = doc.selectFirst(".film-poster")
-    val linkElement = filmPosterElement?.selectFirst("a.film-poster-ahref")
 
-    return linkElement?.attr("href")
-}
+

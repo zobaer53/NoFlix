@@ -25,6 +25,7 @@ import com.zobaer53.zedmovies.R
 @Composable
 fun RatingItem(
     title: String,
+    releaseDate: String,
     rating: Double,
     modifier: Modifier = Modifier
 ) {
@@ -50,6 +51,7 @@ fun RatingItem(
                             /*Toast.makeText(context,"clicked", Toast.LENGTH_LONG).show()*/
                             val intent = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra("movieName", title)
+                                putExtra("movieYear", releaseDate)
                             }
                             context.startActivity(intent)
 

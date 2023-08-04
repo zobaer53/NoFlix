@@ -71,6 +71,7 @@ internal fun VerticalFeedItem(
             }
             RatingItem(
                 "",
+                "",
                 rating = voteAverage,
                 modifier = Modifier
                     .padding(
