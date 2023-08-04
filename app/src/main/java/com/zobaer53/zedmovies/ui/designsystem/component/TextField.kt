@@ -42,8 +42,11 @@ fun zedMoviesTextField(
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = true,
     shape: Shape = zedMoviesTheme.shapes.extraMedium,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
-        textColor = zedMoviesTheme.colors.textPrimary,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = zedMoviesTheme.colors.primaryVariant,
+        unfocusedContainerColor = zedMoviesTheme.colors.primaryVariant,
+        disabledContainerColor = zedMoviesTheme.colors.primaryVariant,
+        //textColor = zedMoviesTheme.colors.textPrimary,
         cursorColor = zedMoviesTheme.colors.accent,
         selectionColors = TextSelectionColors(
             handleColor = zedMoviesTheme.colors.accent,
@@ -51,14 +54,13 @@ fun zedMoviesTextField(
                 alpha = TextSelectionColorsBackgroundColorAlpha
             )
         ),
-        containerColor = zedMoviesTheme.colors.primaryVariant,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
         focusedLeadingIconColor = zedMoviesTheme.colors.textSecondary,
         unfocusedLeadingIconColor = zedMoviesTheme.colors.textSecondary,
         focusedTrailingIconColor = zedMoviesTheme.colors.textSecondary,
         unfocusedTrailingIconColor = zedMoviesTheme.colors.textSecondary,
-        placeholderColor = zedMoviesTheme.colors.textSecondary,
-        focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent
+        //placeholderColor = zedMoviesTheme.colors.textSecondary,
     )
 ) {
     TextField(

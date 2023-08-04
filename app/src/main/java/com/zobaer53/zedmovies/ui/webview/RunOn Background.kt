@@ -8,9 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -25,9 +27,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.zobaer53.zedmovies.R
+
+
 
 @Composable
 fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: String) {
@@ -52,13 +62,19 @@ fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: Strin
     Log.i("movieLink3", "link 1 sflix.to$url")
     if (url.isNotEmpty()) {
         VideoWebView(url = "https://sflix.to$url")
-    } else  {
-        CircularProgressDialog()
+    } else if (year.isNotEmpty() && year != "serverError" && year.toLong()>0) {
+        NotFoundProgressDialog(1000)
+    }
+    else if(year.isNotEmpty() && year == "serverError"){
+       NotFoundProgressDialog(10000)
+    }
+    else{
+        ProgressDialog(10000)
     }
 }
 
 @Composable
-fun CircularProgressDialog() {
+fun NotFoundProgressDialog(toLong: Long) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,10 +82,18 @@ fun CircularProgressDialog() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(48.dp),
-            color = MaterialTheme.colors.primary
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.data))
+
+        LottieAnimation(
+            modifier = Modifier.fillMaxWidth()
+                .height(maxOf(200.dp)),
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
         )
+        Text(text = "Not Found", fontSize = 20.sp)
+
+
+
         // Use DisposableEffect to trigger finish after 1 second when the composable is first composed
         val scope = rememberUpdatedState(LocalContext.current as? ComponentActivity)
         DisposableEffect(Unit) {
@@ -77,11 +101,32 @@ fun CircularProgressDialog() {
             val finishTask = Runnable {
                 scope.value?.finish()
             }
-            handler.postDelayed( finishTask, 5000L)
+            handler.postDelayed( finishTask, toLong)
             onDispose {
                 handler.removeCallbacks(finishTask) // Remove the callback to avoid leaks
             }
+
         }
+    }
+}
+
+@Composable
+fun ProgressDialog(toLong: Long) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFD1C4E9)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.data))
+
+        LottieAnimation(
+            modifier = Modifier.fillMaxWidth()
+                .height(maxOf(200.dp)),
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+        )
     }
 }
 

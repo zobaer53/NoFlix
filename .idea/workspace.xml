@@ -17,17 +17,12 @@
   <component name="ChangeListManager">
     <list default="true" id="72c45060-120d-4e0a-99a3-3a477dbce6f2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/converter/CreditsConverter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/converter/CreditsConverter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/mapper/CreditsMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/mapper/CreditsMapper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/model/common/NetworkCast.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/network/model/common/NetworkCast.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/details/components/Details.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/details/components/Details.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/HorizontalFeed.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/HorizontalFeed.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/VerticalFeed.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/VerticalFeed.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/TextField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/TextField.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/WebViewActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/WebViewActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,19 +87,24 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;android-custom-viewC:/Users/USER/AppData/Local/Android/Sdk/sources/android-33/android/webkit/WebView.java_SELECTED&quot;: &quot;WebView&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;G:/Zobaer/New folder (2)/zeDMovies/zeDMoviesApp&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "android-custom-viewC:/Users/USER/AppData/Local/Android/Sdk/sources/android-33/android/webkit/WebView.java_SELECTED": "WebView",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "G:/Zobaer/New folder (2)/zeDMovies/zeDMoviesApp/app/src/main/res/raw",
+    "settings.editor.selected.configurable": "live.edit.configurable",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Zobaer\New folder (2)\zeDMovies\zeDMoviesApp\app\src\main\res\raw" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="zeDMovies.app.main" />
@@ -200,15 +200,48 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>53</line>
-          <option name="timeStamp" value="115" />
+          <line>136</line>
+          <option name="timeStamp" value="121" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>51</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>54</line>
+          <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
           <line>55</line>
-          <option name="timeStamp" value="118" />
+          <option name="timeStamp" value="125" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>56</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>65</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>68</line>
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
+          <line>63</line>
+          <option name="timeStamp" value="129" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="dart-exception" />
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>
