@@ -46,7 +46,7 @@ fun RatingItem(
         ) {
             if(rating == 0.0){
                 zedMoviesIcon(
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(RatingIconSize)
                         .clickable{
                             /*Toast.makeText(context,"clicked", Toast.LENGTH_LONG).show()*/
                             val intent = Intent(context, WebViewActivity::class.java).apply {

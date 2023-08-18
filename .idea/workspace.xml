@@ -17,20 +17,51 @@
   <component name="ChangeListManager">
     <list default="true" id="72c45060-120d-4e0a-99a3-3a477dbce6f2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/TextField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/designsystem/component/TextField.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/scrapeMovieData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_arrow_back.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_arrow_forward.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_calendar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_clock.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_film.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_github.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_home.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_info.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_language.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_launcher_foreground.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_play.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_search.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_shield.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_splash.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_star.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_wishlist.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/no_search_results.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/no_wishlist_results.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/values-night/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/values/colors.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/values/ic_launcher_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/res/values/themes.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\USER\.android\avd\Pixel_6_API_33.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[R7BT3001THK]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -87,19 +118,19 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "android-custom-viewC:/Users/USER/AppData/Local/Android/Sdk/sources/android-33/android/webkit/WebView.java_SELECTED": "WebView",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "G:/Zobaer/New folder (2)/zeDMovies/zeDMoviesApp/app/src/main/res/raw",
-    "settings.editor.selected.configurable": "live.edit.configurable",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;android-custom-viewC:/Users/USER/AppData/Local/Android/Sdk/sources/android-33/android/webkit/WebView.java_SELECTED&quot;: &quot;WebView&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Zobaer/New folder (2)/zeDMovies/zeDMoviesApp&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;live.edit.configurable&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Zobaer\New folder (2)\zeDMovies\zeDMoviesApp\app\src\main\res\raw" />
@@ -197,48 +228,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>136</line>
-          <option name="timeStamp" value="121" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>51</line>
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>54</line>
-          <option name="timeStamp" value="124" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>55</line>
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>56</line>
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>65</line>
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>68</line>
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/webview/RunOn Background.kt</url>
-          <line>63</line>
-          <option name="timeStamp" value="129" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="dart-exception" />
       </default-breakpoints>
