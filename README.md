@@ -7,6 +7,10 @@ zeDMoviesApp is an application for Android for watching Movies & TV Shows using 
 
 # Preview
 
+https://github.com/zobaer53/zeDMoviesApp/assets/61627836/3743cf43-8afc-4984-b392-b425784ef823
+
+
+
 <img src="https://github.com/zobaer53/zeDMoviesApp/blob/master/screenshot-1-home.png" width="50%"><img src="https://github.com/zobaer53/zeDMoviesApp/blob/master/screenshot-2-home.png" width="50%">
 <img src="https://github.com/zobaer53/zeDMoviesApp/blob/master/screenshot-4-details.png" width="50%"><img src="https://github.com/zobaer53/zeDMoviesApp/blob/master/screenshot-7-wishlist.png" width="50%">
 
