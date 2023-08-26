@@ -1,7 +1,6 @@
-# zeDMoviesApp
-
 ![zeDMoviesApp](https://github.com/zobaer53/zeDMoviesApp/blob/master/zed_movies.png)
 
+# zeDMoviesApp
 
 zeDMoviesApp is an application for Android for watching Movies & TV Shows using webview.
 
