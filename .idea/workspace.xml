@@ -18,50 +18,18 @@
     <list default="true" id="72c45060-120d-4e0a-99a3-3a477dbce6f2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/smallcomponent/Rating.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_arrow_back.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_arrow_forward.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_calendar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_clock.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_film.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_github.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_home.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_info.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_language.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_launcher_foreground.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_play.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_search.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_shield.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_splash.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_star.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/ic_wishlist.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/no_search_results.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/drawable/no_wishlist_results.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/values-night/themes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/values/colors.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/values/ic_launcher_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/values/strings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/res/values/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/converter/LocalDateConverter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/converter/LocalDateConverter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/source/TvShowDatabaseDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/data/database/source/TvShowDatabaseDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/di/DatabaseModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/di/DatabaseModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/search/SearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/zobaer53/zedmovies/ui/search/SearchScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[R7BT3001THK]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[24131JEGR04342]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

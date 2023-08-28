@@ -2,6 +2,7 @@
 
 package com.zobaer53.zedmovies.ui.search
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -47,6 +48,8 @@ import com.zobaer53.zedmovies.R
 import com.zobaer53.zedmovies.ui.smallcomponent.MoviesAndTvShowsContainer
 import com.zobaer53.zedmovies.ui.smallcomponent.MoviesContainer
 import com.zobaer53.zedmovies.ui.smallcomponent.TvShowsContainer
+import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asUserMessage
+import com.zobaer53.zedmovies.ui.smallcomponent.zedMoviesCenteredError
 
 @Composable
 internal fun SearchRoute(
@@ -99,7 +102,7 @@ private fun SearchScreen(
             query = uiState.query,
             onQueryChange = onQueryChange
         )
-        AnimatedContent(targetState = uiState.isSearching) { isSearching ->
+        AnimatedContent(targetState = uiState.isSearching, label = "") { isSearching ->
             if (isSearching) {
                 MediaTabPager(
                     moviesTabContent = {
@@ -114,14 +117,59 @@ private fun SearchScreen(
                     isRefreshing = uiState.isLoading,
                     onRefresh = onRefresh
                 ) {
-                /*    if (uiState.error != null) {
+                    if (uiState.error != null) {
                         zedMoviesCenteredError(
                             errorMessage = uiState.error.asUserMessage(),
                             onRetry = onRetry,
                             shouldShowOfflineMode = uiState.isOfflineModeAvailable,
                             onOfflineModeClick = onOfflineModeClick
-                        )*/
-                  //  } else {
+                        )
+                    }
+                  //   else {
+
+                    //if (uiState.error != null) {
+                        /*  zedMoviesCenteredError(
+                              errorMessage = uiState.error.asUserMessage(),
+                              onRetry = onRetry,
+                              shouldShowOfflineMode = uiState.isOfflineModeAvailable,
+                              onOfflineModeClick = onOfflineModeClick
+                          )*/
+                        if(uiState.movies.containsKey(MediaType.Movie.Discover)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "--- Dis")
+                        }else if(uiState.movies.containsKey(MediaType.Movie.TopRated)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "--- top")
+                        }
+                        else if(uiState.movies.containsKey(MediaType.Movie.NowPlaying)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "---- now playing")
+
+                        }else if(uiState.movies.containsKey(MediaType.Movie.Upcoming)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "--- upcomig")
+
+                        }else if(uiState.movies.containsKey(MediaType.Movie.Popular)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "--- popular")
+
+                        }else if(uiState.movies.containsKey(MediaType.Movie.Trending)){
+                            Log.i("error1","ui state error msg ${uiState.error?.message} " +
+                                    " asUserMessage ${uiState.error?.asUserMessage()} " +
+                                    " localizedMessage ${uiState.error?.cause}" +
+                                    "---- trending")
+                        }
+                   // }
                         SuggestionsContent(
                             movies = uiState.movies,
                             tvShows = uiState.tvShows,
@@ -214,3 +262,4 @@ private fun SuggestionsContent(
         }
     }
 }
+

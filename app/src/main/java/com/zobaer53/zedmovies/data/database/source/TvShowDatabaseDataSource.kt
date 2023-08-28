@@ -30,7 +30,11 @@ class TvShowDatabaseDataSource @Inject constructor(
         tvShows: List<TvShowEntity>
     ) = transactionProvider.runWithTransaction {
         tvShowDao.deleteByMediaType(mediaType)
-        tvShowDao.insertAll(tvShows)
+        try {
+            tvShowDao.insertAll(tvShows)
+        } catch (e: Exception) {
+           e.printStackTrace()
+        }
     }
 
     suspend fun getRemoteKeyByIdAndMediaType(id: Int, mediaType: MediaType.TvShow) =
