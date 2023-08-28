@@ -1,8 +1,19 @@
-![zeDMoviesApp](https://github.com/zobaer53/zeDMoviesApp/blob/master/zed_movies.png)
+![zeDMoviesApp](https://github.com/zobaer53/zeDMoviesApp/blob/master/Product%20Card%20(1).png)
 <p align="center">
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
   <a href="https://android-arsenal.com/api?level=24"><img alt="API" src="https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat"/></a>
 </p>
+
+![GitHub stars](https://img.shields.io/github/stars/zobaer53/zeDMoviesApp.svg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/zobaer53/zeDMoviesApp.svg?style=social)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/zobaer53/zeDMoviesApp)
+![GitHub issues](https://img.shields.io/github/issues-raw/zobaer53/zeDMoviesApp)
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/zobaer53/zeDMoviesApp)
+![GitHub repo size](https://img.shields.io/github/repo-size/zobaer53/zeDMoviesApp)
+
+
+
+
 
 # zeDMoviesApp
 
