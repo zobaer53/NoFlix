@@ -10,8 +10,10 @@
         android:icon="@mipmap/zed_movies_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/zed_movies_round"
+        android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.zedMovies.Splash">
+        android:theme="@style/Theme.zedMovies.Splash"
+        tools:targetApi="tiramisu">
         <profileable
             android:shell="true"
             tools:targetApi="29" />

@@ -58,5 +58,6 @@ object BuildConfig {
     const val VERSION_NAME = "1.0.4"
 
     // Field from default config.
-    const val zedMovies_API_KEY = "yourApiKey"
+    const val zedMovies_API_KEY = "your key"
+
 }
