@@ -195,8 +195,6 @@ private fun GraphicsLayerScope.animationMovieItem(pageOffset: Float) {
     )
 }
 
-private val UpcomingMovieItemHeight = 300.dp
+private val UpcomingMovieItemHeight = 160.dp
 private const val UpcomingMovieItemPlaceholderSecondTextMaxWidthFraction = 0.5f
 private const val UpcomingMovieItemPlaceholderText = ""
-
-private const val PlaceholderCount = 10
