@@ -18,7 +18,7 @@ object NetworkModule {
 
     @Provides
     fun providezedMoviesApiKeyProvider() = object : zedMoviesApiKeyProvider {
-        override val apiKey: String = BuildConfig.zedMovies_API_KEY
+        override val apiKey: String = BuildConfig.API_KEY
     }
 
     @Provides
