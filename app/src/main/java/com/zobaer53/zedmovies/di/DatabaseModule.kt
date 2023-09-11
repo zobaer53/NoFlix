@@ -4,6 +4,7 @@ package com.zobaer53.zedmovies.di
 
 import android.content.Context
 import androidx.room.Room
+import com.zobaer53.zedmovies.BuildConfig
 import com.zobaer53.zedmovies.data.database.zedMoviesDatabase
 import com.zobaer53.zedmovies.data.database.util.zedMoviesVersionProvider
 import dagger.Module
@@ -49,15 +50,4 @@ object DatabaseModule {
 
     @Provides
     fun provideWishlistDao(database: zedMoviesDatabase) = database.wishlistDao
-}
-object BuildConfig {
-    val DEBUG = true
-    const val APPLICATION_ID = "com.zobaer53.zedmovies"
-    const val BUILD_TYPE = "debug"
-    const val VERSION_CODE = 5
-    const val VERSION_NAME = "1.0.4"
-
-    // Field from default config.
-    const val zedMovies_API_KEY = "your key"
-
 }

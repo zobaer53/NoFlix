@@ -1,5 +1,6 @@
 package com.zobaer53.zedmovies.di
 
+import com.zobaer53.zedmovies.BuildConfig
 import com.zobaer53.zedmovies.data.network.api.zedMoviesApi
 import com.zobaer53.zedmovies.data.network.api.zedMoviesApiKeyProvider
 import dagger.Module

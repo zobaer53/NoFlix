@@ -55,7 +55,7 @@ fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: Strin
                 year = taskResult.first
                 title = taskResult.second
                 url = taskResult.third
-                Log.i("movieLink3", "link 0 sflix.to{$url $year $title}")
+                Log.i("movieLink3", "link 0 url-{$url $year $title}")
             }
         }
     }
@@ -66,10 +66,10 @@ fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: Strin
         NotFoundProgressDialog(1000)
     }
     else if(year.isNotEmpty() && year == "serverError"){
-       NotFoundProgressDialog(10000)
+        NotFoundProgressDialog(1000)
     }
     else{
-        ProgressDialog(10000)
+        ProgressDialog(1000)
     }
 }
 
@@ -91,9 +91,6 @@ fun NotFoundProgressDialog(toLong: Long) {
             iterations = LottieConstants.IterateForever,
         )
         Text(text = "Not Found", fontSize = 20.sp)
-
-
-
         // Use DisposableEffect to trigger finish after 1 second when the composable is first composed
         val scope = rememberUpdatedState(LocalContext.current as? ComponentActivity)
         DisposableEffect(Unit) {
@@ -138,5 +135,4 @@ suspend fun performBackgroundTask(
     // Simulate a long-running task
     kotlinx.coroutines.delay(3000)
     return scrapeMovieData(websiteUrl, movieYear,movieName)
-
 }
