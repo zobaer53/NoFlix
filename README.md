@@ -17,7 +17,7 @@
 
 # zeDMoviesApp
 
-zeDMoviesApp is an application for Android to watch Movies & TV Shows using Webview.
+zeDMoviesApp is an application for Android to watch ad-free Movies & TV Shows using Webview.
 
 # Preview
 
