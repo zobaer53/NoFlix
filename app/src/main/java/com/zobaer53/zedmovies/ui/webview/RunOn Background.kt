@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,7 +41,7 @@ import com.zobaer53.zedmovies.R
 
 
 @Composable
-fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: String) {
+fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: String, lifecycleOwner: LifecycleOwner) {
     var url by remember { mutableStateOf("") }
     var year by remember { mutableStateOf("") }
     var title by remember { mutableStateOf("") }
@@ -61,7 +62,7 @@ fun BackgroundTaskScreen(websiteUrl: String, movieName: String, movieYear: Strin
     }
     Log.i("movieLink3", "link 1 sflix.to$url")
     if (url.isNotEmpty()) {
-        VideoWebView(url = "https://sflix.to$url")
+        VideoWebView(url = "https://sflix.to$url", lifecycleOwner = lifecycleOwner)
     } else if (year.isNotEmpty() && year != "serverError" && year.toLong()>0) {
         NotFoundProgressDialog(1000)
     }
