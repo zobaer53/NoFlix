@@ -48,6 +48,23 @@ const val zedMovies_API_KEY = "yourApiKey"
 
 - Design on [Figma](https://www.figma.com/community/file/1088719884686291024).
 
+
+
+# 📫 How to reach me 
+**hossain.zobaer11858@gmail.com**
+<h3 align="left">Connect with me:</h3>
+
+
+<p align="left">
+ 
+
+<a href="https://www.linkedin.com/in/zobaer53/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="zobaer53" height="30" width="40" /></a>
+   <a href="https://medium.com/@zobaer53" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Medium_logo_Monogram.svg/1200px-Medium_logo_Monogram.svg.png" alt="zobaer53" height="30" width="40" /></a>
+<a href="https://www.hackerrank.com/zobaer53" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="id20103184" height="30" width="40" /></a>
+<a href="https://www.sololearn.com/profile/15909016" target="blank"><img align="center" src="https://blob.sololearn.com/avatars/sololearn.png" alt="15909016" height="30" width="40" /></a>
+<a href="https://stackoverflow.com/users/kashif-mehmood" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="kashif-mehmood" height="30" width="40" /></a>
+</p>
+
 # License
 ```xml
 Copyright 2023 zobaer53 (Zobaer Hossain)
