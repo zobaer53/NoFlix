@@ -21,7 +21,9 @@
         <activity
             android:name=".ui.webview.WebViewActivity"
             android:exported="false"
-            android:theme="@style/Theme.zedMovies" />
+            android:theme="@style/Theme.zedMovies"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".zedMoviesActivity"
             android:exported="true">

@@ -62,6 +62,7 @@ internal fun HorizontalFeedItem(
                 RatingItem(
                     "",
                     "",
+                    "",
                     rating = voteAverage,
                     modifier = Modifier
                         .padding(

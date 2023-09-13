@@ -4,9 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
@@ -20,6 +25,8 @@ import java.net.InetSocketAddress
 fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     val filter = AdFilter.get()
     val filterViewModel = filter.viewModel
+    var rememberUrl by remember { mutableStateOf(url) }
+    var isFullScreen by remember { mutableStateOf(false) }
 
     // Setup AdblockAndroid for your WebView.
 
@@ -55,6 +62,7 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     javaScriptEnabled = true
                     mediaPlaybackRequiresUserGesture = false
                     WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
+                    cacheMode =WebSettings.LOAD_DEFAULT
                 }
                 val proxyHost = "91.211.245.176"
                 val proxyPort = 8080 // Your proxy port
@@ -63,12 +71,28 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     .proxy(java.net.Proxy(java.net.Proxy.Type.HTTP, InetSocketAddress(proxyHost, proxyPort)))
                     .build()
 
+
+                webChromeClient = object : WebChromeClient() {
+                    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                        super.onShowCustomView(view, callback)
+                        // Enter fullscreen mode here
+                        isFullScreen = true
+                    }
+
+                    override fun onHideCustomView() {
+                        super.onHideCustomView()
+                        // Exit fullscreen mode here
+                        isFullScreen = false
+                    }
+                }
+
                 // Set WebViewClient and WebChromeClient
-                //webViewClient = AdBlockingWebViewClient(okHttpClient)
+                webChromeClient = WebChromeClient()
+               // webViewClient = AdBlockingWebViewClient(okHttpClient)
                 webViewClient= MyWebClient()
 
                 // Load the video URL
-                loadUrl(url)
+                loadUrl(rememberUrl)
             }
         }
     )

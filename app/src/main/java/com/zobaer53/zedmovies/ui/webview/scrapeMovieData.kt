@@ -8,7 +8,8 @@ import org.jsoup.select.Elements
 fun scrapeMovieData(
     url: String,
     movieYear: String,
-    movieName: String
+    movieName: String,
+    apiType: String
 ): Triple<String, String, String>? {
     val url2 = "https://1movieshd.com/search/$movieName"
     var startTime: Long
@@ -18,11 +19,11 @@ fun scrapeMovieData(
     try {
         val doc: Document = Jsoup.connect(url).get()
         val statusCode = doc.connection().response().statusCode()
-        Log.i("movieLink3", "------------------------------ $statusCode")
+        Log.i("movieLink3", "123 ------------ $statusCode api name= $movieName api year= $movieYear")
         if (statusCode == 200) {
             val flwItems: Elements = doc.select(".flw-item")
 
-            for (i in 0 until flwItems.size / 2) {
+            for (i in 0 until flwItems.size) {
                 val flwItem = flwItems[i]
                 val year = flwItem.select(".fdi-item").first()?.text() ?: ""
                 val type = flwItem.select(".fdi-item strong").first()?.text() ?: ""
@@ -31,14 +32,14 @@ fun scrapeMovieData(
 
                 Log.i(
                     "movieLink3",
-                    "link ------------------------------ sflix.to{$movieUrl $year ${title.lowercase()} main $movieNameReplaced $movieYear}"
+                    "link -type= $type && web sflix.to{$movieUrl $year ${title.lowercase()} main $movieNameReplaced $movieYear}"
                 )
-                if (title.trim().lowercase().contains(movieNameReplaced) || movieYear == year) {
+                if (title.trim().lowercase().contains(movieNameReplaced)&& type.trim().lowercase().contains(apiType) || movieYear == year && type.trim().lowercase().contains(apiType)) {
                     Log.i(
                         "movieLink3",
-                        "------------------------------link final sflix.to{$movieUrl $year $title}"
+                        "link final type= $type sflix.to{$movieUrl $year $title}"
                     )
-                    return movieList.copy(year, title, movieUrl)
+                    return movieList.copy(year, title, "https://sflix.to$movieUrl")
                 }
             }
             startTime = System.currentTimeMillis()
@@ -61,13 +62,13 @@ fun scrapeMovieData(
                             "link ------------------------------ 1movieshd.com{$movieUrl2 $year2 ${title2.lowercase()} main $movieNameReplaced $movieYear}"
                         )
                         if (title2.trim().lowercase()
-                                .contains(movieNameReplaced) || movieYear == year2
+                                .contains(movieNameReplaced)&& type2.trim().lowercase().contains(apiType) || movieYear == year2 && type2.trim().lowercase().contains(apiType)
                         ) {
                             Log.i(
                                 "movieLink3",
                                 "------------------------------link final 1movieshd.com{$movieUrl2 $year2 $title2}"
                             )
-                            return movieList.copy(year2, title2, movieUrl2)
+                            return movieList.copy(year2, title2, "https://1movieshd.com$movieUrl2")
                         }
                     }
                     val endTime = System.currentTimeMillis()
@@ -77,7 +78,8 @@ fun scrapeMovieData(
                 }
                 return if (totalTime.toInt() != 0) {
                     movieList.copy(totalTime.toString(), "", "")
-                } else null
+                }
+                else null
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -103,13 +105,13 @@ fun scrapeMovieData(
                             "link ------------------------------ 1movieshd.com{$movieUrl2 $year2 ${title2.lowercase()} main $movieNameReplaced $movieYear}"
                         )
                         if (title2.trim().lowercase()
-                                .contains(movieNameReplaced) || movieYear == year2
+                                .contains(movieNameReplaced) && type2.trim().lowercase().contains(apiType) || movieYear == year2 && type2.trim().lowercase().contains(apiType)
                         ) {
                             Log.i(
                                 "movieLink3",
                                 "------------------------------link final 1movieshd.com{$movieUrl2 $year2 $title2}"
                             )
-                            return movieList.copy(year2, title2, movieUrl2)
+                            return movieList.copy(year2, title2, "https://1movieshd.com$movieUrl2")
                         }
                     }
                     val endTime = System.currentTimeMillis()
@@ -119,7 +121,8 @@ fun scrapeMovieData(
                 }
                 return if (totalTime.toInt() != 0) {
                     movieList.copy(totalTime.toString(), "", "")
-                } else null
+                }
+                else null
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -130,7 +133,8 @@ fun scrapeMovieData(
     }
     return if (totalTime.toInt() != 0) {
         movieList.copy(totalTime.toString(), "", "")
-    } else null
+    }
+    else null
 }
 
 

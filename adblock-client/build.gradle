@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     namespace 'com.zobaer53.zedmovies'
     compileSdkVersion 31
-    buildToolsVersion "29.0.3"
+
 
     defaultConfig {
         minSdkVersion 23
