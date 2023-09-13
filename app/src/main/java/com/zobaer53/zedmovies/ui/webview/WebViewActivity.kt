@@ -16,6 +16,7 @@ class WebViewActivity : ComponentActivity()  {
             val filter = AdFilter.create(this)
             val movieName = intent.getStringExtra("movieName") ?: ""
             val movieYear = intent.getStringExtra("movieYear") ?: ""
+            val type = intent.getStringExtra("type") ?: ""
             val replacedString = movieName.replace(" ", "-").lowercase()
         setContent {
                 Surface(
@@ -23,7 +24,12 @@ class WebViewActivity : ComponentActivity()  {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val websiteUrl = "https://sflix.to/search/"
-                    BackgroundTaskScreen(websiteUrl,replacedString,movieYear,this)
+                    backgroundTaskScreen(websiteUrl,replacedString,movieYear,type,this).apply {
+                        if(this.isNotEmpty()){
+                            VideoWebView(url = this, lifecycleOwner =WebViewActivity())
+                        }
+                    }
+
                 }
 
         }

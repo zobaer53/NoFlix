@@ -20,6 +20,7 @@ internal fun TvShowDetailsItem(
     with(tvShowDetails) {
         DetailsItem(
             modifier = modifier,
+            type = "tv",
             title = name,
             overview = overview,
             posterPath = posterPath,

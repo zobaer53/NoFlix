@@ -44,6 +44,7 @@ import com.zobaer53.zedmovies.R
 @Suppress("LongParameterList")
 @Composable
 internal fun DetailsItem(
+    type:String,
     title: String,
     overview: String,
     posterPath: String?,
@@ -156,7 +157,7 @@ internal fun DetailsItem(
                             }
                         }
                         if (isPlaceholder) {
-                            RatingItem(
+                            RatingItem("",
                                 title,
                                 releaseDate.year,
                                 modifier = Modifier.zedMoviesPlaceholder(
@@ -165,7 +166,7 @@ internal fun DetailsItem(
                                 rating = PlaceholderRating
                             )
                         } else {
-                            RatingItem(title,releaseDate.year,rating = voteAverage)
+                            RatingItem(type,title,releaseDate.year,rating = voteAverage)
                         }
                     }
                 }
@@ -191,6 +192,7 @@ internal fun DetailsItemPlaceholder(
 ) {
     DetailsItem(
         modifier = modifier,
+        type = "",
         title = PlaceholderText,
         overview = PlaceholderText,
         posterPath = null,
