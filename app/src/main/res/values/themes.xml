@@ -11,7 +11,7 @@
 
     <style name="Theme.zedMovies.Splash">
         <item name="android:windowSplashScreenBackground">@color/primaryDark</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/zed_movies</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/play</item>
     </style>
 
     <style name="Theme.zedMovies.Dialog" parent="android:Theme.Material.Light.Dialog">

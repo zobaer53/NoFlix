@@ -30,7 +30,7 @@ https://github.com/zobaer53/zeDMoviesApp/assets/61627836/3743cf43-8afc-4984-b392
 
 # Architecture
 
-The **zeDMoviesApp** app follows the
+The **NoFlix** app follows the
 [official architecture guidance](https://developer.android.com/topic/architecture)
 
 ![Architecture diagram](https://github.com/zobaer53/zeDMoviesApp/blob/master/architecture-1-overall.png)
