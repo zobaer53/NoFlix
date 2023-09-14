@@ -17,7 +17,7 @@
 
 # zeDMoviesApp
 
-zeDMoviesApp is an application for Android to watch ad-free Movies & TV Shows using Webview.
+NoFlix is an application for Android to watch ad-free Movies & TV Shows using Webview.
 
 # Preview
 
@@ -36,12 +36,12 @@ The **zeDMoviesApp** app follows the
 ![Architecture diagram](https://github.com/zobaer53/zeDMoviesApp/blob/master/architecture-1-overall.png)
 
 # API Keys
-zeDMoviesApp uses [The Movie DB](https://www.themoviedb.org/) API in order to fetch all the Movies and TV Shows Data.
+NoFlix uses [The Movie DB](https://www.themoviedb.org/) API in order to fetch all the Movies and TV Shows Data.
 <br>
-To run this application on your machine you have to issue an API KEY from The Movie DB and place it in package com.zobaer53.zedmovies.di
+To run this application on your machine you have to issue an API KEY from The Movie DB and place it local.properties
 <br>
 ```
-const val zedMovies_API_KEY = "yourApiKey"
+ API_KEY = "yourApiKey"
 ```
 
 # Credits
@@ -62,7 +62,7 @@ const val zedMovies_API_KEY = "yourApiKey"
    <a href="https://medium.com/@zobaer53" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Medium_logo_Monogram.svg/1200px-Medium_logo_Monogram.svg.png" alt="zobaer53" height="30" width="40" /></a>
 <a href="https://www.hackerrank.com/zobaer53" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="id20103184" height="30" width="40" /></a>
 <a href="https://www.sololearn.com/profile/15909016" target="blank"><img align="center" src="https://blob.sololearn.com/avatars/sololearn.png" alt="15909016" height="30" width="40" /></a>
-<a href="https://stackoverflow.com/users/kashif-mehmood" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="kashif-mehmood" height="30" width="40" /></a>
+<a href="https://stackoverflow.com/users/zobaer-hossain" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="zobaer-hossain" height="30" width="40" /></a>
 </p>
 
 # License
