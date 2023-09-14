@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">zeDMovies</string>
+    <string name="app_name">NoFlix</string>
     <string name="back">back</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">Tv Shows</string>
