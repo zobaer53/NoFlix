@@ -15,7 +15,7 @@
 
 
 
-# zeDMoviesApp
+# NoFlix
 
 NoFlix is an application for Android to watch ad-free Movies & TV Shows using Webview.
 
