@@ -7,9 +7,9 @@
     <application
         android:name=".zedMoviesApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/zed_movies_round"
+        android:icon="@mipmap/ic_launcher_foreground1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/zed_movies_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.zedMovies.Splash"
