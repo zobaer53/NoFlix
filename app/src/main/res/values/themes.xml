@@ -11,6 +11,8 @@
     <style name="Theme.NoActionbar.FullScreen.zedMovies" parent="android:Theme.Material.Light.NoActionBar.Fullscreen">
         <item name="android:statusBarColor">@color/primaryLight</item>
         <item name="android:navigationBarColor">@color/primaryLight</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowLightStatusBar" >true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
         <item name="android:dialogTheme">@style/Theme.zedMovies.Dialog</item>
