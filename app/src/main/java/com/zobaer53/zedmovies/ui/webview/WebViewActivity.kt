@@ -31,7 +31,6 @@ class WebViewActivity : ComponentActivity()  {
                     }
 
                 }
-
         }
     }
 }
