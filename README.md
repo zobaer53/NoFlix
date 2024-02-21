@@ -50,6 +50,9 @@ To run this application on your machine you have to issue an API KEY from The Mo
 ```
  API_KEY = "yourApiKey"
 ```
+# Fix Cmake not found issue
+
+go to sdk tools and download Cmake 3.10.2 sdk [Stackoverflow](https://stackoverflow.com/questions/71853200/cmake-3-10-2-not-found-in-sdk-path-or-by-cmake-dir-prop).
 
 # Credits
 
