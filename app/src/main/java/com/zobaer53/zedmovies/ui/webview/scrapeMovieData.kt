@@ -16,12 +16,18 @@ fun scrapeMovieData(
     var totalTime: Long = 0
     val movieList = Triple("", "", "")
     val movieNameReplaced = movieName.trim().replace("-", " ")
+    
+    Log.d("scrapeMovieData", "Starting scrape with: URL=$url, movieYear=$movieYear, movieName=$movieName, apiType=$apiType")
+    Log.d("scrapeMovieData", "Searching for movieNameReplaced=$movieNameReplaced")
+    
     try {
+        Log.d("scrapeMovieData", "Attempting to connect to: $url")
         val doc: Document = Jsoup.connect(url).get()
         val statusCode = doc.connection().response().statusCode()
         Log.i("movieLink3", "123 ------------ $statusCode api name= $movieName api year= $movieYear")
         if (statusCode == 200) {
             val flwItems: Elements = doc.select(".flw-item")
+            Log.d("scrapeMovieData", "Found ${flwItems.size} items on sflix.to")
 
             for (i in 0 until flwItems.size) {
                 val flwItem = flwItems[i]
@@ -30,15 +36,25 @@ fun scrapeMovieData(
                 val title = flwItem.select(".film-name a").first()?.text() ?: "".lowercase()
                 val movieUrl = flwItem.select(".film-name a").first()?.attr("href") ?: ""
 
+                Log.d("scrapeMovieData", "Item $i: title='$title', year='$year', type='$type', url='$movieUrl'")
                 Log.i(
                     "movieLink3",
                     "link -type= $type && web sflix.to{$movieUrl $year ${title.lowercase()} main $movieNameReplaced $movieYear}"
                 )
-                if (title.trim().lowercase().contains(movieNameReplaced)&& type.trim().lowercase().contains(apiType) || movieYear == year && type.trim().lowercase().contains(apiType)) {
+                
+                // Check if this item matches our criteria
+                val titleMatch = title.trim().lowercase().contains(movieNameReplaced)
+                val typeMatch = type.trim().lowercase().contains(apiType)
+                val yearMatch = movieYear == year
+                
+                Log.d("scrapeMovieData", "Matches: title=$titleMatch, type=$typeMatch, year=$yearMatch")
+                
+                if ((titleMatch && typeMatch) || (yearMatch && typeMatch)) {
                     Log.i(
                         "movieLink3",
                         "link final type= $type sflix.to{$movieUrl $year $title}"
                     )
+                    Log.d("scrapeMovieData", "MATCH FOUND! Returning URL: https://sflix.to$movieUrl")
                     return movieList.copy(year, title, "https://sflix.to$movieUrl")
                 }
             }
@@ -129,6 +145,7 @@ fun scrapeMovieData(
             }
         }
     } catch (e: Exception) {
+        Log.e("scrapeMovieData", "Exception during scraping: ${e.message}", e)
         e.printStackTrace()
     }
     return if (totalTime.toInt() != 0) {

@@ -1,8 +1,7 @@
-
-
 package com.zobaer53.zedmovies.ui.smallcomponent
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,17 +45,21 @@ fun RatingItem(
             )
         ) {
             if(rating == 0.0){
+                Log.d("RatingItem", "Play button visible. type=$type, title=$title, releaseDate=$releaseDate")
                 zedMoviesIcon(
                     modifier = Modifier.size(RatingIconSize)
                         .clickable{
-                            /*Toast.makeText(context,"clicked", Toast.LENGTH_LONG).show()*/
+                            Log.d("RatingItem", "Play button clicked. Launching WebViewActivity with parameters:")
+                            Log.d("RatingItem", " - movieName: $title")
+                            Log.d("RatingItem", " - movieYear: $releaseDate")
+                            Log.d("RatingItem", " - type: $type")
+                            
                             val intent = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra("movieName", title)
                                 putExtra("movieYear", releaseDate)
                                 putExtra("type", type)
                             }
                             context.startActivity(intent)
-
                         },
                     iconResourceId = R.drawable.ic_play,
                     contentDescription = stringResource(id = R.string.rating)

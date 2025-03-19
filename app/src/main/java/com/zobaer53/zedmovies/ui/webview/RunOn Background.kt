@@ -48,29 +48,47 @@ fun backgroundTaskScreen(
     var title by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
+    Log.d("backgroundTaskScreen", "Starting with: websiteUrl=$websiteUrl, movieName=$movieName, movieYear=$movieYear, apiType=$apiType")
+
     LaunchedEffect(Unit) {
         coroutineScope.launch {
+            Log.d("backgroundTaskScreen", "Launching coroutine to perform background task")
             val taskResult = withContext(Dispatchers.IO) {
-                performBackgroundTask("$websiteUrl$movieName", movieYear,movieName,apiType)
+                performBackgroundTask("$websiteUrl$movieName", movieYear, movieName, apiType)
             }
+            Log.d("backgroundTaskScreen", "Background task completed, result: $taskResult")
+            
             if (taskResult != null) {
                 year = taskResult.first
                 title = taskResult.second
                 url = taskResult.third
+                Log.d("backgroundTaskScreen", "Task returned data: year=$year, title=$title, url=$url")
                 Log.i("movieLink3", "link 0 url-{$url $year $title}")
+            } else {
+                Log.d("backgroundTaskScreen", "Task returned null")
             }
         }
     }
+    
     Log.i("movieLink3", "link 1 sflix.to$url")
+    
     if (url.isNotEmpty()) {
+        Log.d("backgroundTaskScreen", "Returning URL: $url")
         return url
-    } else if (year.isNotEmpty() && year != "serverError" && year.toLong()>0) {
+    } else if (year.isNotEmpty() && year != "serverError" && year.toLong() > 0) {
+        Log.d("backgroundTaskScreen", "Showing not found dialog, year=$year")
         NotFoundProgressDialog(1000)
     }
-    else if(year.isNotEmpty() && year == "serverError"){
+    else if(year.isNotEmpty() && year == "serverError") {
+        Log.d("backgroundTaskScreen", "Server error detected")
         NotFoundProgressDialog(1000)
-    }else ProgressDialog(toLong = 1000)
-return url.ifEmpty { "" }
+    } else {
+        Log.d("backgroundTaskScreen", "Showing progress dialog")
+        ProgressDialog(toLong = 1000)
+    }
+    
+    Log.d("backgroundTaskScreen", "No URL found, returning empty string")
+    return url.ifEmpty { "" }
 }
 
 @Composable
@@ -133,9 +151,15 @@ suspend fun performBackgroundTask(
     websiteUrl: String,
     movieYear: String,
     movieName: String,
-    apiType:String
+    apiType: String
 ): Triple<String, String, String>? {
+    Log.d("performBackgroundTask", "Starting: websiteUrl=$websiteUrl, movieYear=$movieYear, movieName=$movieName, apiType=$apiType")
+    
     // Simulate a long-running task
     kotlinx.coroutines.delay(3000)
-    return scrapeMovieData(websiteUrl, movieYear,movieName,apiType)
+    
+    val result = scrapeMovieData(websiteUrl, movieYear, movieName, apiType)
+    Log.d("performBackgroundTask", "scrapeMovieData returned: $result")
+    
+    return result
 }

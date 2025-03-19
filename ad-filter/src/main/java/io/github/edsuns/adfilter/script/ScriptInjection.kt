@@ -2,7 +2,6 @@ package io.github.edsuns.adfilter.script
 
 import com.anthonycr.mezzanine.FileStream
 import com.anthonycr.mezzanine.MezzanineGenerator
-import org.jetbrains.anko.commons.BuildConfig
 
 /**
  * Created by Edsuns@qq.com on 2021/4/3.
@@ -47,7 +46,7 @@ internal object ScriptInjection {
     }
 
     private fun parse(raw: String, bridgeName: String? = null): String {
-        var js = raw.replace(DEBUG_FLAG, if (BuildConfig.DEBUG) "" else "//")
+        var js = raw.replace(DEBUG_FLAG, if (true) "//" else "//")
         if (bridgeName != null) {
             js = js.replace(JS_BRIDGE, bridgeName)
         }
