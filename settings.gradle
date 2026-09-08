@@ -14,6 +14,9 @@ dependencyResolutionManagement {
         jcenter()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        // JCenter shut down in 2022; this mirror still serves the old artifacts
+        // (needed for org.jetbrains.anko, which the ad-filter module depends on).
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 rootProject.name = "zeDMovies"
