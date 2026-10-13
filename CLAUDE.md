@@ -1,0 +1,65 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project
+
+NoFlix (Gradle root project `zeDMovies`, package `com.zobaer53.zedmovies`) is an Android app that browses movies/TV shows from The Movie DB and plays them ad-free in a WebView pointed at a third-party streaming site. Single-module app (`:app`) plus two vendored ad-blocking library modules (`:ad-filter`, `:adblock-client`, originally Edsuns/AdblockAndroid).
+
+## Build & run
+
+```bash
+./gradlew :app:assembleDebug        # debug APK
+./gradlew :app:installDebug         # install on connected device/emulator
+./gradlew :app:assembleRelease      # signed release APK (needs signing keys in local.properties)
+./gradlew :app:testDebugUnitTest    # JVM unit tests
+./gradlew :app:connectedDebugAndroidTest   # instrumented tests (device required)
+./gradlew :ad-filter:connectedDebugAndroidTest --tests 'io.github.edsuns.adfilter.RuleIteratorTest'  # single test class
+```
+
+There is no lint/format config beyond Android defaults, and test coverage is essentially placeholder (`ExampleUnitTest`, `RuleIteratorTest`, `AdBlockClientTest`).
+
+Requirements:
+- JDK 17, AGP 8.0.2, Kotlin 1.7.20 (Compose compiler 1.3.2 — Kotlin and Compose compiler versions must move together).
+- NDK + **CMake 3.10.2** for `:adblock-client`'s native library (CI installs `ndk;25.1.8937393` and `cmake;3.10.2.4988404`).
+- `local.properties` must contain `API_KEY=<TMDB key>`; `app/build.gradle` reads it into `BuildConfig.API_KEY` and fails to configure without the file. Optional `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD` enable release signing; without them the release build is unsigned.
+- `:ad-filter` depends on Anko, which is only resolvable through the Aliyun JCenter mirror declared in `settings.gradle` — don't remove that repo.
+
+## Releases / CI
+
+`.github/workflows/release.yml` runs on every push to `master`: it computes the next version (latest `X.Y.Z` git tag with patch +1, or `versionName` from `app/build.gradle` if that is higher), passes `-PappVersionCode`/`-PappVersionName` to Gradle (versionCode = `X*10000 + Y*100 + Z`), verifies the APK is signed with the release cert (`CN=zeD, O=NoFlix`), and publishes a GitHub release with `NoFlix.apk`. To start a new minor/major line, bump `versionName` in `app/build.gradle`. Pushing to `master` therefore ships a public release.
+
+Do not name the streaming website in commit messages, release notes, or identifiers/file names — use neutral names like `STREAM_BASE_URL` / `StreamPageStyle.kt`. The URL itself stays in code.
+
+## Architecture
+
+Follows Google's recommended layered architecture (data → domain → ui) with Hilt DI, all inside `:app`:
+
+- **data/** — Retrofit (kotlinx-serialization) TMDB services in `data/network`, Room DB in `data/database`, Preferences DataStore in `data/datastore`. Repositories (`data/repository/*Impl`) combine them:
+  - Lists use Paging 3 `RemoteMediator`s (`data/paging`) that cache TMDB pages into Room with remote-key tables; search uses plain `PagingSource`s (network only).
+  - Details use `networkBoundResource` (`data/network/common/NetworkBoundResource.kt`): emit cached Room data, fetch, save, re-emit from Room.
+  - Retrofit calls return `ZedMoviesResult<T>` (success/failure/loading) via a custom `ResultAdapterFactory`/`ResultCall` instead of throwing.
+  - Each layer has its own model types (`Network*` → `*Entity` → `data/model` → `domain/model/*Model`), with mappers in `data/mapper`, `data/database/mapper`, and `ui/smallcomponent/mapper`.
+- **domain/** — repository interfaces and one-method use cases consumed by ViewModels.
+- **di/** — Hilt modules binding repositories, DB, DataStore and network (API key comes from `BuildConfig.API_KEY` via `NetworkModule`).
+- **ui/** — Jetpack Compose. `zedMoviesActivity` → `zedMoviesApp` → `ZedMoviesNavHost`. Each feature (`home`, `list`, `search`, `details`, `wishlist`) has `Screen`, `ViewModel`, `UiState`, `Event`, and a `navigation/*Destination.kt`. Shared design system lives in `ui/designsystem` (theme accessed via `zedMoviesTheme.colors/spacing/typography`); reusable widgets in `ui/smallcomponent`.
+
+Naming quirk: many classes/functions use a lowercase `zedMovies` prefix (`zedMoviesActivity`, `zedMoviesApplication`, `zedMoviesApi`, `zedMoviesTheme`) while their files are `ZedMovies*.kt`. The manifest references the lowercase names.
+
+### Playback (WebView) path
+
+Playback is separate from the Compose nav graph:
+
+1. The "Play" button (`ui/smallcomponent/Rating.kt`) starts `ui/webview/WebViewActivity` with extras `movieName`, `movieYear`, `type`, `tmdbId`.
+2. With a `tmdbId`, `buildStreamUrl()` (`ui/webview/scrapeMovieData.kt`) builds `STREAM_BASE_URL/watch/<id>` (movies) or `/tv/<id>` (TV). The site is a client-rendered SPA keyed by TMDB id, so it can't be scraped. The older Jsoup scraping path (`RunOn Background.kt`, `scrapeMovieData()`) is only a fallback when `tmdbId` is 0.
+3. `VideoWebView` (`ui/webview/WebView.kt`) hosts an Android `WebView` in Compose: installs AdGuard filter subscriptions on first run, wires `AdFilter` into `MyWebClient` (`ContentBlockingWebViewClient.kt`) for request blocking and cosmetic scripts, handles HTML5 full-screen via `onShowCustomView`, and locks orientation: landscape on `/watch/` pages and full-screen video, portrait everywhere else.
+4. `StreamPageStyle.kt` injects CSS/JS into the site: a document-start script (sets the site's welcome-popup flag before its scripts run) and an idempotent page script that hides site chrome and stretches the player iframe on `/watch/` pages. Because the site is an SPA, it hooks `history.pushState`/`replaceState` and uses a `MutationObserver`. Selectors depend on the live site's DOM and break when it changes.
+
+`WebViewActivity` declares `configChanges` for orientation/screen size in the manifest so rotation doesn't recreate it and reload the page.
+
+### Ad-blocking modules
+
+- `:ad-filter` (`io.github.edsuns.adfilter`) — Kotlin API (`AdFilter.create/get`, `FilterViewModel`); downloads and installs filter lists with WorkManager (`DownloadWorker`, `InstallationWorker`) and injects element-hiding/scriptlet JS from `src/main/js/`. `scriptlets.min.js` is generated from `scriptlets_src/` with `gulp`; `extended-css.min.js` is vendored from AdGuard ExtendedCss.
+- `:adblock-client` (`io.github.edsuns.adblockclient`) — JNI wrapper (`src/main/cpp/adblockclient-lib.cpp`) around Brave's C++ ad-block engine in `src/main/cpp/third-party/`. Native bugs here crash the app with SIGSEGV (e.g. strings passed to `parse()` must be NUL-terminated).
+
+Both library modules still target compileSdk 31 / Java 8 with an old Kotlin stdlib, independent of `:app`'s settings.
