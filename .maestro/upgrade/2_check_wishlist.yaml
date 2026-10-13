@@ -1,0 +1,15 @@
+# Upgrade test, part 2 (run on the NEW build installed over the old one): the wish list survived.
+appId: com.zobaer53.zedmovies
+name: upgrade_2_check_wishlist
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 30000
+- tapOn:
+    text: "Wish list"
+    index: 0
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 10000
+- assertNotVisible: "Wish list is empty"

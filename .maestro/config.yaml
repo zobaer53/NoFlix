@@ -1,0 +1,11 @@
+# Maestro workspace config: `maestro test .maestro` runs every flow in flows/ in order.
+flows:
+  - flows/*
+executionOrder:
+  continueOnFailure: false
+  flowsOrder:
+    - 01_home
+    - 02_see_all
+    - 03_search
+    - 04_details_wishlist
+    - 05_play

@@ -1,0 +1,22 @@
+# Cold start with cleared data: splash, then home sections load from TMDB and the bottom bar is shown.
+appId: com.zobaer53.zedmovies
+name: 01_home
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- assertVisible: "Top Rated"
+- assertVisible: "Movies"
+- assertVisible: "Tv Shows"
+- assertVisible: "Search"
+- assertVisible: "Wish list"
+# Posters have loaded once a rating chip is shown on a card.
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- takeScreenshot: home
+- scrollUntilVisible:
+    element: "Tv Shows"
+    direction: DOWN
