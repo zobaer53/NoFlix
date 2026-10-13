@@ -22,9 +22,10 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: targetSdk 33 → 34 | ✅ done | 5/5 pass (16 KB API 36 emulator) | No code changes needed |
 | Phase 4: compileSdk 37 (all modules, from the catalog) | ✅ done | 5/5 pass (16 KB API 36 emulator) | `platforms;android-37.0` |
 | Phase 4: targetSdk 35 (edge-to-edge enforced) | ✅ done | 5/5 pass (16 KB API 36); screenshots compared with target 34, gesture and 3-button nav | No visual change, no code changes needed |
-| Phase 4: targetSdk 36 → 37 | ⏳ next | | |
+| Phase 4: targetSdk 36 (predictive back, large-screen orientation) | ✅ done | 5/5 pass (16 KB API 36) + manual large-screen check | Back works unchanged. On sw ≥ 600dp the portrait lock is ignored and the UI stretches in landscape (usable) |
+| Phase 4: targetSdk 37 | ⏸ deferred | | Needs an API 37 device (see emulator note). Continuing with Phase 5 first |
+| Phase 5: library upgrades | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
-| Phase 5: library upgrades                                 | ⬜      |                                  |                                                                                                                               |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
 
@@ -66,6 +67,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - `compileSdk` comes from the catalog (`compileSdk = "37"`) in all three modules. AGP 9.4 resolves it to the installed `platforms;android-37.0` package. build-tools 37.0.0 is installed too.
 - **API 37 emulator problem (blocks on-device tests of targetSdk 37 behaviors):** the `system-images;android-37.0;google_apis_playstore;arm64-v8a` image (rev 6) starts with "hvf is not enabled on this aarch64 host" plus repeated `mprotect failed: Permission denied`, so it runs in software emulation and never finishes booting. This happens on emulator 36.6.11 and after updating to 37.2.12, both inside and outside the command sandbox, on an Apple M4 with macOS 26.6.2. The API 36 images get hardware acceleration in the same setup, and the AVD configs differ only in the system image. Workarounds to try: start `Pixel_9_Pro_API37` from Android Studio's Device Manager, try the non-Play `google_apis` API 37 image, or test target-37 behavior on a real Android 17 phone. Targets 35 and 36 are tested on the API 36 emulators.
 - **targetSdk 35:** the app already called `WindowCompat.setDecorFitsSystemWindows(window, false)` and applied insets, so enforced edge-to-edge changed nothing visible. Screenshots of home, list, search, details and wish list match target 34, and the bottom bar sits above the 3-button nav bar. The theme `statusBarColor`/`navigationBarColor` and Accompanist `SystemUiController` now do nothing. They get removed with Accompanist in Phase 5 (`enableEdgeToEdge()`).
+- **targetSdk 36:** predictive back is on by default. Back from details, list, search results and the WebView works unchanged (the app already used Compose `BackHandler` and `enableOnBackInvokedCallback="true"`).
+- **Large screens at targetSdk 36,** simulated on the phone emulator with `adb shell wm density 200` (1024dp wide) and landscape rotation: `dumpsys` shows `ignoreOrientationRequest=true`, so `zedMoviesActivity` runs in landscape despite `screenOrientation="portrait"`. The Compose UI lays out and works, but it's a stretched phone layout (a very wide pager banner, long single-row carousels, a full-width bottom bar). **Follow-up (Phase 7):** adaptive layouts (`material3-adaptive`, grid columns by window width). One ANR ("Waited 5003ms for FocusEvent") happened right after the density and rotation change, with the emulator at load ~12. It didn't recur on two more cold starts, so it's treated as emulator starvation. For reference, cold start is 3–4.3 s on a normal phone display vs 4.3–7 s wide (debug build, busy emulator). Revisit startup time with a release build and Baseline Profiles (Phase 7).
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -298,9 +301,9 @@ Little impact. The app has no foreground services, broadcast receivers, implicit
 
 ### API 36 (Android 16)
 
-- [ ] **Edge-to-edge opt-out gone.** Don't add `windowOptOutEdgeToEdgeEnforcement`.
-- [ ] **Predictive back on by default.** `onBackPressed()` is no longer called and `KEYCODE_BACK` is no longer dispatched. The app already uses Compose `BackHandler` (`WebView.kt`) and `enableOnBackInvokedCallback="true"`, which are compatible. Test: Back exits full-screen video, then goes back in WebView history, then closes the activity. Check that the back-to-home animation doesn't fire while a custom view is showing.
-- [ ] **Orientation and resizability ignored on sw ≥ 600dp** (tablets, unfolded foldables, desktop windowing):
+- [x] **Edge-to-edge opt-out gone.** Don't add `windowOptOutEdgeToEdgeEnforcement`.
+- [x] **Predictive back on by default.** `onBackPressed()` is no longer called and `KEYCODE_BACK` is no longer dispatched. The app already uses Compose `BackHandler` (`WebView.kt`) and `enableOnBackInvokedCallback="true"`, which are compatible. Test: Back exits full-screen video, then goes back in WebView history, then closes the activity. Check that the back-to-home animation doesn't fire while a custom view is showing.
+- [x] **Orientation and resizability ignored on sw ≥ 600dp** (tablets, unfolded foldables, desktop windowing):
   - `zedMoviesActivity` (`screenOrientation="portrait"`) will rotate and resize. Confirm the Compose layouts stay usable in landscape and wide windows (lists and grids, details header), and that state survives the recreation (ViewModels, `rememberSaveable`, pager position).
   - `WebView.kt`'s `requestedOrientation` lock does nothing on those devices. That's acceptable because the video still fills the screen. `WebViewActivity` already declares `configChanges` for orientation, screen size and layout, so the page won't reload.
   - Phones (sw < 600dp) keep the current portrait/landscape locking.
