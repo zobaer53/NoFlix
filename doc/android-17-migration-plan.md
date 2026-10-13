@@ -32,7 +32,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: targetSdk 37 | ⏸ deferred | | Needs an Android 17 device |
 | Phase 8 (part): API 24 (minSdk) emulator | ✅ fixed a **pre-existing crash** | 5/5 UI flows pass on Android 7.0 | Core library desugaring added. Ad filter and playback still can't work on 7.x (TLS roots), decision needed |
 | Room schema export (`androidx.room` plugin, `app/schemas/`) | ✅ done | 5/5 pass + upgrade-in-place pass | Identity hash `318b45f8…` matches existing installs |
-| Phase 8: remaining matrix (API 30–33, tablet, real phone, Android 17) | ⏳ remaining | | |
+| Phase 8 (part): API 30 (Android 11, 3-button nav) emulator | ✅ done | 5/5 pass (exit 0); re-verified on 16 KB API 36 | Restored the pre-migration nav-bar look (no white scrim) |
+| Phase 8: remaining matrix (real phone, physical tablet, Android 17) | ⏳ remaining | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 
 ### Testing harness (added during the migration)
@@ -100,6 +101,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
   - **Still not working on Android 7.x (platform limits, not fixed):** (1) filter-list downloads fail. `filters.adtidy.org` uses Let's Encrypt's new chain (`YE1` → `Root YE` → `ISRG Root X2`), which Android 7.0's root store doesn't trust, so no ads are blocked. TMDB (Amazon/Starfield chain) works. (2) The player page doesn't load in the API 24 WebView (blank, only `about:blank` scripts ran), for the same TLS reason and/or the 2016 WebView (Chrome 53) on this image. Real 7.x phones usually have an updated WebView from Play, but still use the 7.0 system root store.
   - **Decision for the owner:** either (a) raise `minSdk` to 26, which matches what actually works and lets the desugaring go, or (b) keep 24 for catalog browsing and ship ISRG roots for the filter host via `res/xml/network_security_config.xml` `<trust-anchors>` (fixes filter downloads only, not WebView playback). Option (a) is recommended: playback is the app's purpose, and Android 7.x is a tiny share of devices.
 - **Process slip (recorded for honesty):** commit `52a8b4d` (Room schema export) was pushed although its first full-suite run had failed `03_search`. The command chain took its exit status from `tail`, not from `run.sh`. The failure was a test flake (Maestro typed "BBatman"). `03_search` now clears and retypes inside a `retry` block, and the re-run passed 5/5 (exit 0), which validates `52a8b4d`. From now on, commits are gated on `run.sh`'s own exit code.
+- **API 30 (Android 11) findings:** everything works. Below API 35, `enableEdgeToEdge()`'s default style plus Android's navigation-bar contrast enforcement (on since API 29) put a whitish scrim behind 3-button navigation, where the old app showed its purple background. `zedMoviesActivity` now passes `navigationBarStyle = SystemBarStyle.auto(TRANSPARENT, TRANSPARENT)` and sets `window.isNavigationBarContrastEnforced = false` (API 29+), so the background shows through as before. `SystemBarsAppearance` still picks dark or light buttons. Re-tested on API 30 and on 16 KB API 36.
+- **Disk space:** the external drive filled up (3 GB free) while creating test AVDs. The two API 37 AVDs and the non-Play API 37 image (created this session and unusable on this Mac) were deleted, which freed 13 GB. Test AVDs kept: `Pixel_9_Pro_16k` (API 36, 16 KB), `Pixel_API24`, `Pixel_API30`. The Play API 37 image is kept for an Android Studio attempt.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
