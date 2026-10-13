@@ -31,6 +31,7 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 6: CI workflow (actions v7/v6/v6, SDK 37 + NDK r28c + CMake 3.22.1, 16 KB check), versionName 3.0.0, CLAUDE.md | ✅ done | CI steps reproduced locally; signed release 3.0.0 passes 5/5 (clean install); public 2.1.2 → 3.0.0 update keeps data | Workflow itself only runs on `master` |
 | Phase 4: targetSdk 37 | ⏸ deferred | | Needs an Android 17 device |
 | Phase 8 (part): API 24 (minSdk) emulator | ✅ fixed a **pre-existing crash** | 5/5 UI flows pass on Android 7.0 | Core library desugaring added. Ad filter and playback still can't work on 7.x (TLS roots), decision needed |
+| Room schema export (`androidx.room` plugin, `app/schemas/`) | ✅ done | 5/5 pass + upgrade-in-place pass | Identity hash `318b45f8…` matches existing installs |
 | Phase 8: remaining matrix (API 30–33, tablet, real phone, Android 17) | ⏳ remaining | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 
@@ -245,7 +246,7 @@ Going to the last AGP 8 release first gives deprecation **warnings** for everyth
 - [x] **Namespaces**: `:ad-filter` → `io.github.edsuns.adfilter`, `:adblock-client` → `io.github.edsuns.adblockclient`.
 - [x] **kapt → KSP**
   > **Done:** Room and Hilt on KSP 2.3.12. Schema export not enabled yet. (`com.google.devtools.ksp`):
-  - Room: `ksp("androidx.room:room-compiler")`. Optionally add the Room Gradle plugin (`androidx.room`) with `schemaDirectory("$projectDir/schemas")` and set `exportSchema = true`, so future schema changes get real migrations. The DB is version 2 with no migrations and no destructive fallback, so any accidental schema change would crash on upgrade.
+  - Room: `ksp("androidx.room:room-compiler")`. **(Schema export done later: `exportSchema = true`, `room { schemaDirectory "$projectDir/schemas" }`, schema v2 committed.)** Optionally add the Room Gradle plugin (`androidx.room`) with `schemaDirectory("$projectDir/schemas")` and set `exportSchema = true`, so future schema changes get real migrations. The DB is version 2 with no migrations and no destructive fallback, so any accidental schema change would crash on upgrade.
   - Hilt: plugin and library 2.60.1, `ksp("com.google.dagger:hilt-android-compiler")`.
   - `:ad-filter` still uses kapt for Mezzanine at this point. That's fine on AGP 8.13. It goes away in Phase 3.
 - [x] Replace `kotlinOptions` with `kotlin { compilerOptions { jvmTarget = JvmTarget.JVM_17 } }`.

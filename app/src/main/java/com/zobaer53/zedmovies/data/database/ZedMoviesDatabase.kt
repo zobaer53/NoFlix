@@ -30,7 +30,7 @@ import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
         WishlistEntity::class
     ],
     version = 2,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(ListConverter::class, LocalDateConverter::class, CreditsConverter::class)
 abstract class zedMoviesDatabase : RoomDatabase() {
