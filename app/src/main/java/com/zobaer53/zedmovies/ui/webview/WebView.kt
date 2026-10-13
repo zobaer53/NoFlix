@@ -105,7 +105,10 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     javaScriptEnabled = true
                     domStorageEnabled = true
                     mediaPlaybackRequiresUserGesture = false
-                    WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
+                    // Never auto-darken the site (setForceDark is a no-op from targetSdk 33).
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                        WebSettingsCompat.setAlgorithmicDarkeningAllowed(this, false)
+                    }
                     cacheMode =WebSettings.LOAD_DEFAULT
                 }
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {

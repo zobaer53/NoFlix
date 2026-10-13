@@ -3,7 +3,6 @@
 package com.zobaer53.zedmovies.data.network.serializer
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -25,7 +24,7 @@ class LocalDateSerializer : KSerializer<LocalDate?> {
     override fun deserialize(decoder: Decoder): LocalDate? = try {
         val string = decoder.decodeString()
         if (string.isNotEmpty()) {
-            string.toLocalDate()
+            LocalDate.parse(string)
         } else {
             null
         }

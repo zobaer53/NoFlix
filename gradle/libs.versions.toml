@@ -7,9 +7,7 @@ ndk = "28.2.13676358"
 cmake = "3.22.1"
 hilt = "2.60.1"
 
-androidxCore = "1.10.1"
-androidxCoreKtx = "1.3.2"
-appcompat = "1.2.0"
+androidxCore = "1.19.1"
 activity = "1.7.2"
 lifecycle = "2.6.1"
 composeBom = "2023.06.00"
@@ -17,36 +15,35 @@ composeLegacy = "1.4.3"
 composeMaterial = "1.0.0"
 navigation = "2.5.3"
 hiltNavigationCompose = "1.0.0"
-splashscreen = "1.0.1"
+splashscreen = "1.2.0"
 paging = "3.1.1"
 pagingCompose = "1.0.0-alpha20"
 room = "2.8.5"
 datastore = "1.2.1"
-webkit = "1.4.0"
-work = "2.7.1"
+webkit = "1.17.1"
+work = "2.12.0"
 accompanist = "0.29.1-alpha"
 
-coroutines = "1.7.1"
+coroutines = "1.11.0"
 serialization = "1.11.0"
-datetime = "0.4.0"
+datetime = "0.8.0"
 retrofit = "2.9.0"
 retrofitSerializationConverter = "1.0.0"
 okhttp = "4.11.0"
 coil = "2.4.0"
 lottie = "6.1.0"
 jsoup = "1.14.3"
-timber = "4.7.1"
+timber = "5.0.1"
 
 junit = "4.13.2"
-androidxTestExt = "1.1.5"
-espresso = "3.5.1"
+androidxTestExt = "1.3.0"
+espresso = "3.7.0"
 
 [libraries]
 # AGP 9 compiles Kotlin itself (built-in Kotlin); this pins the Kotlin Gradle plugin it uses.
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidxCore" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }

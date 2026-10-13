@@ -40,7 +40,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
     implementation project(':adblock-client')
     implementation libs.timber
     implementation libs.kotlinx.coroutines.core

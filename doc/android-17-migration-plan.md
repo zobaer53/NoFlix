@@ -24,7 +24,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: targetSdk 35 (edge-to-edge enforced) | ✅ done | 5/5 pass (16 KB API 36); screenshots compared with target 34, gesture and 3-button nav | No visual change, no code changes needed |
 | Phase 4: targetSdk 36 (predictive back, large-screen orientation) | ✅ done | 5/5 pass (16 KB API 36) + manual large-screen check | Back works unchanged. On sw ≥ 600dp the portrait lock is ignored and the UI stretches in landscape (usable) |
 | Phase 4: targetSdk 37 | ⏸ deferred | | Needs an API 37 device (see emulator note). Continuing with Phase 5 first |
-| Phase 5: library upgrades | ⏳ next | | |
+| Phase 5a: core/core-ktx 1.19.1, splashscreen 1.2.0, webkit 1.17.1, WorkManager 2.12.0, coroutines 1.11.0, datetime 0.8.0, timber 5.0.1, test libs; appcompat removed | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also `LocalDate.parse()` and `setAlgorithmicDarkeningAllowed(false)` |
+| Phase 5b: Compose BOM 2026.09 + Material 3 + Accompanist removal (+ activity, lifecycle, navigation, hilt-compose, paging) | ⏳ next | | These pull in new Compose, so they go together |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
@@ -69,6 +70,10 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - **targetSdk 35:** the app already called `WindowCompat.setDecorFitsSystemWindows(window, false)` and applied insets, so enforced edge-to-edge changed nothing visible. Screenshots of home, list, search, details and wish list match target 34, and the bottom bar sits above the 3-button nav bar. The theme `statusBarColor`/`navigationBarColor` and Accompanist `SystemUiController` now do nothing. They get removed with Accompanist in Phase 5 (`enableEdgeToEdge()`).
 - **targetSdk 36:** predictive back is on by default. Back from details, list, search results and the WebView works unchanged (the app already used Compose `BackHandler` and `enableOnBackInvokedCallback="true"`).
 - **Large screens at targetSdk 36,** simulated on the phone emulator with `adb shell wm density 200` (1024dp wide) and landscape rotation: `dumpsys` shows `ignoreOrientationRequest=true`, so `zedMoviesActivity` runs in landscape despite `screenOrientation="portrait"`. The Compose UI lays out and works, but it's a stretched phone layout (a very wide pager banner, long single-row carousels, a full-width bottom bar). **Follow-up (Phase 7):** adaptive layouts (`material3-adaptive`, grid columns by window width). One ANR ("Waited 5003ms for FocusEvent") happened right after the density and rotation change, with the emulator at load ~12. It didn't recur on two more cold starts, so it's treated as emulator starvation. For reference, cold start is 3–4.3 s on a normal phone display vs 4.3–7 s wide (debug build, busy emulator). Revisit startup time with a release build and Baseline Profiles (Phase 7).
+- **Phase 5a:** activity, lifecycle, navigation, hilt-navigation-compose and paging were deliberately left for 5b. Their current versions depend on much newer Compose artifacts, and mixing those with Compose 1.4/1.5 and Accompanist 0.29 is asking for runtime `NoSuchMethodError`s. `appcompat` was declared in both library modules but never used, so it's gone. `adblock-client` no longer depends on core-ktx (unused).
+- **Emulator lessons (test environment, not app bugs):**
+  - Under host memory pressure, the emulator silently switches to **software rendering** (`gles_mode_selected:swangle`, `vulkan_mode_selected:lavapipe`). That burns the guest CPUs (load 15–24), and the app then hits "start timeout" kills and ANRs. The A/B test confirmed it: the last-passing commit failed in the same state. **Launch the test emulator with `-gpu host`**, e.g. `emulator -avd Pixel_9_Pro_16k -gpu host -no-snapshot-load -no-audio -no-boot-anim`. After that the suite ran in 2m42s instead of 5+ minutes.
+  - Stop old Gradle daemons after a Gradle upgrade (the 8.0 and 8.14.4 daemons stayed alive and held memory): `./gradlew --stop`, run with each old wrapper, or kill them.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -274,7 +279,7 @@ Going to the last AGP 8 release first gives deprecation **warnings** for everyth
 
 - [x] **Replace Edsuns `HttpRequest`** in `DownloadWorker.kt` with OkHttp (catalog version, shared with app) or `HttpURLConnection`. Keep the 10 s timeout.
 - [x] Once both are gone, **remove JitPack** from `settings.gradle`, unless something else still needs it (check with `./gradlew :app:dependencies`).
-- [ ] Bump timber 5.0.1, coroutines 1.11.0, serialization 1.11.0, work 2.12.0 and core-ktx 1.19.1. Remove `kotlin-stdlib`. Remove `appcompat` if nothing in the module uses it.
+- [x] Bump timber 5.0.1, coroutines 1.11.0, serialization 1.11.0, work 2.12.0 and core-ktx 1.19.1. Remove `kotlin-stdlib`. Remove `appcompat` if nothing in the module uses it.
 - [ ] Optional: change `DownloadWorker`/`InstallationWorker` from `Worker` + `runBlocking` to `CoroutineWorker`.
 - [ ] Confirm filters still download and install on a **fresh install** (WorkManager), and that blocking and cosmetic hiding still work on the streaming page.
 
@@ -322,7 +327,7 @@ Little impact. The app has no foreground services, broadcast receivers, implicit
 
 ### WebView-specific
 
-- [ ] `WebSettingsCompat.setForceDark(…, FORCE_DARK_OFF)` → `WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, false)` (guard with `WebViewFeature.ALGORITHMIC_DARKENING`).
+- [x] `WebSettingsCompat.setForceDark(…, FORCE_DARK_OFF)` → `WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, false)` (guard with `WebViewFeature.ALGORITHMIC_DARKENING`).
 - [ ] `addDocumentStartJavaScript` is unchanged in webkit 1.17. Keep the `DOCUMENT_START_SCRIPT` feature check.
 - [ ] `setWebContentsDebuggingEnabled` stays limited to debuggable builds (already done).
 
@@ -375,9 +380,10 @@ Do these as separate commits, roughly in this order. Each one should build and r
 ### 8.6 Images, animation and the remaining libraries
 
 - [ ] **Coil 2.4 → 3.6.3** (`designsystem/component/Image.kt` and any `AsyncImage` users): artifacts move to `io.coil-kt.coil3:coil-compose` + `io.coil-kt.coil3:coil-network-okhttp`. Package `coil` → `coil3` (`coil3.compose.SubcomposeAsyncImage`, `coil3.request.ImageRequest`, `coil3.request.crossfade`). Network loading needs the network artifact, or images silently fail to load. Follow the official guide at coil-kt.github.io/coil/upgrading_to_coil3/. To move faster, go to 2.7.0 now and Coil 3 in a later commit.
-- [ ] Lottie 6.7.1, splashscreen 1.2.0, webkit 1.17.1, core 1.19.1, activity 1.13.0. API compatible.
+- [ ] Lottie 6.7.1, splashscreen 1.2.0, webkit 1.17.1, core 1.19.1, activity 1.13.0.
+  > **Partly done (5a):** splashscreen, webkit, core done. Lottie and activity go in 5b/5c. API compatible.
 - [ ] Jsoup → 1.23.2, or, better, **remove the scraping fallback**. `WebViewActivity` only uses it when `tmdbId == 0`, which the Play button shouldn't send. Removing it drops Jsoup, `RunOn Background.kt` and `scrapeMovieData()`. Update CLAUDE.md if you do.
-- [ ] Tests: junit-ext 1.3.0, espresso 3.7.0.
+- [x] Tests: junit-ext 1.3.0, espresso 3.7.0.
 
 ## 9. Phase 6: CI and release workflow (`.github/workflows/release.yml`)
 
