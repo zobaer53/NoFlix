@@ -19,7 +19,7 @@ android {
         // CI passes -PappVersionCode/-PappVersionName (see .github/workflows/release.yml).
         // To start a new minor/major line, raise versionName here; CI releases it next.
         versionCode project.hasProperty("appVersionCode") ? project.property("appVersionCode").toInteger() : 3
-        versionName project.findProperty("appVersionName") ?: "2.1.0"
+        versionName project.findProperty("appVersionName") ?: "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

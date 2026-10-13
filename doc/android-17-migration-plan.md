@@ -23,15 +23,15 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: compileSdk 37 (all modules, from the catalog) | ✅ done | 5/5 pass (16 KB API 36 emulator) | `platforms;android-37.0` |
 | Phase 4: targetSdk 35 (edge-to-edge enforced) | ✅ done | 5/5 pass (16 KB API 36); screenshots compared with target 34, gesture and 3-button nav | No visual change, no code changes needed |
 | Phase 4: targetSdk 36 (predictive back, large-screen orientation) | ✅ done | 5/5 pass (16 KB API 36) + manual large-screen check | Back works unchanged. On sw ≥ 600dp the portrait lock is ignored and the UI stretches in landscape (usable) |
-| Phase 4: targetSdk 37 | ⏸ deferred | | Needs an API 37 device (see emulator note). Continuing with Phase 5 first |
 | Phase 5a: core/core-ktx 1.19.1, splashscreen 1.2.0, webkit 1.17.1, WorkManager 2.12.0, coroutines 1.11.0, datetime 0.8.0, timber 5.0.1, test libs; appcompat removed | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also `LocalDate.parse()` and `setAlgorithmicDarkeningAllowed(false)` |
 | Phase 5b-1: Compose BOM 2023.06 → 2026.09.00, Accompanist removed, activity 1.13.0, `enableEdgeToEdge()`, Material ripple APIs | ✅ done | 5/5 pass (16 KB API 36), screenshots identical, new pager/tab swipe checks | See 5b-1 notes |
 | Phase 5b-2: Material 2 → Material 3 (PullToRefreshBox, SecondaryTabRow, M3 `Text`), `compose-material` dropped | ✅ done | 5/5 pass (16 KB API 36), new pull-to-refresh step, screenshots checked | `material-icons-core` stays for one icon |
 | Phase 5b-3: navigation 2.10.2, lifecycle 2.11.0, paging + paging-compose 3.5.3, `hilt-lifecycle-viewmodel-compose` 1.4.0 | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also M3 deprecation renames and a dead helper removed |
 | Phase 5c: Retrofit 3.0.0 + first-party converter, OkHttp 5.5.0, Coil 3.6.3 (+ `coil-network-okhttp`), Lottie 6.7.1, Jsoup 1.23.2 | ✅ done | 5/5 pass (16 KB API 36), posters checked on screenshots | Custom `ResultCall` adapter unchanged |
-| Phase 6: CI workflow, versionName 3.0.0, CLAUDE.md | ⏳ next | | |
+| Phase 6: CI workflow (actions v7/v6/v6, SDK 37 + NDK r28c + CMake 3.22.1, 16 KB check), versionName 3.0.0, CLAUDE.md | ✅ done | CI steps reproduced locally; signed release 3.0.0 passes 5/5 (clean install); public 2.1.2 → 3.0.0 update keeps data | Workflow itself only runs on `master` |
+| Phase 4: targetSdk 37 | ⏸ deferred | | Needs an Android 17 device |
+| Phase 8: full test matrix | ⏳ remaining | | API 24 / API 30–33 devices, tablet, real phone |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
-| Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
 
 ### Testing harness (added during the migration)
 
@@ -90,6 +90,9 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - **Phase 5b-2:** `ZedMoviesSwipeRefresh` wraps M3 `PullToRefreshBox` + `PullToRefreshDefaults.Indicator` (same colors and padding). The unused `scale` parameter is gone: the M3 indicator slides in instead of scaling. Tabs use `SecondaryTabRow` + `TabRowDefaults.SecondaryIndicator`, and the pager-following indicator now goes through M3's `Modifier.tabIndicatorLayout`. With no M2 components left, the M2 `LocalRippleConfiguration` and the `androidx.compose.material:material` dependency are removed. `RippleAlpha` still comes from `material-ripple` (via material3).
 - **Phase 5b-3:** `hiltViewModel()` moved to `androidx.hilt.lifecycle.viewmodel.compose` (5 screens). Navigation's string routes still compile unchanged on 2.10. paging-compose left its separate alpha track and now shares the paging version. Mechanical M3 renames: `outlinedButtonBorder` → `outlinedButtonBorder(enabled = true)`, `centerAlignedTopAppBarColors` → `topAppBarColors`. `ui/webview/getMiddleScreenPosition.kt` (unused, deprecated `defaultDisplay` API) deleted.
 - **Phase 5c:** Coil 3: package `coil` → `coil3`, and `painter.state` is now a `StateFlow`, so `Image.kt` collects it (`painter.state.collectAsState()`) before switching on loading/success/error. `coil-network-okhttp` is required for remote images (it registers itself). The JakeWharton converter is replaced by `com.squareup.retrofit2:converter-kotlinx-serialization` (import `retrofit2.converter.kotlinx.serialization.asConverterFactory`). `ResultAdapterFactory`/`ResultCall` compiled against Retrofit 3 without changes. The Jsoup scraping fallback was kept, just updated, since removing it would change behavior.
+- **Phase 6 (CI):** `release.yml` uses `actions/checkout@v7`, `actions/setup-java@v6`, `gradle/actions/setup-gradle@v6` (caching + wrapper validation, replacing `setup-java`'s `cache: gradle`). It installs `platforms;android-37.0`, `build-tools;36.0.0`, `ndk;28.2.13676358` and `cmake;3.22.1`, and has a new **"Check 16 KB page-size alignment"** step (`zipalign -c -P 16` + `llvm-objdump` on every arm64/x86_64 `.so`). The workflow can't run off `master` without publishing, so its steps were reproduced locally: `assembleRelease -PappVersionCode=30000 -PappVersionName=3.0.0` → signed with `CN=zeD, O=NoFlix`, 16 KB step passes, `aapt2 badging` shows versionCode 30000 / 3.0.0 / compileSdk 37 / targetSdk 36. The 16 KB step correctly **fails** on the pre-migration APK (all 4 64-bit `.so` flagged). With `versionName` 3.0.0 above the latest tag (2.1.2), the next master push releases **3.0.0**.
+- **Release-build tests:** the signed 3.0.0 release passes all 5 flows on a clean install (`pageSizeCompat=0`, no crashes). `.maestro/upgrade.sh build/baseline/release/NoFlix.apk app/build/outputs/apk/release/app-release.apk` (the public 2.1.2 release downloaded with `gh release download`, then 3.0.0 over it, same key) keeps the wish list. The update keeps `pageSizeCompat=6` (see the open 16 KB finding above). `upgrade.sh` now takes an optional new-APK argument.
+- **CLAUDE.md** updated: toolchain, catalog, built-in Kotlin, 16 KB rule, classpath-alignment caveat, repositories, assets-loaded JS, system bars, and the Maestro suite. It also includes the user's own pending edit (the `navigation/` bullet).
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -403,13 +406,13 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 ## 9. Phase 6: CI and release workflow (`.github/workflows/release.yml`)
 
-- [ ] SDK components: replace `ndk;25.1.8937393` and `cmake;3.10.2.4988404` with `ndk;28.2.13676358`, `cmake;3.22.1`, `platforms;android-37` and `build-tools;36.0.0`.
-- [ ] Use `gradle/actions/setup-gradle` for caching and wrapper validation, instead of `setup-java`'s `cache: gradle`. Update action major versions (`actions/checkout`, `actions/setup-java`) to the current ones.
-- [ ] JDK: Temurin 17 still works. Moving to 21 is optional.
-- [ ] Add a **16 KB check** after the build: `zipalign -c -P 16 -v 4 app-release.apk` (from the newest build-tools), and fail the job if it fails.
-- [ ] Keep the `apksigner … CN=zeD, O=NoFlix` check. The signing key must not change, or users can't update in place.
+- [x] SDK components: replace `ndk;25.1.8937393` and `cmake;3.10.2.4988404` with `ndk;28.2.13676358`, `cmake;3.22.1`, `platforms;android-37` and `build-tools;36.0.0`.
+- [x] Use `gradle/actions/setup-gradle` for caching and wrapper validation, instead of `setup-java`'s `cache: gradle`. Update action major versions (`actions/checkout`, `actions/setup-java`) to the current ones.
+- [x] JDK: Temurin 17 still works. Moving to 21 is optional.
+- [x] Add a **16 KB check** after the build: `zipalign -c -P 16 -v 4 app-release.apk` (from the newest build-tools), and fail the job if it fails.
+- [x] Keep the `apksigner … CN=zeD, O=NoFlix` check. The signing key must not change, or users can't update in place.
 - [ ] Optional: run `./gradlew lint :app:testDebugUnitTest` before `assembleRelease`.
-- [ ] Bump `versionName` in `app/build.gradle` to **3.0.0** so CI releases a new major line for the platform jump. The `sed` in the workflow reads `?: "X.Y.Z"`, so keep that pattern if the file becomes KTS, or update the regex.
+- [x] Bump `versionName` in `app/build.gradle` to **3.0.0** so CI releases a new major line for the platform jump. The `sed` in the workflow reads `?: "X.Y.Z"`, so keep that pattern if the file becomes KTS, or update the regex.
 - [ ] Release notes: describe it as "updated for Android 17, 16 KB page-size support, large-screen support". Don't name the site.
 
 ## 10. Phase 7: optional improvements (after the migration ships)

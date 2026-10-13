@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Install-over test: OLD apk + wish list item, then the current debug build installed on top.
-# Usage: .maestro/upgrade.sh path/to/old.apk
+# Usage: .maestro/upgrade.sh path/to/old.apk [path/to/new.apk]  (new defaults to the debug build)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 adb uninstall com.zobaer53.zedmovies >/dev/null 2>&1 || true
 adb install "$1" >/dev/null
 maestro test .maestro/upgrade/1_add_wishlist.yaml
-adb install -r app/build/outputs/apk/debug/app-debug.apk >/dev/null
+adb install -r "${2:-app/build/outputs/apk/debug/app-debug.apk}" >/dev/null
 adb logcat -c
 maestro test .maestro/upgrade/2_check_wishlist.yaml
 if adb logcat -d | grep -qE "FATAL EXCEPTION|IllegalStateException: .*(Room|migration)"; then
