@@ -1,19 +1,14 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace 'io.github.edsuns.adfilter'
-    compileSdkVersion 31
-
+    compileSdk 36
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        minSdk 24
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -31,8 +26,9 @@ android {
     }
 
     packaging {
-        pickFirst 'META-INF/AL2.0'
-        pickFirst 'META-INF/LGPL2.1'
+        resources {
+            pickFirsts += ['META-INF/AL2.0', 'META-INF/LGPL2.1']
+        }
     }
 
     compileOptions {

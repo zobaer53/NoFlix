@@ -1,18 +1,13 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace 'io.github.edsuns.adblockclient'
-    compileSdkVersion 31
-
+    compileSdk 36
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        minSdk 24
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

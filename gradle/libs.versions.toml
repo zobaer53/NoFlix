@@ -1,15 +1,15 @@
 [versions]
-agp = "8.13.2"
-kotlin = "2.3.21"
+agp = "9.4.1"
+kotlin = "2.4.21"
 ksp = "2.3.12"
-hilt = "2.57.2"
+hilt = "2.60.1"
 
 androidxCore = "1.10.1"
 androidxCoreKtx = "1.3.2"
 appcompat = "1.2.0"
 activity = "1.7.2"
 lifecycle = "2.6.1"
-composeBom = "2023.05.00"
+composeBom = "2023.06.00"
 composeLegacy = "1.4.3"
 composeMaterial = "1.0.0"
 navigation = "2.5.3"
@@ -39,6 +39,8 @@ androidxTestExt = "1.1.5"
 espresso = "3.5.1"
 
 [libraries]
+# AGP 9 compiles Kotlin itself (built-in Kotlin); this pins the Kotlin Gradle plugin it uses.
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidxCore" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -100,8 +102,6 @@ androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core",
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -17,8 +17,9 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 1: version catalog                                  | ✅ done | 5/5 pass                         | `gradle/libs.versions.toml`. The resolved-dependency diff showed only the intended removals. Groovy kept, KTS skipped for now |
 | Phase 2 Step A: AGP 8.13 / Gradle 8.14 / Kotlin 2.3 / KSP | ✅ done | 5/5 pass + upgrade-in-place pass | See Step A notes below                                                                                                        |
 | Phase 3 (part): `:ad-filter` without Anko / Mezzanine / HttpRequest; jcenter, Aliyun and JitPack removed | ✅ done | 5/5 pass | Done before AGP 9 so `legacy-kapt` is never needed. See notes |
-| Phase 2 Step B: AGP 9.4 / Gradle 9.7 / Kotlin 2.4         | ⏳ next |                                  |                                                                                                                               |
-| Phase 3: ad-block modules                                 | ⬜      |                                  |                                                                                                                               |
+| Phase 2 Step B: AGP 9.4.1 / Gradle 9.7.1 / Kotlin 2.4.21 / Hilt 2.60.1 | ✅ done | 5/5 pass + upgrade-in-place pass | Built-in Kotlin, configuration cache on, Jetifier off. See Step B notes |
+| Phase 3: native lib (NDK r28, CMake 3.22, 16 KB) | ⏳ next | | |
+| Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 4: targetSdk 34 → 37                                | ⬜      |                                  | `platforms;android-37` and an API 37 system image still need installing                                                       |
 | Phase 5: library upgrades                                 | ⬜      |                                  |                                                                                                                               |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
@@ -45,7 +46,12 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - **Behavior change (debug builds only):** `ScriptInjection` used Anko's `BuildConfig.DEBUG` (always false), so the injected JS never logged. It now uses `:ad-filter`'s own `BuildConfig`, so debug builds print `console.log` lines such as "element hiding finished". `run.sh` uses that as a check that the asset-loaded scripts run. Release builds are unchanged.
 - `DownloadWorker` uses `HttpURLConnection` (10 s connect/read timeouts, non-2xx → failure, non-UTF-8 charsets re-encoded to UTF-8), the same contract as Edsuns `HttpRequest`. Verified: all 6 filter lists download and install after a clean start.
 - `settings.gradle` now only has `google()`, `mavenCentral()` and `gradlePluginPortal()`. The build resolves with no JCenter, Aliyun or JitPack. CLAUDE.md still describes the Aliyun mirror; update it in the CI/docs step.
-- Commits: each tested step is committed and pushed to `origin/upgrade`.
+- **Step B: AGP 9 drops the compile/runtime classpath alignment** (`android.dependency.useConstraints` now defaults to false). Before, a transitive constraint quietly raised the Compose BOM from the declared 2023.05.00 to 2023.06.00 on every classpath. Under AGP 9 only the runtime classpath got it, so `compileDebugKotlin` saw material3 1.0.1 and failed (`TextFieldDefaults.colors` unresolved) while the APK shipped 1.1.0. Fix: declare `composeBom = "2023.06.00"`, which is what already shipped, so there's no runtime change. A compile-vs-runtime diff afterwards shows only harmless older-on-compile transitive versions (core-ktx, annotation-experimental, arch core-runtime). **Watch for this with every upgrade from now on:** declare the versions you actually run.
+- Step B: with built-in Kotlin the Kotlin Gradle plugin version is pinned with `buildscript { dependencies { classpath libs.kotlin.gradle.plugin } }` in the root `build.gradle`. `./gradlew buildEnvironment` confirms AGP's bundled 2.2.10 resolves to 2.4.21. The `kotlin-android`/`kotlin-kapt` plugins are gone from every module, and so is the `kotlin { compilerOptions { jvmTarget } }` block (it now defaults to `compileOptions.targetCompatibility` = 17).
+- Step B: library modules moved to the new DSL (`compileSdk 36`, `minSdk 24`, no `targetSdkVersion`/`versionCode`/`versionName`, `packaging.resources.pickFirsts`). `gradle.properties`: removed `android.useAndroidX` and `android.enableJetifier` (`./gradlew checkJetifier` found no support-library users), `configureondemand` → `org.gradle.configuration-cache=true`, `-Xmx4g`.
+- Step B: AGP 9 prints `EXTERNAL_NATIVE_BUILD_CONFIGURATION` warnings for `:adblock-client` (CMake 3.10.2 / `cmake_minimum_required(3.4.1)`). Handled in the native step next.
+- The baseline (pre-migration) debug APK is kept at `build/baseline/baseline-debug.apk` (gitignored) for `.maestro/upgrade.sh`.
+- Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
 
@@ -204,13 +210,13 @@ Going to the last AGP 8 release first gives deprecation **warnings** for everyth
 
 ### 5.2 Step B: AGP 9.4.1 + Gradle 9.7.1 + Kotlin 2.4.21
 
-- [ ] Gradle wrapper → 9.7.1 (AGP 9.4 needs at least 9.6.0).
-- [ ] AGP → 9.4.1.
-- [ ] **Built-in Kotlin**: remove `org.jetbrains.kotlin.android` / `kotlin-android` from every module and from the root `plugins {}`. Keep the Compose and serialization compiler plugins and KSP.
+- [x] Gradle wrapper → 9.7.1 (AGP 9.4 needs at least 9.6.0).
+- [x] AGP → 9.4.1.
+- [x] **Built-in Kotlin**: remove `org.jetbrains.kotlin.android` / `kotlin-android` from every module and from the root `plugins {}`. Keep the Compose and serialization compiler plugins and KSP.
 - [x] **No kapt left.** If Mezzanine isn't replaced yet, use `com.android.legacy-kapt` (same version as AGP) in `:ad-filter` as a temporary bridge. The real fix is in Phase 3.
 - [x] Remove `jcenter()` from both repository blocks (Gradle 9 removed it).
   > **Done:** in the ad-filter step, along with the Aliyun mirror and JitPack.
-- [ ] Check the AGP 9 default changes against this project:
+- [x] Check the AGP 9 default changes against this project:
   - `android.uniquePackageNames=true` → fixed in Step A.
   - `android.newDsl=true` → there are no `applicationVariants`/`variantFilter` uses, so no change needed.
   - `android.sdk.defaultTargetSdkToCompileSdkIfUnset` → set targetSdk explicitly anyway.
@@ -218,9 +224,10 @@ Going to the last AGP 8 release first gives deprecation **warnings** for everyth
   - `android.onlyEnableUnitTestForTheTestedBuildType=true` → unit tests run only for debug. OK.
   - `android.r8.*` strict defaults → `minifyEnabled false` today. If R8 gets turned on later (recommended, but as a separate change), note that `-keep class A` no longer keeps the default constructor.
   - `getDefaultProguardFile('proguard-android-optimize.txt')` is still allowed. `proguard-android.txt` is not.
-- [ ] `gradle.properties`: remove `android.useAndroidX` (now the default). Remove `android.enableJetifier` after `./gradlew checkJetifier` reports nothing. Replace `org.gradle.configureondemand=true` with `org.gradle.configuration-cache=true`. Raise `org.gradle.jvmargs` to `-Xmx4g`.
-- [ ] Don't add the `android.builtInKotlin=false` / `android.newDsl=false` opt-outs. AGP 10 removes them.
-- [ ] Build, smoke-test, `dependencyGuard`, commit.
+- [x] `gradle.properties`: remove `android.useAndroidX` (now the default). Remove `android.enableJetifier` after `./gradlew checkJetifier` reports nothing. Replace `org.gradle.configureondemand=true` with `org.gradle.configuration-cache=true`. Raise `org.gradle.jvmargs` to `-Xmx4g`.
+- [x] Don't add the `android.builtInKotlin=false` / `android.newDsl=false` opt-outs. AGP 10 removes them.
+- [x] Build, smoke-test, `dependencyGuard`, commit.
+  > **Done:** Maestro 5/5, upgrade-in-place passed, compile/runtime classpath diff reviewed.
 
 ## 6. Phase 3: modernize the vendored ad-blocking modules
 
