@@ -16,6 +16,7 @@ import io.github.edsuns.adfilter.impl.Constants.KEY_FILTER_NAME
 import io.github.edsuns.adfilter.impl.Constants.KEY_RAW_CHECKSUM
 import io.github.edsuns.adfilter.impl.Constants.TAG_INSTALLATION
 import io.github.edsuns.adfilter.script.ElementHiding
+import io.github.edsuns.adfilter.script.JsAssets
 import io.github.edsuns.adfilter.script.ScriptInjection
 import io.github.edsuns.adfilter.script.Scriptlet
 import io.github.edsuns.adfilter.util.None
@@ -28,6 +29,10 @@ import java.io.File
  * Created by Edsuns@qq.com on 2021/7/29.
  */
 internal class AdFilterImpl constructor(appContext: Context) : AdFilter {
+
+    init {
+        JsAssets.init(appContext.assets)
+    }
 
     private val detector: Detector = DetectorImpl()
     internal val binaryDataStore: BinaryDataStore =

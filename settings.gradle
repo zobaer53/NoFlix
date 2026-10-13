@@ -1,22 +1,15 @@
 pluginManagement {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         gradlePluginPortal()
-        maven { url 'https://jitpack.io' }
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        jcenter()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
-        // JCenter shut down in 2022; this mirror still serves the old artifacts
-        // (needed for org.jetbrains.anko, which the ad-filter module depends on).
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 rootProject.name = "zeDMovies"

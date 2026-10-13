@@ -1,6 +1,6 @@
 # Files Introduction
 
-## About JavaScript source code files in `src/main/js/`
+## About JavaScript source code files in `src/main/assets/adfilter/`
 
 - `extended-css.min.js` is from https://github.com/AdguardTeam/ExtendedCss/releases
 - `scriptlets.min.js` is generated from `scriptlets_src` folder

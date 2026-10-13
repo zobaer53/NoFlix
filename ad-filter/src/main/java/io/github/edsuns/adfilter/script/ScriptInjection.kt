@@ -1,24 +1,17 @@
 package io.github.edsuns.adfilter.script
 
-import com.anthonycr.mezzanine.FileStream
-import com.anthonycr.mezzanine.MezzanineGenerator
-import org.jetbrains.anko.commons.BuildConfig
+import io.github.edsuns.adfilter.BuildConfig
 
 /**
  * Created by Edsuns@qq.com on 2021/4/3.
  */
 internal object ScriptInjection {
 
-    @FileStream("src/main/js/inject.js")
-    interface Injection {
-        fun js(): String
-    }
-
     private const val INJECTION = "{{INJECTION}}"
     private const val DEBUG_FLAG = "{{DEBUG}}"
     private const val JS_BRIDGE = "{{BRIDGE}}"
 
-    private val injectJS = parse(MezzanineGenerator.Injection().js())
+    private val injectJS by lazy { parse(JsAssets.read("inject.js")) }
 
     private val bridgeRegister = arrayListOf(
         ElementHiding::class.java,

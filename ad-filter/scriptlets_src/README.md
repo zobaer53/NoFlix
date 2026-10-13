@@ -5,4 +5,4 @@
 
 ### Build
 
-Run `gulp` to generate output files into `../src/main/js/`.
+Run `gulp` to generate output files into `../src/main/assets/adfilter/`.

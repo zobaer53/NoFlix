@@ -2,8 +2,6 @@ package io.github.edsuns.adfilter.script
 
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import com.anthonycr.mezzanine.FileStream
-import com.anthonycr.mezzanine.MezzanineGenerator
 import io.github.edsuns.adfilter.impl.Detector
 import timber.log.Timber
 import java.net.MalformedURLException
@@ -14,29 +12,14 @@ import java.net.URL
  */
 internal class ElementHiding constructor(private val detector: Detector) {
 
-    @FileStream("src/main/js/elemhide_blocked.js")
-    interface ElemhideBlockedInjection {
-        fun js(): String
-    }
-
-    @FileStream("src/main/js/extended-css.min.js")
-    interface ExtendedCssInjection {
-        fun js(): String
-    }
-
-    @FileStream("src/main/js/element_hiding.js")
-    interface EleHidingInjection {
-        fun js(): String
-    }
-
     private val eleHidingJS by lazy {
-        var js = MezzanineGenerator.ExtendedCssInjection().js()
-        js += ScriptInjection.parseScript(this, MezzanineGenerator.EleHidingInjection().js(), true)
+        var js = JsAssets.read("extended-css.min.js")
+        js += ScriptInjection.parseScript(this, JsAssets.read("element_hiding.js"), true)
         js
     }
 
     private val elemhideBlockedJs by lazy {
-        val js = MezzanineGenerator.ElemhideBlockedInjection().js()
+        val js = JsAssets.read("elemhide_blocked.js")
         ScriptInjection.parseScript(this, js)
     }
 

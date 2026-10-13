@@ -1,23 +1,14 @@
 package com.zobaer53.zedmovies.ui.webview
 
 import android.graphics.Bitmap
-import android.net.Proxy
-import android.os.Build
-import android.view.View
-import android.webkit.WebChromeClient
+import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.annotation.RequiresApi
-import com.google.android.gms.common.api.Response
+import com.zobaer53.zedmovies.BuildConfig
 import io.github.edsuns.adfilter.AdFilter
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
+
 class MyWebClient(private val onUrlChange: (String) -> Unit = {}) : WebViewClient() {
 
     private val filter = AdFilter.get()
@@ -27,6 +18,8 @@ class MyWebClient(private val onUrlChange: (String) -> Unit = {}) : WebViewClien
         request: WebResourceRequest?
     ): WebResourceResponse? {
         val result = filter.shouldIntercept(view!!, request!!)
+        // Debug builds log blocked requests; .maestro/run.sh counts them.
+        if (result.shouldBlock && BuildConfig.DEBUG) Log.d("NoFlixAdBlock", "blocked ${result.resourceUrl}")
         return result.resourceResponse
     }
 

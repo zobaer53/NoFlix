@@ -8,7 +8,7 @@ const pump = require('pump');
 const uglifyES = composer(uglifyjs, console);
 
 const file = 'scriptlets.js';
-const dist = '../src/main/js/';
+const dist = '../src/main/assets/adfilter/';
 const minFile = dist + 'scriptlets.min.js'
 
 gulp.task('uglify', function (cb) {

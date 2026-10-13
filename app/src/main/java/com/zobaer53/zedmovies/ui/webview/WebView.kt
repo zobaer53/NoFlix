@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
-import android.os.Build
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -25,8 +24,6 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import io.github.edsuns.adfilter.AdFilter
-import okhttp3.OkHttpClient
-import java.net.InetSocketAddress
 
 // RestrictedApi: addDocumentStartJavaScript is still marked internal in androidx.webkit 1.4.0;
 // the public version needs webkit 1.9+, which requires compileSdk 34.
@@ -116,14 +113,6 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                         this, STREAM_DOCUMENT_START_SCRIPT, setOf(STREAM_BASE_URL)
                     )
                 }
-                val proxyHost = "91.211.245.176"
-                val proxyPort = 8080 // Your proxy port
-
-                val okHttpClient = OkHttpClient.Builder()
-                    .proxy(java.net.Proxy(java.net.Proxy.Type.HTTP, InetSocketAddress(proxyHost, proxyPort)))
-                    .build()
-
-
                 webChromeClient = object : WebChromeClient() {
                     override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
                         val decor = activity?.window?.decorView as? FrameLayout
@@ -151,7 +140,6 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     }
                 }
 
-               // webViewClient = AdBlockingWebViewClient(okHttpClient)
                 webViewClient = MyWebClient { newUrl ->
                     pageUrl = newUrl
                     updateOrientation()

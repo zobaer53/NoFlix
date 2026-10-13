@@ -150,8 +150,7 @@ fun MoviesContainer(
                 movies.loadState.refresh.isError -> {
                     item {
                         zedMoviesCenteredBox(modifier = Modifier.fillParentMaxSize()) {
-                            errorContent(
-                                errorMessage = movies.loadState.refresh.error.asUserMessage()
+                            errorContent(movies.loadState.refresh.error.asUserMessage()
                             )
                         }
                     }
@@ -163,7 +162,7 @@ fun MoviesContainer(
             }
             if (movies.loadState.append.isError) {
                 item {
-                    errorContent(errorMessage = movies.loadState.append.error.asUserMessage()) }
+                    errorContent(movies.loadState.append.error.asUserMessage()) }
             }
         }
     }
@@ -229,8 +228,7 @@ fun TvShowsContainer(
                 tvShows.loadState.refresh.isError -> {
                     item {
                         zedMoviesCenteredBox(modifier = Modifier.fillParentMaxSize()) {
-                            errorContent(
-                                errorMessage = tvShows.loadState.refresh.error.asUserMessage()
+                            errorContent(tvShows.loadState.refresh.error.asUserMessage()
                             )
                         }
                     }
@@ -242,7 +240,7 @@ fun TvShowsContainer(
             }
             if (tvShows.loadState.append.isError) {
                 item {
-                    errorContent(errorMessage = tvShows.loadState.append.error.asUserMessage()) }
+                    errorContent(tvShows.loadState.append.error.asUserMessage()) }
             }
         }
     }
