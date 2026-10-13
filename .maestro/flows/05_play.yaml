@@ -25,6 +25,10 @@ name: 05_play
 - waitForAnimationToEnd:
     timeout: 15000
 - takeScreenshot: play_webview
+# A fresh device shows Android's one-time "Viewing full screen" hint for hidden system bars.
+- tapOn:
+    text: "Got it"
+    optional: true
 - back
 - extendedWaitUntil:
     visible: "Overview"

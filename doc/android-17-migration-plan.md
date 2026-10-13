@@ -18,9 +18,9 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 2 Step A: AGP 8.13 / Gradle 8.14 / Kotlin 2.3 / KSP | ✅ done | 5/5 pass + upgrade-in-place pass | See Step A notes below                                                                                                        |
 | Phase 3 (part): `:ad-filter` without Anko / Mezzanine / HttpRequest; jcenter, Aliyun and JitPack removed | ✅ done | 5/5 pass | Done before AGP 9 so `legacy-kapt` is never needed. See notes |
 | Phase 2 Step B: AGP 9.4.1 / Gradle 9.7.1 / Kotlin 2.4.21 / Hilt 2.60.1 | ✅ done | 5/5 pass + upgrade-in-place pass | Built-in Kotlin, configuration cache on, Jetifier off. See Step B notes |
-| Phase 3: native lib (NDK r28, CMake 3.22, 16 KB) | ⏳ next | | |
+| Phase 3: native lib (NDK r28, CMake 3.22, 16 KB) + DataStore 1.2.1 | ✅ done | 5/5 pass on API 36 **and** on a 16 KB page-size API 36 emulator; upgrade-in-place pass on both | The current release shows Android's "isn't 16 KB compatible" dialog. Fixed. See notes |
+| Phase 4: compileSdk/targetSdk → 37 | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
-| Phase 4: targetSdk 34 → 37                                | ⬜      |                                  | `platforms;android-37` and an API 37 system image still need installing                                                       |
 | Phase 5: library upgrades                                 | ⬜      |                                  |                                                                                                                               |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
@@ -51,6 +51,13 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - Step B: library modules moved to the new DSL (`compileSdk 36`, `minSdk 24`, no `targetSdkVersion`/`versionCode`/`versionName`, `packaging.resources.pickFirsts`). `gradle.properties`: removed `android.useAndroidX` and `android.enableJetifier` (`./gradlew checkJetifier` found no support-library users), `configureondemand` → `org.gradle.configuration-cache=true`, `-Xmx4g`.
 - Step B: AGP 9 prints `EXTERNAL_NATIVE_BUILD_CONFIGURATION` warnings for `:adblock-client` (CMake 3.10.2 / `cmake_minimum_required(3.4.1)`). Handled in the native step next.
 - The baseline (pre-migration) debug APK is kept at `build/baseline/baseline-debug.apk` (gitignored) for `.maestro/upgrade.sh`.
+- **16 KB results (Pixel 9 Pro, API 36, `system-images;android-36;google_apis_playstore_ps16k`, AVD `Pixel_9_Pro_16k`, `getconf PAGE_SIZE` = 16384):**
+  - Pre-migration build: Android shows "This app isn't 16 KB compatible. APK and ELF alignment checks failed. This app will be run using page size compatible mode" on launch. **Users of the current release on 16 KB devices see this.**
+  - After AGP 9 (NDK r28c is its default, so `libadblock-client.so` was already `2**14`): still "ELF alignment check failed". The culprit was **`libdatastore_shared_counter.so` from DataStore `1.1.0-alpha04`** (4 KB-aligned), not our library. DataStore → 1.2.1 (planned for Phase 5, pulled forward) ships it 16 KB-aligned. No dialog now, and all flows pass.
+  - Lesson: 16 KB compliance depends on **every** `.so` in the APK, including AndroidX ones. `run.sh` now checks every 64-bit `.so` with `llvm-objdump` (fails unless all LOAD segments are `2**14`+), and `01_home` asserts that the "16 KB compatible" dialog never appears.
+  - 32-bit (`armeabi-v7a`, `x86`) libraries stay 4 KB-aligned. That's fine, since 16 KB pages are 64-bit only.
+- Native step: `ndkVersion` and the CMake version now come from the catalog (`ndk = "28.2.13676358"`, `cmake = "3.22.1"`), and `cmake_minimum_required(VERSION 3.22.1)`. AGP's `EXTERNAL_NATIVE_BUILD_CONFIGURATION` warnings are gone. Clang still prints one old warning in the vendored code (`ad_block_client.cc:51`, `-Wwritable-strings`): harmless, left as is.
+- Test-flow fixes found on a fresh emulator: Android's one-time "Viewing full screen" hint (shown the first time an app hides the system bars) swallows the first Back, so `05_play` taps "Got it" if it's there. The upgrade flow dismisses the old build's 16 KB dialog ("OK") before anything else.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -233,16 +240,16 @@ Going to the last AGP 8 release first gives deprecation **warnings** for everyth
 
 ### 6.1 `:adblock-client` (native engine): required for 16 KB devices
 
-- [ ] Pin `ndkVersion = "28.2.13676358"` (AGP 9.4's default, r28c). r28+ links with 16 KB max-page-size by default.
-- [ ] `CMakeLists.txt`: `cmake_minimum_required(VERSION 3.22.1)`. Set `externalNativeBuild.cmake.version` to `"3.22.1"`.
+- [x] Pin `ndkVersion = "28.2.13676358"` (AGP 9.4's default, r28c). r28+ links with 16 KB max-page-size by default.
+- [x] `CMakeLists.txt`: `cmake_minimum_required(VERSION 3.22.1)`. Set `externalNativeBuild.cmake.version` to `"3.22.1"`.
 - [ ] Optional: set `abiFilters` to `arm64-v8a`, `armeabi-v7a`, `x86_64` (drop 32-bit x86) to save APK size.
-- [ ] Fix any new clang warnings or errors from the newer NDK in `third-party/ad-block` (old C++; watch for `-Wdeprecated`, implicit conversions and `register` keywords). Keep `parse()` inputs NUL-terminated, as CLAUDE.md warns.
-- [ ] **Check alignment** on the release APK:
+- [x] Fix any new clang warnings or errors from the newer NDK in `third-party/ad-block` (old C++; watch for `-Wdeprecated`, implicit conversions and `register` keywords). Keep `parse()` inputs NUL-terminated, as CLAUDE.md warns.
+- [x] **Check alignment** on the release APK:
   - `zipalign -c -P 16 -v 4 app-release.apk` → "Verification successful".
   - `llvm-objdump -p lib/arm64-v8a/libadblock-client.so | grep LOAD` → every segment `align 2**14`.
   - Or Studio's **Build → Analyze APK** (Alignment column), or Google's `check_elf_alignment.sh`.
-- [ ] Run on a **16 KB page-size emulator image** (Android 15+ "16 KB Page Size" system image) and confirm there is no compat-mode warning dialog.
-- [ ] Android 17 checks (verified): no `SetStatic*Field` JNI writes in the C++ (the static-final restriction doesn't apply). The library loads with `System.loadLibrary` from the APK, so the new native dynamic-code-loading rule doesn't apply.
+- [x] Run on a **16 KB page-size emulator image** (Android 15+ "16 KB Page Size" system image) and confirm there is no compat-mode warning dialog.
+- [x] Android 17 checks (verified): no `SetStatic*Field` JNI writes in the C++ (the static-final restriction doesn't apply). The library loads with `System.loadLibrary` from the APK, so the new native dynamic-code-loading rule doesn't apply.
 
 ### 6.2 `:ad-filter`
 
@@ -345,7 +352,8 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 - [ ] paging-runtime and paging-compose → 3.5.3. `Container.kt` already uses `items(count, key = itemKey(), contentType = itemContentType())`, so expect only small changes.
 - [ ] Room 2.8.5 with KSP (done in Phase 2). Rebuild. The generated code changes, but the schema must not. Confirm `ZedMoviesDatabase` stays at `version = 2` with identical entities. Phase 8 tests upgrade-in-place.
-- [ ] DataStore 1.1.0-alpha04 → 1.2.1. API compatible.
+- [x] DataStore 1.1.0-alpha04 → 1.2.1. API compatible.
+  > **Done early** in the native step: its 1.1.0-alpha04 native library was the remaining 16 KB blocker. Preferences survive the update-in-place test.
 
 ### 8.5 Networking and serialization
 

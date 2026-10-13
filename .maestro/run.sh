@@ -8,9 +8,26 @@ PKG=com.zobaer53.zedmovies
 OUT=build/maestro
 if [ "${1:-}" = "--no-build" ]; then shift; else ./gradlew :app:assembleDebug --console=plain -q; fi
 adb install -r app/build/outputs/apk/debug/app-debug.apk >/dev/null
+
+# 16 KB page-size devices (Android 15+) need every 64-bit native library aligned to 2**14.
+SDK=$(sed -n 's/^sdk.dir=//p' local.properties)
+OBJDUMP=$(ls "$SDK"/ndk/*/toolchains/llvm/prebuilt/*/bin/llvm-objdump 2>/dev/null | sort -V | tail -1)
+if [ -n "$OBJDUMP" ]; then
+  libs=$(mktemp -d)
+  unzip -q -o app/build/outputs/apk/debug/app-debug.apk 'lib/arm64-v8a/*' 'lib/x86_64/*' -d "$libs" 2>/dev/null || true
+  for so in "$libs"/lib/*/*.so; do
+    [ -e "$so" ] || continue
+    if "$OBJDUMP" -p "$so" | grep LOAD | grep -qv 'align 2\*\*1[4-9]'; then
+      echo "NOT 16 KB aligned: ${so#$libs/}"; align_failed=1
+    fi
+  done
+  rm -rf "$libs"
+  [ -z "${align_failed:-}" ] && echo "native libraries: 16 KB aligned"
+fi
 adb logcat -c
 rm -rf "$OUT"; mkdir -p "$OUT"
 status=0
+[ -n "${align_failed:-}" ] && status=1
 if [ $# -gt 0 ]; then
   maestro test --test-output-dir "$OUT" "$@" || status=$?
 else

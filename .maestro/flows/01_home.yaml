@@ -8,6 +8,8 @@ name: 01_home
     visible: "Upcoming Movies"
     timeout: 30000
 - assertVisible: "Top Rated"
+# On 16 KB page-size devices a misaligned native library shows a compat-mode warning dialog.
+- assertNotVisible: ".*16 KB compatible.*"
 - assertVisible: "Movies"
 - assertVisible: "Tv Shows"
 - assertVisible: "Search"
