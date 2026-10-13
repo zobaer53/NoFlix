@@ -18,8 +18,10 @@ android {
         applicationId "com.zobaer53.zedmovies"
         minSdk 24
         targetSdk 33
-        versionCode 3
-        versionName "2.1.0"
+        // CI passes -PappVersionCode/-PappVersionName (see .github/workflows/release.yml).
+        // To start a new minor/major line, raise versionName here; CI releases it next.
+        versionCode project.hasProperty("appVersionCode") ? project.property("appVersionCode").toInteger() : 3
+        versionName project.findProperty("appVersionName") ?: "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

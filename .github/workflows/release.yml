@@ -1,0 +1,101 @@
+# Builds a signed release APK for every push to master (including merged pull
+# requests) and publishes it as a GitHub release.
+#
+# Versioning: the next version is the latest X.Y.Z tag with the patch number
+# bumped (2.1.0 -> 2.1.1). To start a new minor/major line, raise versionName in
+# app/build.gradle above the latest tag (e.g. "2.2.0") and that version is used
+# as is. versionCode is derived from the version (X*10000 + Y*100 + Z), so it
+# always increases and installs update over older releases.
+#
+# Required repository secrets: API_KEY, RELEASE_KEYSTORE_BASE64,
+# RELEASE_STORE_PASSWORD, RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD.
+name: Release
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Two releases built at once could pick the same version number.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tags are needed to work out the next version
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Install NDK and CMake for the ad-block native library
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install \
+            "ndk;25.1.8937393" "cmake;3.10.2.4988404" > /dev/null
+
+      - name: Work out version
+        id: version
+        run: |
+          base=$(sed -n 's/.*?: "\([0-9]*\.[0-9]*\.[0-9]*\)".*/\1/p' app/build.gradle | head -1)
+          latest=$(git tag --list '[0-9]*' | sort -V | tail -1)
+          if [ -z "$latest" ] || [ "$(printf '%s\n%s\n' "$latest" "$base" | sort -V | tail -1)" != "$latest" ]; then
+            version=$base
+          else
+            IFS=. read -r major minor patch <<< "$latest"
+            version="$major.${minor:-0}.$(( ${patch:-0} + 1 ))"
+          fi
+          IFS=. read -r major minor patch <<< "$version"
+          code=$(( major * 10000 + minor * 100 + patch ))
+          echo "Releasing $version (versionCode $code), latest tag was ${latest:-none}"
+          echo "name=$version" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Set up signing and API key
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          {
+            echo "sdk.dir=$ANDROID_HOME"
+            echo "API_KEY=$API_KEY"
+            echo "RELEASE_STORE_FILE=$RUNNER_TEMP/release.jks"
+            echo "RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD"
+            echo "RELEASE_KEY_ALIAS=$RELEASE_KEY_ALIAS"
+            echo "RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD"
+          } > local.properties
+
+      - name: Build release APK
+        run: |
+          ./gradlew :app:assembleRelease \
+            -PappVersionCode=${{ steps.version.outputs.code }} \
+            -PappVersionName=${{ steps.version.outputs.name }}
+
+      - name: Check the APK is signed with the release key
+        run: |
+          apk=app/build/outputs/apk/release/app-release.apk
+          apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$apksigner" verify --print-certs "$apk" | grep -q "CN=zeD, O=NoFlix"
+          cp "$apk" NoFlix.apk
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.name }}" NoFlix.apk \
+            --target "$GITHUB_SHA" \
+            --title "v${{ steps.version.outputs.name }}" \
+            --generate-notes
