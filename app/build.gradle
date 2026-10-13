@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace 'com.zobaer53.zedmovies'
-    compileSdk 36
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.zobaer53.zedmovies"

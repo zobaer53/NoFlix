@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'io.github.edsuns.adblockclient'
-    compileSdk 36
+    compileSdk libs.versions.compileSdk.get().toInteger()
     // r28+ links 64-bit libraries with 16 KB page alignment (Android 15+ 16 KB devices).
     ndkVersion libs.versions.ndk.get()
 

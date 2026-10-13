@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'io.github.edsuns.adfilter'
-    compileSdk 36
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         minSdk 24
