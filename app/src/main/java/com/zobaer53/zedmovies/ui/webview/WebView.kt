@@ -1,11 +1,16 @@
 package com.zobaer53.zedmovies.ui.webview
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
+import android.content.pm.ApplicationInfo
 import android.os.Build
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.FrameLayout
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.webkit.WebSettingsCompat
@@ -27,12 +33,35 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     val filterViewModel = filter.viewModel
     var rememberUrl by remember { mutableStateOf(url) }
     var isFullScreen by remember { mutableStateOf(false) }
+    val activity = LocalContext.current as? Activity
+    var webView by remember { mutableStateOf<WebView?>(null) }
+    var customView by remember { mutableStateOf<View?>(null) }
+    var customViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
+
+    fun hideCustomView() {
+        (activity?.window?.decorView as? FrameLayout)?.removeView(customView)
+        customView = null
+        customViewCallback?.onCustomViewHidden()
+        customViewCallback = null
+        isFullScreen = false
+    }
+
+    BackHandler {
+        when {
+            customView != null -> hideCustomView()
+            webView?.canGoBack() == true -> webView?.goBack()
+            else -> activity?.finish()
+        }
+    }
 
     // Setup AdblockAndroid for your WebView.
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
+            if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
+                WebView.setWebContentsDebuggingEnabled(true)
+            }
             WebView(context).apply {
                 filter.setupWebView(this)
                 // Add filter list subscriptions on first installation.
@@ -60,6 +89,7 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                 // Enable JavaScript and other settings
                 settings.apply {
                     javaScriptEnabled = true
+                    domStorageEnabled = true
                     mediaPlaybackRequiresUserGesture = false
                     WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
                     cacheMode =WebSettings.LOAD_DEFAULT
@@ -74,22 +104,40 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
 
                 webChromeClient = object : WebChromeClient() {
                     override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-                        super.onShowCustomView(view, callback)
+                        val decor = activity?.window?.decorView as? FrameLayout
+                        if (view == null || decor == null || customView != null) {
+                            callback?.onCustomViewHidden()
+                            return
+                        }
                         // Enter fullscreen mode here
+                        decor.addView(
+                            view,
+                            FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.MATCH_PARENT,
+                                FrameLayout.LayoutParams.MATCH_PARENT
+                            )
+                        )
+                        customView = view
+                        customViewCallback = callback
                         isFullScreen = true
                     }
 
                     override fun onHideCustomView() {
-                        super.onHideCustomView()
                         // Exit fullscreen mode here
-                        isFullScreen = false
+                        hideCustomView()
                     }
                 }
 
-                // Set WebViewClient and WebChromeClient
-                webChromeClient = WebChromeClient()
                // webViewClient = AdBlockingWebViewClient(okHttpClient)
-                webViewClient= MyWebClient()
+                webViewClient = MyWebClient { pageUrl ->
+                    // Watch pages play the video full screen, so use landscape there.
+                    activity?.requestedOrientation = if (isStreamWatchUrl(pageUrl)) {
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                    } else {
+                        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    }
+                }
+                webView = this
 
                 // Load the video URL
                 loadUrl(rememberUrl)

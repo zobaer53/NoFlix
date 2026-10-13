@@ -21,6 +21,7 @@ internal fun MovieDetailsItem(
     with(movieDetails) {
         DetailsItem(
             modifier = modifier,
+            id = id,
             type = "movie",
             title = title,
             overview = overview,

@@ -28,7 +28,8 @@ fun RatingItem(
     title: String,
     releaseDate: String,
     rating: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tmdbId: Int = 0
 ) {
     val context = LocalContext.current
     Card(
@@ -54,6 +55,7 @@ fun RatingItem(
                                 putExtra("movieName", title)
                                 putExtra("movieYear", releaseDate)
                                 putExtra("type", type)
+                                putExtra("tmdbId", tmdbId)
                             }
                             context.startActivity(intent)
 

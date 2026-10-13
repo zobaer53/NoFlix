@@ -44,6 +44,7 @@ import com.zobaer53.zedmovies.R
 @Suppress("LongParameterList")
 @Composable
 internal fun DetailsItem(
+    id: Int,
     type:String,
     title: String,
     overview: String,
@@ -166,7 +167,7 @@ internal fun DetailsItem(
                                 rating = PlaceholderRating
                             )
                         } else {
-                            RatingItem(type,title,releaseDate.year,rating = voteAverage)
+                            RatingItem(type,title,releaseDate.year,rating = voteAverage, tmdbId = id)
                         }
                     }
                 }
@@ -192,6 +193,7 @@ internal fun DetailsItemPlaceholder(
 ) {
     DetailsItem(
         modifier = modifier,
+        id = 0,
         type = "",
         title = PlaceholderText,
         overview = PlaceholderText,

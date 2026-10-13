@@ -18,7 +18,7 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-class MyWebClient() : WebViewClient() {
+class MyWebClient(private val onUrlChange: (String) -> Unit = {}) : WebViewClient() {
 
     private val filter = AdFilter.get()
 
@@ -32,6 +32,22 @@ class MyWebClient() : WebViewClient() {
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         filter.performScript(view, url)
+    }
+
+    override fun onPageCommitVisible(view: WebView?, url: String?) {
+        injectStreamPageStyle(view, url)
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        injectStreamPageStyle(view, url)
+    }
+
+    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+        url?.let(onUrlChange)
+    }
+
+    private fun injectStreamPageStyle(view: WebView?, url: String?) {
+        if (isStreamSiteUrl(url)) view?.evaluateJavascript(STREAM_PAGE_SCRIPT, null)
     }
 }
 

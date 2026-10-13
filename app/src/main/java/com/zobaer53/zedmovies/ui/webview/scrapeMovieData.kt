@@ -5,6 +5,17 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
+const val STREAM_BASE_URL = "https://framextv.xyz"
+
+// The streaming site is a client-rendered SPA, so its pages can't be scraped with Jsoup.
+// Its routes are keyed by TMDB id, so the watch URL is built directly instead.
+fun buildStreamUrl(tmdbId: Int, type: String): String =
+    if (type.trim().lowercase() == "tv") {
+        "$STREAM_BASE_URL/tv/$tmdbId"
+    } else {
+        "$STREAM_BASE_URL/watch/$tmdbId"
+    }
+
 fun scrapeMovieData(
     url: String,
     movieYear: String,
