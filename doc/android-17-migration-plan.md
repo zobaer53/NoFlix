@@ -21,7 +21,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 3: native lib (NDK r28, CMake 3.22, 16 KB) + DataStore 1.2.1 | ✅ done | 5/5 pass on API 36 **and** on a 16 KB page-size API 36 emulator; upgrade-in-place pass on both | The current release shows Android's "isn't 16 KB compatible" dialog. Fixed. See notes |
 | Phase 4: targetSdk 33 → 34 | ✅ done | 5/5 pass (16 KB API 36 emulator) | No code changes needed |
 | Phase 4: compileSdk 37 (all modules, from the catalog) | ✅ done | 5/5 pass (16 KB API 36 emulator) | `platforms;android-37.0` |
-| Phase 4: targetSdk 35 → 37 | ⏳ next | | API 37 emulator can't boot with acceleration on this Mac (see notes) |
+| Phase 4: targetSdk 35 (edge-to-edge enforced) | ✅ done | 5/5 pass (16 KB API 36); screenshots compared with target 34, gesture and 3-button nav | No visual change, no code changes needed |
+| Phase 4: targetSdk 36 → 37 | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 5: library upgrades                                 | ⬜      |                                  |                                                                                                                               |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
@@ -64,6 +65,7 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - `run.sh` now uninstalls before installing, so leftovers from `upgrade.sh` (like inherited compat mode) can't affect a run.
 - `compileSdk` comes from the catalog (`compileSdk = "37"`) in all three modules. AGP 9.4 resolves it to the installed `platforms;android-37.0` package. build-tools 37.0.0 is installed too.
 - **API 37 emulator problem (blocks on-device tests of targetSdk 37 behaviors):** the `system-images;android-37.0;google_apis_playstore;arm64-v8a` image (rev 6) starts with "hvf is not enabled on this aarch64 host" plus repeated `mprotect failed: Permission denied`, so it runs in software emulation and never finishes booting. This happens on emulator 36.6.11 and after updating to 37.2.12, both inside and outside the command sandbox, on an Apple M4 with macOS 26.6.2. The API 36 images get hardware acceleration in the same setup, and the AVD configs differ only in the system image. Workarounds to try: start `Pixel_9_Pro_API37` from Android Studio's Device Manager, try the non-Play `google_apis` API 37 image, or test target-37 behavior on a real Android 17 phone. Targets 35 and 36 are tested on the API 36 emulators.
+- **targetSdk 35:** the app already called `WindowCompat.setDecorFitsSystemWindows(window, false)` and applied insets, so enforced edge-to-edge changed nothing visible. Screenshots of home, list, search, details and wish list match target 34, and the bottom bar sits above the 3-button nav bar. The theme `statusBarColor`/`navigationBarColor` and Accompanist `SystemUiController` now do nothing. They get removed with Accompanist in Phase 5 (`enableEdgeToEdge()`).
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
