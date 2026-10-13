@@ -9,7 +9,6 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.material.RippleConfiguration as Material2RippleConfiguration
 
 /** Indication for clickable() and other foundation components. */
 @Composable
@@ -24,11 +23,6 @@ internal fun rememberzedMoviesRipple(
 @Composable
 internal fun zedMoviesRippleConfiguration() =
     RippleConfiguration(color = RippleColor, rippleAlpha = RippleAlpha)
-
-/** The same for the remaining Material 2 components. */
-@Composable
-internal fun zedMoviesMaterial2RippleConfiguration() =
-    Material2RippleConfiguration(color = RippleColor, rippleAlpha = RippleAlpha)
 
 private val RippleColor @Composable get() = zedMoviesTheme.colors.accent
 

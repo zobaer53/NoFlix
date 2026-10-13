@@ -82,7 +82,6 @@ dependencies {
     implementation libs.androidx.compose.ui.tooling.preview
     implementation libs.androidx.compose.ui.util
     implementation libs.androidx.compose.foundation
-    implementation libs.androidx.compose.material
     implementation libs.androidx.compose.material.icons.core
     implementation libs.androidx.compose.material3
     debugImplementation libs.androidx.compose.ui.tooling

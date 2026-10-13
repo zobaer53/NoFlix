@@ -11,7 +11,6 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.material.LocalRippleConfiguration as LocalMaterial2RippleConfiguration
 
 @Composable
 fun zedMoviesTheme(
@@ -43,8 +42,7 @@ private fun ProvidezedMoviesThemeDependencies(
 private fun ProvideMaterialThemeDependencies(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalIndication provides rememberzedMoviesRipple(),
-        LocalRippleConfiguration provides zedMoviesRippleConfiguration(),
-        LocalMaterial2RippleConfiguration provides zedMoviesMaterial2RippleConfiguration()
+        LocalRippleConfiguration provides zedMoviesRippleConfiguration()
     ) {
         ProvideTextStyle(value = zedMoviesTheme.typography.regular.h4, content = content)
     }

@@ -26,8 +26,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: targetSdk 37 | ⏸ deferred | | Needs an API 37 device (see emulator note). Continuing with Phase 5 first |
 | Phase 5a: core/core-ktx 1.19.1, splashscreen 1.2.0, webkit 1.17.1, WorkManager 2.12.0, coroutines 1.11.0, datetime 0.8.0, timber 5.0.1, test libs; appcompat removed | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also `LocalDate.parse()` and `setAlgorithmicDarkeningAllowed(false)` |
 | Phase 5b-1: Compose BOM 2023.06 → 2026.09.00, Accompanist removed, activity 1.13.0, `enableEdgeToEdge()`, Material ripple APIs | ✅ done | 5/5 pass (16 KB API 36), screenshots identical, new pager/tab swipe checks | See 5b-1 notes |
-| Phase 5b-2: Material 2 → Material 3 (pull-to-refresh, tabs, M2 `Text`), drop `compose-material` | ⏳ next | | |
-| Phase 5b-3: navigation, Hilt Compose, lifecycle, paging | ⬜ | | |
+| Phase 5b-2: Material 2 → Material 3 (PullToRefreshBox, SecondaryTabRow, M3 `Text`), `compose-material` dropped | ✅ done | 5/5 pass (16 KB API 36), new pull-to-refresh step, screenshots checked | `material-icons-core` stays for one icon |
+| Phase 5b-3: navigation, Hilt Compose, lifecycle, paging | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
@@ -86,6 +86,7 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
   - `material-icons-core` no longer comes in transitively. It's declared explicitly (frozen at 1.7.8, still in the BOM) for `Icons.Rounded.Close`.
   - `ui-util`/`runtime` pins (1.4.3) and `material` pin (1.0.0) removed. Everything Compose comes from the BOM.
   - `run.sh <flow…>` (a partial run) skips the ad-filter checks, which need `05_play`.
+- **Phase 5b-2:** `ZedMoviesSwipeRefresh` wraps M3 `PullToRefreshBox` + `PullToRefreshDefaults.Indicator` (same colors and padding). The unused `scale` parameter is gone: the M3 indicator slides in instead of scaling. Tabs use `SecondaryTabRow` + `TabRowDefaults.SecondaryIndicator`, and the pager-following indicator now goes through M3's `Modifier.tabIndicatorLayout`. With no M2 components left, the M2 `LocalRippleConfiguration` and the `androidx.compose.material:material` dependency are removed. `RippleAlpha` still comes from `material-ripple` (via material3).
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -349,13 +350,13 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 ### 8.1 Compose BOM 2023.05.00 → 2026.09.00 and leaving Material 2
 
-- [ ] Use the BOM for every `androidx.compose.*` artifact. Remove the pinned `material:1.0.0`, `ui-util:1.4.3` and `runtime:1.4.3`.
+- [x] Use the BOM for every `androidx.compose.*` artifact. Remove the pinned `material:1.0.0`, `ui-util:1.4.3` and `runtime:1.4.3`.
 - [x] **Ripple** (`designsystem/theme/Ripple.kt`, `Theme.kt`): `RippleTheme`, `LocalRippleTheme` and `rememberRipple` are ignored or deprecated. Replace with `ripple(bounded, radius, color)` from material3. For theme-wide colors, either set `LocalRippleConfiguration` around the tree, or build a custom `IndicationNodeFactory` with `createRippleModifierNode()` as Google's ripple migration guide describes. `LocalUseFallbackRippleImplementation` exists only as a temporary bridge.
-- [ ] **Pull to refresh** (`designsystem/component/SwipeRefresh.kt`): M2 `pullRefresh`/`PullRefreshIndicator` → M3 `PullToRefreshBox` (or `Modifier.pullToRefresh` + `PullToRefreshDefaults.Indicator`).
-- [ ] **Tabs** (`smallcomponent/TabPager.kt`): M2 `TabRow`/`Tab`/`TabRowDefaults.Indicator`/`Divider` → M3 `PrimaryTabRow` or `SecondaryTabRow` with `TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(selectedIndex))`.
-- [ ] M2 `Text` (3 files) → M3 `Text`, styled with `zedMoviesTheme.typography`.
-- [ ] Icons: `Icons.Rounded.Close` comes from `material-icons-core`. Either add `androidx.compose.material:material-icons-core` explicitly (the icon artifacts are no longer actively developed), or switch to a vector drawable / Material Symbols. After this, **drop `androidx.compose.material:material`** entirely.
-- [ ] Remove the `ExperimentalMaterialApi` opt-ins and update any other `@OptIn` annotations whose APIs became stable.
+- [x] **Pull to refresh** (`designsystem/component/SwipeRefresh.kt`): M2 `pullRefresh`/`PullRefreshIndicator` → M3 `PullToRefreshBox` (or `Modifier.pullToRefresh` + `PullToRefreshDefaults.Indicator`).
+- [x] **Tabs** (`smallcomponent/TabPager.kt`): M2 `TabRow`/`Tab`/`TabRowDefaults.Indicator`/`Divider` → M3 `PrimaryTabRow` or `SecondaryTabRow` with `TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(selectedIndex))`.
+- [x] M2 `Text` (3 files) → M3 `Text`, styled with `zedMoviesTheme.typography`.
+- [x] Icons: `Icons.Rounded.Close` comes from `material-icons-core`. Either add `androidx.compose.material:material-icons-core` explicitly (the icon artifacts are no longer actively developed), or switch to a vector drawable / Material Symbols. After this, **drop `androidx.compose.material:material`** entirely.
+- [x] Remove the `ExperimentalMaterialApi` opt-ins and update any other `@OptIn` annotations whose APIs became stable.
 
 ### 8.2 Accompanist → Compose foundation
 

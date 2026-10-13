@@ -14,6 +14,13 @@ name: 02_see_all
     timeout: 20000
 - assertNotVisible: "Top Rated"
 - takeScreenshot: list
+# Pull to refresh (Material 3 PullToRefreshBox), then the list is shown again.
+- swipe:
+    start: "50%, 25%"
+    end: "50%, 75%"
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
 - swipe:
     direction: UP
 - swipe:
