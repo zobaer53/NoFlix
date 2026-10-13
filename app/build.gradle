@@ -109,6 +109,7 @@ dependencies {
     implementation libs.retrofit.kotlinx.serialization
     implementation libs.okhttp
     implementation libs.coil.compose
+    implementation libs.coil.network.okhttp
     implementation libs.lottie.compose
     implementation libs.jsoup
 

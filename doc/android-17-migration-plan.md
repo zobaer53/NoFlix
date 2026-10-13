@@ -28,9 +28,9 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 5b-1: Compose BOM 2023.06 → 2026.09.00, Accompanist removed, activity 1.13.0, `enableEdgeToEdge()`, Material ripple APIs | ✅ done | 5/5 pass (16 KB API 36), screenshots identical, new pager/tab swipe checks | See 5b-1 notes |
 | Phase 5b-2: Material 2 → Material 3 (PullToRefreshBox, SecondaryTabRow, M3 `Text`), `compose-material` dropped | ✅ done | 5/5 pass (16 KB API 36), new pull-to-refresh step, screenshots checked | `material-icons-core` stays for one icon |
 | Phase 5b-3: navigation 2.10.2, lifecycle 2.11.0, paging + paging-compose 3.5.3, `hilt-lifecycle-viewmodel-compose` 1.4.0 | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also M3 deprecation renames and a dead helper removed |
-| Phase 5c: Retrofit 3, OkHttp 5, Coil 3, Lottie, Jsoup | ⏳ next | | |
+| Phase 5c: Retrofit 3.0.0 + first-party converter, OkHttp 5.5.0, Coil 3.6.3 (+ `coil-network-okhttp`), Lottie 6.7.1, Jsoup 1.23.2 | ✅ done | 5/5 pass (16 KB API 36), posters checked on screenshots | Custom `ResultCall` adapter unchanged |
+| Phase 6: CI workflow, versionName 3.0.0, CLAUDE.md | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
-| Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
 
 ### Testing harness (added during the migration)
@@ -89,6 +89,7 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
   - `run.sh <flow…>` (a partial run) skips the ad-filter checks, which need `05_play`.
 - **Phase 5b-2:** `ZedMoviesSwipeRefresh` wraps M3 `PullToRefreshBox` + `PullToRefreshDefaults.Indicator` (same colors and padding). The unused `scale` parameter is gone: the M3 indicator slides in instead of scaling. Tabs use `SecondaryTabRow` + `TabRowDefaults.SecondaryIndicator`, and the pager-following indicator now goes through M3's `Modifier.tabIndicatorLayout`. With no M2 components left, the M2 `LocalRippleConfiguration` and the `androidx.compose.material:material` dependency are removed. `RippleAlpha` still comes from `material-ripple` (via material3).
 - **Phase 5b-3:** `hiltViewModel()` moved to `androidx.hilt.lifecycle.viewmodel.compose` (5 screens). Navigation's string routes still compile unchanged on 2.10. paging-compose left its separate alpha track and now shares the paging version. Mechanical M3 renames: `outlinedButtonBorder` → `outlinedButtonBorder(enabled = true)`, `centerAlignedTopAppBarColors` → `topAppBarColors`. `ui/webview/getMiddleScreenPosition.kt` (unused, deprecated `defaultDisplay` API) deleted.
+- **Phase 5c:** Coil 3: package `coil` → `coil3`, and `painter.state` is now a `StateFlow`, so `Image.kt` collects it (`painter.state.collectAsState()`) before switching on loading/success/error. `coil-network-okhttp` is required for remote images (it registers itself). The JakeWharton converter is replaced by `com.squareup.retrofit2:converter-kotlinx-serialization` (import `retrofit2.converter.kotlinx.serialization.asConverterFactory`). `ResultAdapterFactory`/`ResultCall` compiled against Retrofit 3 without changes. The Jsoup scraping fallback was kept, just updated, since removing it would change behavior.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -388,14 +389,14 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 ### 8.5 Networking and serialization
 
-- [ ] Retrofit 2.9.0 → 3.0.0. Swap `com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter` for `com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0`, and change the `asConverterFactory` import to `retrofit2.converter.kotlinx.serialization.asConverterFactory`. Check that the custom `ResultAdapterFactory`/`ResultCall`/`CallDelegate` still compile against Retrofit 3's `Call`/`CallAdapter`.
-- [ ] OkHttp → 5.5.0, one declaration in the catalog. The interceptor (`ZedMoviesAuthInterceptor`) and `toMediaType()` are unchanged in 5.x.
-- [ ] kotlinx-serialization 1.11.0, coroutines 1.11.0, datetime 0.8.0. The app only uses `LocalDate`, `toLocalDate()` and `toJavaLocalDate()`, so replace any deprecated `String.toLocalDate()` with `LocalDate.parse()` if the compiler flags it.
+- [x] Retrofit 2.9.0 → 3.0.0. Swap `com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter` for `com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0`, and change the `asConverterFactory` import to `retrofit2.converter.kotlinx.serialization.asConverterFactory`. Check that the custom `ResultAdapterFactory`/`ResultCall`/`CallDelegate` still compile against Retrofit 3's `Call`/`CallAdapter`.
+- [x] OkHttp → 5.5.0, one declaration in the catalog. The interceptor (`ZedMoviesAuthInterceptor`) and `toMediaType()` are unchanged in 5.x.
+- [x] kotlinx-serialization 1.11.0, coroutines 1.11.0, datetime 0.8.0. The app only uses `LocalDate`, `toLocalDate()` and `toJavaLocalDate()`, so replace any deprecated `String.toLocalDate()` with `LocalDate.parse()` if the compiler flags it.
 
 ### 8.6 Images, animation and the remaining libraries
 
-- [ ] **Coil 2.4 → 3.6.3** (`designsystem/component/Image.kt` and any `AsyncImage` users): artifacts move to `io.coil-kt.coil3:coil-compose` + `io.coil-kt.coil3:coil-network-okhttp`. Package `coil` → `coil3` (`coil3.compose.SubcomposeAsyncImage`, `coil3.request.ImageRequest`, `coil3.request.crossfade`). Network loading needs the network artifact, or images silently fail to load. Follow the official guide at coil-kt.github.io/coil/upgrading_to_coil3/. To move faster, go to 2.7.0 now and Coil 3 in a later commit.
-- [ ] Lottie 6.7.1, splashscreen 1.2.0, webkit 1.17.1, core 1.19.1, activity 1.13.0.
+- [x] **Coil 2.4 → 3.6.3** (`designsystem/component/Image.kt` and any `AsyncImage` users): artifacts move to `io.coil-kt.coil3:coil-compose` + `io.coil-kt.coil3:coil-network-okhttp`. Package `coil` → `coil3` (`coil3.compose.SubcomposeAsyncImage`, `coil3.request.ImageRequest`, `coil3.request.crossfade`). Network loading needs the network artifact, or images silently fail to load. Follow the official guide at coil-kt.github.io/coil/upgrading_to_coil3/. To move faster, go to 2.7.0 now and Coil 3 in a later commit.
+- [x] Lottie 6.7.1, splashscreen 1.2.0, webkit 1.17.1, core 1.19.1, activity 1.13.0.
   > **Partly done (5a):** splashscreen, webkit, core done. Lottie and activity go in 5b/5c. API compatible.
 - [ ] Jsoup → 1.23.2, or, better, **remove the scraping fallback**. `WebViewActivity` only uses it when `tmdbId == 0`, which the Play button shouldn't send. Removing it drops Jsoup, `RunOn Background.kt` and `scrapeMovieData()`. Update CLAUDE.md if you do.
 - [x] Tests: junit-ext 1.3.0, espresso 3.7.0.
