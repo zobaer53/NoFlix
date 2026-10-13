@@ -9,13 +9,12 @@ hilt = "2.60.1"
 
 androidxCore = "1.19.1"
 activity = "1.13.0"
-lifecycle = "2.6.1"
+lifecycle = "2.11.0"
 composeBom = "2026.09.00"
-navigation = "2.5.3"
-hiltNavigationCompose = "1.0.0"
+navigation = "2.10.2"
+androidxHilt = "1.4.0"
 splashscreen = "1.2.0"
-paging = "3.1.1"
-pagingCompose = "1.0.0-alpha20"
+paging = "3.5.3"
 room = "2.8.5"
 datastore = "1.2.1"
 webkit = "1.17.1"
@@ -61,9 +60,9 @@ androidx-compose-material-icons-core = { module = "androidx.compose.material:mat
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-hilt-lifecycle-viewmodel-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "androidxHilt" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }

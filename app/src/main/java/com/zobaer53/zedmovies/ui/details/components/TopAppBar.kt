@@ -57,7 +57,7 @@ internal fun TopAppBar(
             zedMoviesWishlistButton(isWishlisted = isWishlisted, onClick = onWishlistButtonClick)
         },
         windowInsets = windowInsets,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
             titleContentColor = zedMoviesTheme.colors.textPrimary,
             navigationIconContentColor = zedMoviesTheme.colors.textPrimary

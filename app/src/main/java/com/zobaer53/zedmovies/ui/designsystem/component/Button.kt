@@ -42,7 +42,7 @@ fun zedMoviesOutlinedButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
-        border = ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(borderColor))
+        border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(brush = SolidColor(borderColor))
     ) {
         Text(text = stringResource(id = textResourceId), style = textStyle)
     }

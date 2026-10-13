@@ -27,7 +27,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 5a: core/core-ktx 1.19.1, splashscreen 1.2.0, webkit 1.17.1, WorkManager 2.12.0, coroutines 1.11.0, datetime 0.8.0, timber 5.0.1, test libs; appcompat removed | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also `LocalDate.parse()` and `setAlgorithmicDarkeningAllowed(false)` |
 | Phase 5b-1: Compose BOM 2023.06 → 2026.09.00, Accompanist removed, activity 1.13.0, `enableEdgeToEdge()`, Material ripple APIs | ✅ done | 5/5 pass (16 KB API 36), screenshots identical, new pager/tab swipe checks | See 5b-1 notes |
 | Phase 5b-2: Material 2 → Material 3 (PullToRefreshBox, SecondaryTabRow, M3 `Text`), `compose-material` dropped | ✅ done | 5/5 pass (16 KB API 36), new pull-to-refresh step, screenshots checked | `material-icons-core` stays for one icon |
-| Phase 5b-3: navigation, Hilt Compose, lifecycle, paging | ⏳ next | | |
+| Phase 5b-3: navigation 2.10.2, lifecycle 2.11.0, paging + paging-compose 3.5.3, `hilt-lifecycle-viewmodel-compose` 1.4.0 | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also M3 deprecation renames and a dead helper removed |
+| Phase 5c: Retrofit 3, OkHttp 5, Coil 3, Lottie, Jsoup | ⏳ next | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
@@ -87,6 +88,7 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
   - `ui-util`/`runtime` pins (1.4.3) and `material` pin (1.0.0) removed. Everything Compose comes from the BOM.
   - `run.sh <flow…>` (a partial run) skips the ad-filter checks, which need `05_play`.
 - **Phase 5b-2:** `ZedMoviesSwipeRefresh` wraps M3 `PullToRefreshBox` + `PullToRefreshDefaults.Indicator` (same colors and padding). The unused `scale` parameter is gone: the M3 indicator slides in instead of scaling. Tabs use `SecondaryTabRow` + `TabRowDefaults.SecondaryIndicator`, and the pager-following indicator now goes through M3's `Modifier.tabIndicatorLayout`. With no M2 components left, the M2 `LocalRippleConfiguration` and the `androidx.compose.material:material` dependency are removed. `RippleAlpha` still comes from `material-ripple` (via material3).
+- **Phase 5b-3:** `hiltViewModel()` moved to `androidx.hilt.lifecycle.viewmodel.compose` (5 screens). Navigation's string routes still compile unchanged on 2.10. paging-compose left its separate alpha track and now shares the paging version. Mechanical M3 renames: `outlinedButtonBorder` → `outlinedButtonBorder(enabled = true)`, `centerAlignedTopAppBarColors` → `topAppBarColors`. `ui/webview/getMiddleScreenPosition.kt` (unused, deprecated `defaultDisplay` API) deleted.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -373,14 +375,14 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 ### 8.3 Navigation, Hilt and lifecycle
 
-- [ ] navigation-compose 2.5.3 → 2.10.2. The string routes with `navArgument` (`DetailsDestination.kt`, `ListDestination.kt`) still compile. Moving to type-safe `@Serializable` routes is optional (a later refactor). Navigation 3 is out of scope.
-- [ ] `hilt-navigation-compose` → `androidx.hilt:hilt-lifecycle-viewmodel-compose:1.4.0`. Change `import androidx.hilt.navigation.compose.hiltViewModel` to `import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel` in `DetailsScreen`, `HomeScreen`, `ListScreen`, `SearchScreen` and `WishlistScreen`.
-- [ ] lifecycle 2.11.0: if `LocalLifecycleOwner` is ever needed, import it from `androidx.lifecycle.compose`. The `compose.ui.platform` one is deprecated. None are used today.
+- [x] navigation-compose 2.5.3 → 2.10.2. The string routes with `navArgument` (`DetailsDestination.kt`, `ListDestination.kt`) still compile. Moving to type-safe `@Serializable` routes is optional (a later refactor). Navigation 3 is out of scope.
+- [x] `hilt-navigation-compose` → `androidx.hilt:hilt-lifecycle-viewmodel-compose:1.4.0`. Change `import androidx.hilt.navigation.compose.hiltViewModel` to `import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel` in `DetailsScreen`, `HomeScreen`, `ListScreen`, `SearchScreen` and `WishlistScreen`.
+- [x] lifecycle 2.11.0: if `LocalLifecycleOwner` is ever needed, import it from `androidx.lifecycle.compose`. The `compose.ui.platform` one is deprecated. None are used today.
 
 ### 8.4 Paging, Room, DataStore
 
-- [ ] paging-runtime and paging-compose → 3.5.3. `Container.kt` already uses `items(count, key = itemKey(), contentType = itemContentType())`, so expect only small changes.
-- [ ] Room 2.8.5 with KSP (done in Phase 2). Rebuild. The generated code changes, but the schema must not. Confirm `ZedMoviesDatabase` stays at `version = 2` with identical entities. Phase 8 tests upgrade-in-place.
+- [x] paging-runtime and paging-compose → 3.5.3. `Container.kt` already uses `items(count, key = itemKey(), contentType = itemContentType())`, so expect only small changes.
+- [x] Room 2.8.5 with KSP (done in Phase 2). Rebuild. The generated code changes, but the schema must not. Confirm `ZedMoviesDatabase` stays at `version = 2` with identical entities. Phase 8 tests upgrade-in-place.
 - [x] DataStore 1.1.0-alpha04 → 1.2.1. API compatible.
   > **Done early** in the native step: its 1.1.0-alpha04 native library was the remaining 16 KB blocker. Preferences survive the update-in-place test.
 
