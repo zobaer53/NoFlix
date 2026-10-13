@@ -50,12 +50,15 @@ print(f"play screenshot {w}x{h}: {'landscape OK' if w > h else 'NOT landscape'}"
 sys.exit(0 if w > h else 1)
 PY
 fi
+# Ad-filter checks need the Play flow, so they only apply to a full run.
+if [ $# -eq 0 ]; then
 filters=$(adb shell run-as $PKG ls files/filter_data 2>/dev/null | wc -l | tr -d ' ')
 blocked=$(grep -c "NoFlixAdBlock: blocked" "$OUT/logcat.txt" || true)
 # Debug builds print the injected scripts' console logs (the {{DEBUG}} flag in ad-filter's JS).
 scripts=$(grep -c "element hiding finished" "$OUT/logcat.txt" || true)
 echo "filter lists installed: $filters, requests blocked: $blocked, element-hiding script runs: $scripts"
 if [ "$scripts" -lt 1 ]; then echo "injected element-hiding script never finished"; status=1; fi
+fi
 if [ "$filters" -lt 6 ]; then echo "expected 6 installed filter lists"; status=1; fi
 [ $status -eq 0 ] && echo "ALL CHECKS PASSED" || echo "CHECKS FAILED (see $OUT)"
 exit $status

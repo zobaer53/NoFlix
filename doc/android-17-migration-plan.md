@@ -25,7 +25,9 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 4: targetSdk 36 (predictive back, large-screen orientation) | ✅ done | 5/5 pass (16 KB API 36) + manual large-screen check | Back works unchanged. On sw ≥ 600dp the portrait lock is ignored and the UI stretches in landscape (usable) |
 | Phase 4: targetSdk 37 | ⏸ deferred | | Needs an API 37 device (see emulator note). Continuing with Phase 5 first |
 | Phase 5a: core/core-ktx 1.19.1, splashscreen 1.2.0, webkit 1.17.1, WorkManager 2.12.0, coroutines 1.11.0, datetime 0.8.0, timber 5.0.1, test libs; appcompat removed | ✅ done | 5/5 pass + upgrade-in-place pass (16 KB API 36) | Also `LocalDate.parse()` and `setAlgorithmicDarkeningAllowed(false)` |
-| Phase 5b: Compose BOM 2026.09 + Material 3 + Accompanist removal (+ activity, lifecycle, navigation, hilt-compose, paging) | ⏳ next | | These pull in new Compose, so they go together |
+| Phase 5b-1: Compose BOM 2023.06 → 2026.09.00, Accompanist removed, activity 1.13.0, `enableEdgeToEdge()`, Material ripple APIs | ✅ done | 5/5 pass (16 KB API 36), screenshots identical, new pager/tab swipe checks | See 5b-1 notes |
+| Phase 5b-2: Material 2 → Material 3 (pull-to-refresh, tabs, M2 `Text`), drop `compose-material` | ⏳ next | | |
+| Phase 5b-3: navigation, Hilt Compose, lifecycle, paging | ⬜ | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
 | Phase 8: full test matrix                                 | ⬜      |                                  |                                                                                                                               |
@@ -74,6 +76,16 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 - **Emulator lessons (test environment, not app bugs):**
   - Under host memory pressure, the emulator silently switches to **software rendering** (`gles_mode_selected:swangle`, `vulkan_mode_selected:lavapipe`). That burns the guest CPUs (load 15–24), and the app then hits "start timeout" kills and ANRs. The A/B test confirmed it: the last-passing commit failed in the same state. **Launch the test emulator with `-gpu host`**, e.g. `emulator -avd Pixel_9_Pro_16k -gpu host -no-snapshot-load -no-audio -no-boot-anim`. After that the suite ran in 2m42s instead of 5+ minutes.
   - Stop old Gradle daemons after a Gradle upgrade (the 8.0 and 8.14.4 daemons stayed alive and held memory): `./gradlew --stop`, run with each old wrapper, or kill them.
+- **Phase 5b-1 details:**
+  - Pager: Accompanist `HorizontalPager(count = …)` → foundation `HorizontalPager` + `rememberPagerState(pageCount = { … })`. The page offset used for the scale/alpha transition is now `PagerState.offsetForPage(page)` = `(currentPage - page) + currentPageOffsetFraction` (in `ui/home/component/Pager.kt`). The indicator reads `currentPageOffsetFraction`.
+  - Tab indicator: a private `pagerTabIndicatorOffset(pagerState, tabPositions)` in `TabPager.kt` (same algorithm as Accompanist's), so the indicator still follows the finger mid-swipe.
+  - Placeholder: Accompanist `placeholder(visible = true, color, shape)` without highlight just painted the shape instead of the content. Now it's `drawWithContent { drawOutline(...) }` in `Placeholder.kt`.
+  - System bars: `enableEdgeToEdge()` in `zedMoviesActivity`. Accompanist's `setSystemBarsColor(color)` is replaced by `SystemBarsAppearance.setIconsFor(color)` (`ui/SystemBarsAppearance.kt`), which keeps its luminance rule for dark/light icons (white icons over the details backdrop, dark elsewhere). Theme `statusBarColor`/`navigationBarColor` removed.
+  - **Ripple had to move in 5b-1, not 5b-2:** `RippleTheme`, `LocalRippleTheme` and `rememberRipple` are deprecated at error level in the new Material. `LocalIndication` = material3 `ripple(color = accent)`. `LocalRippleConfiguration` (M3) and the M2 `LocalRippleConfiguration` (for the M2 tabs until 5b-2) carry the custom alpha values.
+  - `LocalMinimumTouchTargetEnforcement provides false` → `LocalMinimumInteractiveComponentSize provides Dp.Unspecified`.
+  - `material-icons-core` no longer comes in transitively. It's declared explicitly (frozen at 1.7.8, still in the BOM) for `Icons.Rounded.Close`.
+  - `ui-util`/`runtime` pins (1.4.3) and `material` pin (1.0.0) removed. Everything Compose comes from the BOM.
+  - `run.sh <flow…>` (a partial run) skips the ad-filter checks, which need `05_play`.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---
@@ -297,8 +309,8 @@ Little impact. The app has no foreground services, broadcast receivers, implicit
 
 ### API 35 (Android 15): edge-to-edge enforced
 
-- [ ] Call `enableEdgeToEdge()` (activity 1.13) in `zedMoviesActivity.onCreate` in place of `WindowCompat.setDecorFitsSystemWindows(window, false)`. Delete Accompanist `SystemUiController` from `ZedMoviesAppState.kt`. Set light or dark status/navigation-bar icons with `enableEdgeToEdge(SystemBarStyle.auto(...))` or `WindowInsetsControllerCompat.isAppearanceLightStatusBars`.
-- [ ] Remove `android:statusBarColor` / `android:navigationBarColor` from `values/themes.xml` and `values-night/themes.xml`. They do nothing now.
+- [x] Call `enableEdgeToEdge()` (activity 1.13) in `zedMoviesActivity.onCreate` in place of `WindowCompat.setDecorFitsSystemWindows(window, false)`. Delete Accompanist `SystemUiController` from `ZedMoviesAppState.kt`. Set light or dark status/navigation-bar icons with `enableEdgeToEdge(SystemBarStyle.auto(...))` or `WindowInsetsControllerCompat.isAppearanceLightStatusBars`.
+- [x] Remove `android:statusBarColor` / `android:navigationBarColor` from `values/themes.xml` and `values-night/themes.xml`. They do nothing now.
 - [ ] Check that every screen handles insets: the top of home/details under the status bar, the bottom bar (`ZedMoviesBottomBar.kt`) above the gesture/3-button nav bar, the search field, and dialogs. M2 components don't apply insets automatically. Use `Modifier.windowInsetsPadding(WindowInsets.systemBars)` or `Scaffold(contentWindowInsets = …)`.
 - [ ] `WebViewActivity`: `LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES` is now treated as `ALWAYS`. Check that full-screen landscape video still looks right on a phone with a notch or punch-hole.
 - [ ] OpenJDK changes: there are no `removeFirst()`/`removeLast()` calls (verified). `String.format` validation is stricter, so check any format strings.
@@ -338,7 +350,7 @@ Do these as separate commits, roughly in this order. Each one should build and r
 ### 8.1 Compose BOM 2023.05.00 → 2026.09.00 and leaving Material 2
 
 - [ ] Use the BOM for every `androidx.compose.*` artifact. Remove the pinned `material:1.0.0`, `ui-util:1.4.3` and `runtime:1.4.3`.
-- [ ] **Ripple** (`designsystem/theme/Ripple.kt`, `Theme.kt`): `RippleTheme`, `LocalRippleTheme` and `rememberRipple` are ignored or deprecated. Replace with `ripple(bounded, radius, color)` from material3. For theme-wide colors, either set `LocalRippleConfiguration` around the tree, or build a custom `IndicationNodeFactory` with `createRippleModifierNode()` as Google's ripple migration guide describes. `LocalUseFallbackRippleImplementation` exists only as a temporary bridge.
+- [x] **Ripple** (`designsystem/theme/Ripple.kt`, `Theme.kt`): `RippleTheme`, `LocalRippleTheme` and `rememberRipple` are ignored or deprecated. Replace with `ripple(bounded, radius, color)` from material3. For theme-wide colors, either set `LocalRippleConfiguration` around the tree, or build a custom `IndicationNodeFactory` with `createRippleModifierNode()` as Google's ripple migration guide describes. `LocalUseFallbackRippleImplementation` exists only as a temporary bridge.
 - [ ] **Pull to refresh** (`designsystem/component/SwipeRefresh.kt`): M2 `pullRefresh`/`PullRefreshIndicator` → M3 `PullToRefreshBox` (or `Modifier.pullToRefresh` + `PullToRefreshDefaults.Indicator`).
 - [ ] **Tabs** (`smallcomponent/TabPager.kt`): M2 `TabRow`/`Tab`/`TabRowDefaults.Indicator`/`Divider` → M3 `PrimaryTabRow` or `SecondaryTabRow` with `TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(selectedIndex))`.
 - [ ] M2 `Text` (3 files) → M3 `Text`, styled with `zedMoviesTheme.typography`.
@@ -347,16 +359,16 @@ Do these as separate commits, roughly in this order. Each one should build and r
 
 ### 8.2 Accompanist → Compose foundation
 
-- [ ] **Pager** (`ui/home/component/Pager.kt`, `smallcomponent/TabPager.kt` and callers): `com.google.accompanist.pager.*` → `androidx.compose.foundation.pager.HorizontalPager` / `rememberPagerState(pageCount = { n })`.
+- [x] **Pager** (`ui/home/component/Pager.kt`, `smallcomponent/TabPager.kt` and callers): `com.google.accompanist.pager.*` → `androidx.compose.foundation.pager.HorizontalPager` / `rememberPagerState(pageCount = { n })`.
   - `HorizontalPager(count = n)` → page count now goes in `rememberPagerState { n }`.
   - `PagerScope` / `calculateCurrentOffsetForPage(page)` → `(pagerState.currentPage - page) + pagerState.currentPageOffsetFraction`, or `pagerState.getOffsetDistanceInPages(page)`.
   - `pagerState.currentPageOffset` → `currentPageOffsetFraction`.
   - `pagerTabIndicatorOffset` → M3 tab indicator offset (8.1).
   - Remove the `ExperimentalPagerApi` opt-ins.
-- [ ] **Indicators**: `DefaultHorizontalPagerIndicator` in `Pager.kt` is already custom. Just point it at the foundation `PagerState`.
-- [ ] **Placeholder** (`designsystem/component/Placeholder.kt`): Accompanist placeholder is deprecated. Write a small `Modifier.placeholder(visible, color, shape, highlight)` using `drawWithContent` and an `InfiniteTransition` shimmer (about 60 lines), or copy the Apache-2.0 Accompanist implementation into the design system.
-- [ ] **SystemUiController** → `enableEdgeToEdge()` (Phase 4, API 35).
-- [ ] Remove all `com.google.accompanist` dependencies.
+- [x] **Indicators**: `DefaultHorizontalPagerIndicator` in `Pager.kt` is already custom. Just point it at the foundation `PagerState`.
+- [x] **Placeholder** (`designsystem/component/Placeholder.kt`): Accompanist placeholder is deprecated. Write a small `Modifier.placeholder(visible, color, shape, highlight)` using `drawWithContent` and an `InfiniteTransition` shimmer (about 60 lines), or copy the Apache-2.0 Accompanist implementation into the design system.
+- [x] **SystemUiController** → `enableEdgeToEdge()` (Phase 4, API 35).
+- [x] Remove all `com.google.accompanist` dependencies.
 
 ### 8.3 Navigation, Hilt and lifecycle
 

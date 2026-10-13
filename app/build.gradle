@@ -70,7 +70,7 @@ android {
 
 dependencies {
     implementation libs.androidx.core
-    implementation libs.androidx.activity
+    implementation libs.androidx.activity.compose
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.lifecycle.runtime.compose
     implementation libs.androidx.core.splashscreen
@@ -81,8 +81,9 @@ dependencies {
     implementation libs.androidx.compose.ui.graphics
     implementation libs.androidx.compose.ui.tooling.preview
     implementation libs.androidx.compose.ui.util
-    implementation libs.androidx.compose.runtime
+    implementation libs.androidx.compose.foundation
     implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.material.icons.core
     implementation libs.androidx.compose.material3
     debugImplementation libs.androidx.compose.ui.tooling
     debugImplementation libs.androidx.compose.ui.test.manifest
@@ -111,11 +112,6 @@ dependencies {
     implementation libs.coil.compose
     implementation libs.lottie.compose
     implementation libs.jsoup
-
-    implementation libs.accompanist.pager
-    implementation libs.accompanist.pager.indicators
-    implementation libs.accompanist.placeholder.material
-    implementation libs.accompanist.systemuicontroller
 
     // Ad blocker
     implementation project(':ad-filter')

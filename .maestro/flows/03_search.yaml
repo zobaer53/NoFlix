@@ -17,6 +17,17 @@ name: 03_search
     visible: "Batman Begins"
     timeout: 20000
 - takeScreenshot: search
+# Tab pager: tap a tab, then swipe back to the first one.
+- tapOn: "Tv Shows"
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- swipe:
+    start: "20%, 60%"
+    end: "85%, 60%"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000
 # First result's poster (the search field also contains "Batman").
 - tapOn:
     text: "Rating"

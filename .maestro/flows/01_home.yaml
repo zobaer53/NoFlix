@@ -19,6 +19,14 @@ name: 01_home
     visible: "Rating"
     timeout: 20000
 - takeScreenshot: home
+# Swipe the upcoming-movies pager (foundation HorizontalPager).
+- swipe:
+    start: "80%, 22%"
+    end: "20%, 22%"
+- swipe:
+    start: "80%, 22%"
+    end: "20%, 22%"
+- assertVisible: "Upcoming Movies"
 - scrollUntilVisible:
     element: "Tv Shows"
     direction: DOWN

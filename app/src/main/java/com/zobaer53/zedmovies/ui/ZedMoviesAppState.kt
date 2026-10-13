@@ -16,8 +16,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.SystemUiController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.zobaer53.zedmovies.navigation.zedMoviesNavigationDestination
 import com.zobaer53.zedmovies.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
@@ -27,20 +25,20 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun rememberzedMoviesAppState(
-    systemUiController: SystemUiController = rememberSystemUiController(),
+    systemBars: SystemBarsAppearance = rememberSystemBarsAppearance(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     startDestination: TopLevelDestination = TopLevelDestination.Home
 ) = remember(
-    systemUiController,
+    systemBars,
     snackbarHostState,
     coroutineScope,
     navController,
     startDestination
 ) {
     zedMoviesAppState(
-        systemUiController = systemUiController,
+        systemBars = systemBars,
         snackbarHostState = snackbarHostState,
         coroutineScope = coroutineScope,
         navController = navController,
@@ -50,7 +48,7 @@ fun rememberzedMoviesAppState(
 
 @Stable
 class zedMoviesAppState(
-    val systemUiController: SystemUiController,
+    val systemBars: SystemBarsAppearance,
     val snackbarHostState: SnackbarHostState,
     val coroutineScope: CoroutineScope,
     val navController: NavHostController,
@@ -128,7 +126,7 @@ class zedMoviesAppState(
 
     fun onBackClick() = navController.popBackStack()
 
-    fun setSystemBarsColor(color: Color) = systemUiController.setSystemBarsColor(color = color)
+    fun setSystemBarsColor(color: Color) = systemBars.setIconsFor(color)
 
     fun showMessage(message: String) = snackbarMessages.update { it + message }
 }
