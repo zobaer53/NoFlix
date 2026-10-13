@@ -22,11 +22,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
 import io.github.edsuns.adfilter.AdFilter
 import okhttp3.OkHttpClient
 import java.net.InetSocketAddress
 
-@SuppressLint("SetJavaScriptEnabled", "RequiresFeature")
+// RestrictedApi: addDocumentStartJavaScript is still marked internal in androidx.webkit 1.4.0;
+// the public version needs webkit 1.9+, which requires compileSdk 34.
+@SuppressLint("SetJavaScriptEnabled", "RequiresFeature", "RestrictedApi")
 @Composable
 fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     val filter = AdFilter.get()
@@ -37,6 +41,18 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     var webView by remember { mutableStateOf<WebView?>(null) }
     var customView by remember { mutableStateOf<View?>(null) }
     var customViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
+    var pageUrl by remember { mutableStateOf(url) }
+
+    // Videos (watch pages and full-screen players) play in landscape; every other page is
+    // a phone layout, so it's locked to portrait. Unlocking instead would leave the app
+    // sideways after Back while the phone is still held that way from watching.
+    fun updateOrientation() {
+        activity?.requestedOrientation = if (customView != null || isStreamWatchUrl(pageUrl)) {
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
 
     fun hideCustomView() {
         (activity?.window?.decorView as? FrameLayout)?.removeView(customView)
@@ -44,6 +60,7 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
         customViewCallback?.onCustomViewHidden()
         customViewCallback = null
         isFullScreen = false
+        updateOrientation()
     }
 
     BackHandler {
@@ -94,6 +111,11 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
                     cacheMode =WebSettings.LOAD_DEFAULT
                 }
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
+                    WebViewCompat.addDocumentStartJavaScript(
+                        this, STREAM_DOCUMENT_START_SCRIPT, setOf(STREAM_BASE_URL)
+                    )
+                }
                 val proxyHost = "91.211.245.176"
                 val proxyPort = 8080 // Your proxy port
 
@@ -120,6 +142,7 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                         customView = view
                         customViewCallback = callback
                         isFullScreen = true
+                        updateOrientation()
                     }
 
                     override fun onHideCustomView() {
@@ -129,13 +152,9 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                 }
 
                // webViewClient = AdBlockingWebViewClient(okHttpClient)
-                webViewClient = MyWebClient { pageUrl ->
-                    // Watch pages play the video full screen, so use landscape there.
-                    activity?.requestedOrientation = if (isStreamWatchUrl(pageUrl)) {
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                    } else {
-                        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                    }
+                webViewClient = MyWebClient { newUrl ->
+                    pageUrl = newUrl
+                    updateOrientation()
                 }
                 webView = this
 

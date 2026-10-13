@@ -8,6 +8,11 @@ fun isStreamSiteUrl(url: String?): Boolean =
 fun isStreamWatchUrl(url: String?): Boolean =
     isStreamSiteUrl(url) && Uri.parse(url).path?.startsWith("/watch/") == true
 
+// The site's welcome popup reads this flag once, when its scripts start, so it has to be
+// set before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads).
+const val STREAM_DOCUMENT_START_SCRIPT =
+    "try { localStorage.setItem('framextv_welcome_seen', 'true'); } catch (e) {}"
+
 // Hides the site's logo header, bottom menu bar and footer, plus the "Cast" and
 // "More Like This" sections (tagged nfx-hidden by the script below). On /watch/ pages
 // the player iframe is stretched over the whole viewport so the video plays full screen.

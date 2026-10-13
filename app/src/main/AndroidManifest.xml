@@ -22,11 +22,12 @@
             android:name=".ui.webview.WebViewActivity"
             android:exported="false"
             android:theme="@style/Theme.NoActionbar.FullScreen.zedMovies"
-            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".zedMoviesActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
