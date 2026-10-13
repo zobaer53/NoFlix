@@ -8,7 +8,7 @@ The plan follows Google's [version upgrade strategy](https://developer.android.c
 
 ## Progress
 
-Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in `.maestro/` (see "Testing harness" below).
+Each step is tested with the Maestro suite in `.maestro/` (see "Testing harness" below), mostly on a Pixel 9 Pro API 36 emulator with **16 KB pages** (`Pixel_9_Pro_16k`), plus API 24 and API 30 emulators and a signed release build. **Status: Phases 1–6 done; targetSdk 37, the minSdk decision and real-device testing are left (see "Open decisions" below).**
 
 | Step                                                      | Status  | Maestro                          | Notes                                                                                                                         |
 | --------------------------------------------------------- | ------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -34,7 +34,15 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Room schema export (`androidx.room` plugin, `app/schemas/`) | ✅ done | 5/5 pass + upgrade-in-place pass | Identity hash `318b45f8…` matches existing installs |
 | Phase 8 (part): API 30 (Android 11, 3-button nav) emulator | ✅ done | 5/5 pass (exit 0); re-verified on 16 KB API 36 | Restored the pre-migration nav-bar look (no white scrim) |
 | Phase 8: remaining matrix (real phone, physical tablet, Android 17) | ⏳ remaining | | |
-| Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
+| Phase 3: rest of the ad-block modules (deps bump) | ✅ done (in 5a) | | timber 5.0.1, coroutines/serialization/WorkManager/core-ktx from the catalog, appcompat removed |
+
+### Open decisions / remaining work (need the owner or hardware)
+
+1. **targetSdk 37:** no API 37 emulator image gets hardware acceleration on this Mac (see the emulator note). Try `Pixel_9_Pro_API37` from Android Studio (the Play API 37 image is still installed), or use a real Android 17 phone. Then set `targetSdk 37` and check the API 37 items in Phase 4 (Certificate Transparency/ECH on the player hosts, background audio).
+2. **minSdk 24 vs 26:** on Android 7.x the catalog works now, but ad blocking and playback can't (TLS roots). The recommendation is minSdk 26 (see the API 24 notes).
+3. **Updating from 2.1.x on 16 KB devices** keeps Android's compat-mode warning (see the open 16 KB finding). Mention it in the 3.0.0 release notes, or test on a real 16 KB phone first.
+4. **Release:** merging `upgrade` into `master` publishes **3.0.0** through CI. Do it after a real-phone smoke test.
+5. **Phase 7 (optional):** R8/minify, Baseline Profiles, adaptive tablet layouts, refreshing the AdGuard Scriptlets/ExtendedCss JS, making the whole Play pill clickable (pre-existing: only the icon is).
 
 ### Testing harness (added during the migration)
 
