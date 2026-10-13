@@ -31,8 +31,24 @@ android {
         buildConfigField "String","API_KEY","\"${properties.getProperty("API_KEY")}\""
     }
 
+    signingConfigs {
+        release {
+            Properties signing = new Properties()
+            signing.load(project.rootProject.file("local.properties").newDataInputStream())
+            if (signing.getProperty("RELEASE_STORE_FILE") != null) {
+                storeFile file(signing.getProperty("RELEASE_STORE_FILE"))
+                storePassword signing.getProperty("RELEASE_STORE_PASSWORD")
+                keyAlias signing.getProperty("RELEASE_KEY_ALIAS")
+                keyPassword signing.getProperty("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (signingConfigs.release.storeFile != null) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
