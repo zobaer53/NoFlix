@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/zobaer53/NoFlix/releases/latest/download/NoFlix.apk"><img alt="Download NoFlix APK" src="https://img.shields.io/badge/Download-APK-12CDD9?style=for-the-badge&logo=android&logoColor=white"/></a>
+  <a href="https://zobaer53.github.io/NoFlix/"><img alt="NoFlix website" src="https://img.shields.io/badge/Website-NoFlix-6647F0?style=for-the-badge&logo=googlechrome&logoColor=white"/></a>
 </p>
 
 <p align="center">

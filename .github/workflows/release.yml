@@ -14,6 +14,11 @@ name: Release
 on:
   push:
     branches: [master]
+    # Website and docs-only changes don't need a new APK.
+    paths-ignore:
+      - 'docs/**'
+      - 'tools/**'
+      - '**.md'
   workflow_dispatch:
 
 # Two releases built at once could pick the same version number.
