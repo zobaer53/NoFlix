@@ -53,6 +53,8 @@ android {
         }
     }
     compileOptions {
+        // kotlinx-datetime uses java.time, which only exists from API 26 (minSdk is 24).
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -115,6 +117,8 @@ dependencies {
 
     // Ad blocker
     implementation project(':ad-filter')
+
+    coreLibraryDesugaring libs.desugar.jdk.libs
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
