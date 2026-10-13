@@ -19,7 +19,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
 | Phase 3 (part): `:ad-filter` without Anko / Mezzanine / HttpRequest; jcenter, Aliyun and JitPack removed | ✅ done | 5/5 pass | Done before AGP 9 so `legacy-kapt` is never needed. See notes |
 | Phase 2 Step B: AGP 9.4.1 / Gradle 9.7.1 / Kotlin 2.4.21 / Hilt 2.60.1 | ✅ done | 5/5 pass + upgrade-in-place pass | Built-in Kotlin, configuration cache on, Jetifier off. See Step B notes |
 | Phase 3: native lib (NDK r28, CMake 3.22, 16 KB) + DataStore 1.2.1 | ✅ done | 5/5 pass on API 36 **and** on a 16 KB page-size API 36 emulator; upgrade-in-place pass on both | The current release shows Android's "isn't 16 KB compatible" dialog. Fixed. See notes |
-| Phase 4: compileSdk/targetSdk → 37 | ⏳ next | | |
+| Phase 4: targetSdk 33 → 34 | ✅ done | 5/5 pass (16 KB API 36 emulator) | No code changes needed |
+| Phase 4: compileSdk 37, targetSdk 35 → 37 | ⏳ next | | API 37 platform, build-tools 37.0.0 and API 37.0 image installed |
 | Phase 3: rest of the ad-block modules (deps bump) | ⬜ | | |
 | Phase 5: library upgrades                                 | ⬜      |                                  |                                                                                                                               |
 | Phase 6: CI                                               | ⬜      |                                  |                                                                                                                               |
@@ -58,6 +59,8 @@ Each step is tested on the API 36 Pixel 9 Pro emulator with the Maestro suite in
   - 32-bit (`armeabi-v7a`, `x86`) libraries stay 4 KB-aligned. That's fine, since 16 KB pages are 64-bit only.
 - Native step: `ndkVersion` and the CMake version now come from the catalog (`ndk = "28.2.13676358"`, `cmake = "3.22.1"`), and `cmake_minimum_required(VERSION 3.22.1)`. AGP's `EXTERNAL_NATIVE_BUILD_CONFIGURATION` warnings are gone. Clang still prints one old warning in the vendored code (`ad_block_client.cc:51`, `-Wwritable-strings`): harmless, left as is.
 - Test-flow fixes found on a fresh emulator: Android's one-time "Viewing full screen" hint (shown the first time an app hides the system bars) swallows the first Back, so `05_play` taps "Got it" if it's there. The upgrade flow dismisses the old build's 16 KB dialog ("OK") before anything else.
+- **Open finding: updating over the old release keeps 16 KB compat mode (API 36 image).** `dumpsys package` shows `pageSizeCompat=0` for a clean install of the new build, but `6` (APK + ELF checks "failed") when the same APK is installed **over** the pre-migration build, even after a reboot. The old warning dialog keeps showing. Adding `android:pageSizeCompat="disabled"` to `<application>` set the value to `70` but did **not** remove the dialog, so it was reverted (the default keeps compat mode as a safety net if a misaligned `.so` ever slips in). The app still works in compat mode, it just shows the warning. Users can turn it off under App info → Advanced → "Run app with page size compat mode", or reinstall. **To do:** retest on the API 37 image. If it persists, mention it in the 3.0.0 release notes.
+- `run.sh` now uninstalls before installing, so leftovers from `upgrade.sh` (like inherited compat mode) can't affect a run.
 - Commits: each tested step is committed and pushed to `origin/upgrade`. The first push also included `doc/star-ratings-plan.md` (the user's own file, which happened to be in `doc/`).
 
 ---

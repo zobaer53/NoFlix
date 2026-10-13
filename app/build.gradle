@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "com.zobaer53.zedmovies"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         // CI passes -PappVersionCode/-PappVersionName (see .github/workflows/release.yml).
         // To start a new minor/major line, raise versionName here; CI releases it next.
         versionCode project.hasProperty("appVersionCode") ? project.property("appVersionCode").toInteger() : 3

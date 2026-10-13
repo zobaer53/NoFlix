@@ -7,7 +7,9 @@ cd "$(dirname "$0")/.."
 PKG=com.zobaer53.zedmovies
 OUT=build/maestro
 if [ "${1:-}" = "--no-build" ]; then shift; else ./gradlew :app:assembleDebug --console=plain -q; fi
-adb install -r app/build/outputs/apk/debug/app-debug.apk >/dev/null
+# Clean install: an update over an older build can inherit its state (e.g. 16 KB compat mode).
+adb uninstall com.zobaer53.zedmovies >/dev/null 2>&1 || true
+adb install app/build/outputs/apk/debug/app-debug.apk >/dev/null
 
 # 16 KB page-size devices (Android 15+) need every 64-bit native library aligned to 2**14.
 SDK=$(sed -n 's/^sdk.dir=//p' local.properties)
