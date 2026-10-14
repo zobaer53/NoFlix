@@ -19,9 +19,11 @@
         <item name="android:windowBackground">@android:color/black</item>
     </style>
 
-    <style name="Theme.zedMovies.Splash">
-        <item name="android:windowSplashScreenBackground">@color/primaryDark</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/zed_movies_round</item>
+    <!-- core-splashscreen's theme, so installSplashScreen() shows the same splash below API 31. -->
+    <style name="Theme.zedMovies.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primaryDark</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/zed_movies_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.zedMovies</item>
     </style>
 
     <style name="Theme.zedMovies.Dialog" parent="android:Theme.Material.Light.Dialog">
