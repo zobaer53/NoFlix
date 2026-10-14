@@ -55,7 +55,7 @@
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="no_runtime">no runtime</string>
-    <string name="details_runtime_text">runtime</string>
+    <string name="details_runtime_text">%1$s min</string>
     <string name="overview">Overview</string>
     <string name="top_rated">Top Rated</string>
     <string name="most_popular">Most Popular</string>
