@@ -1,0 +1,131 @@
+# Filters with no search text: a genre and a minimum rating show discover results and chips;
+# a result opens details; "Clear all" brings the Discover suggestions back.
+# Then "More filters" (TMDB-backed choices, a TV-only network).
+# Then filters with search text: sort is disabled, an upper year bound and an original language
+# narrow the "Batman" results (filtered in the app).
+appId: com.zobaer53.zedmovies
+name: 07_filters
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- tapOn: "Search"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- tapOn: "Filters"
+- extendedWaitUntil:
+    visible: "Show results"
+    timeout: 10000
+- tapOn: "Drama"
+- scrollUntilVisible:
+    element:
+      id: "filters_rating_slider"
+    direction: DOWN
+# The middle of the 0–10 slider.
+- tapOn:
+    id: "filters_rating_slider"
+- assertVisible: "5\\.0\\+ ★"
+- takeScreenshot: filters_sheet
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Remove filter"
+    timeout: 10000
+- assertVisible: "Clear all"
+- extendedWaitUntil:
+    visible:
+      text: "Rating"
+      below: "Tv Shows"
+    timeout: 20000
+- takeScreenshot: filters_results
+- tapOn:
+    text: "Rating"
+    below: "Tv Shows"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- back
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- assertNotVisible: "Clear all"
+# --- More filters: TMDB-backed choices load; a TV network narrows the TV tab ---
+- tapOn: "Filters"
+- scrollUntilVisible:
+    element: "More filters"
+    direction: DOWN
+- tapOn: "More filters"
+# Age ratings and streaming services come from TMDB; the credit shows once they've loaded.
+- scrollUntilVisible:
+    element: "Streaming data from JustWatch"
+    direction: DOWN
+    timeout: 30000
+- scrollUntilVisible:
+    element: "JTBC"
+    direction: DOWN
+- tapOn: "JTBC"
+- takeScreenshot: filters_more
+- tapOn: "Show results"
+- tapOn: "Tv Shows"
+- extendedWaitUntil:
+    visible:
+      text: "Rating"
+      below: "Tv Shows"
+    timeout: 20000
+- assertVisible: "JTBC"
+- takeScreenshot: filters_network
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+# --- With search text ---
+- tapOn: "search place holder"
+# Maestro's inputText occasionally doubles the first key ("BBatman"), so clear and retype on a miss.
+- retry:
+    maxRetries: 2
+    commands:
+      - eraseText: 20
+      - inputText: "Batman"
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Batman Begins"
+          timeout: 20000
+- tapOn: "Filters"
+- extendedWaitUntil:
+    visible: "Clear the search text to sort"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "filters_year_slider"
+    direction: DOWN
+# Moves the end thumb to about 2012 (a tap moves the closer thumb).
+- tapOn:
+    id: "filters_year_slider"
+    point: "88%,50%"
+- assertVisible: "Until 20(0[6-9]|1[0-9]|2[01])"
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000
+- assertNotVisible: "The Batman"
+- takeScreenshot: filters_search_year
+# Tapping the chip removes the year bound.
+- tapOn: "Until \\d+"
+- tapOn: "Filters"
+- scrollUntilVisible:
+    element: "Japanese"
+    direction: DOWN
+- tapOn: "Japanese"
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Batman Ninja"
+    timeout: 20000
+- assertNotVisible: "Batman Begins"
+- takeScreenshot: filters_search_language
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000

@@ -28,12 +28,14 @@ if [ -n "$OBJDUMP" ]; then
   rm -rf "$libs"
   [ -z "${align_failed:-}" ] && echo "native libraries: 16 KB aligned"
 fi
-# Old emulators (API 26) sometimes fail the first clear after boot ("failed to clear the 'main' log").
-adb logcat -c || { sleep 2; adb logcat -c; }
+# Old emulators (API 26) sometimes fail to clear ("failed to clear the 'main' log"), several times
+# in a row after a cold boot.
+for attempt in 1 2 3 4 5; do adb logcat -c && break; [ $attempt = 5 ] && exit 1; sleep 2; done
 rm -rf "$OUT"; mkdir -p "$OUT"
 # Stream logcat for the whole run: Maestro clears the device log at the start of every flow, so a
-# dump at the end would only cover the last flow.
-adb logcat > "$OUT/logcat.txt" 2>/dev/null &
+# dump at the end would only cover the last flow. A clear can end the stream (seen on API 26), so
+# restart it; a restart repeats the buffer, which the checks below tolerate (they only count > 0).
+( while :; do adb logcat; sleep 0.2; done ) > "$OUT/logcat.txt" 2>/dev/null &
 logcat_pid=$!
 status=0
 [ -n "${align_failed:-}" ] && status=1
@@ -42,7 +44,9 @@ if [ $# -gt 0 ]; then
 else
   "${MAESTRO[@]}" test --test-output-dir "$OUT" .maestro || status=$?
 fi
-sleep 2; kill "$logcat_pid" 2>/dev/null || true
+sleep 2; logcat_children=$(pgrep -P "$logcat_pid" || true)
+kill "$logcat_pid" $logcat_children 2>/dev/null || true
+wait "$logcat_pid" 2>/dev/null || true
 if grep -E "FATAL EXCEPTION|Fatal signal|AndroidRuntime: Process: $PKG" "$OUT/logcat.txt" | grep -q .; then
   echo "CRASH found in logcat:"; grep -A15 -E "FATAL EXCEPTION|Fatal signal" "$OUT/logcat.txt" | head -40
   status=1

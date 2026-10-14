@@ -272,7 +272,7 @@ private fun zedMoviesBottomNavItemLayout(
 private fun ZedMoviesBottomNavIndicator(
     modifier: Modifier = Modifier,
     padding: Dp = zedMoviesTheme.spacing.smallMedium,
-    color: Color = zedMoviesTheme.colors.primaryVariant,
+    color: Color = zedMoviesTheme.colors.accentContainer,
     shape: Shape = CircleShape
 ) {
     Spacer(

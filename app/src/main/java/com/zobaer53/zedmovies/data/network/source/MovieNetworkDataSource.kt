@@ -22,9 +22,17 @@ class MovieNetworkDataSource @Inject constructor(private val movieService: Movie
         NetworkMediaType.Movie.TRENDING -> movieService.getTrending(language, page)
     }
 
+    /** [year]: release year (movies) or first air year (TV); null for any. */
     suspend fun search(
         query: String,
         language: String,
+        page: Int = DEFAULT_PAGE,
+        year: Int? = null
+    ): ZedMoviesResult<MovieResponseDto> = movieService.search(query, language, page, year)
+
+    suspend fun discover(
+        filters: Map<String, String>,
+        language: String,
         page: Int = DEFAULT_PAGE
-    ): ZedMoviesResult<MovieResponseDto> = movieService.search(query, language, page)
+    ): ZedMoviesResult<MovieResponseDto> = movieService.discover(filters, language, page)
 }

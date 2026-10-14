@@ -4,6 +4,7 @@ import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.model.response.TvShowResponseDto
 import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
+import com.zobaer53.zedmovies.data.network.util.Constants.Discover
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.APPEND_TO_RESPONSE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.INCLUDE_VIDEO_LANGUAGE
@@ -21,6 +22,7 @@ import com.zobaer53.zedmovies.data.network.util.Constants.Path.TRENDING_TV_SHOW
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface TvShowService {
     @GET(TOP_RATED_TV_SHOW)
@@ -47,6 +49,14 @@ interface TvShowService {
         @Query(PAGE) page: Int = DEFAULT_PAGE
     ): ZedMoviesResult<TvShowResponseDto>
 
+    /** [filters] are the discover parameters (see `Constants.Discover`). */
+    @GET(DISCOVER_TV_SHOW)
+    suspend fun discover(
+        @QueryMap filters: Map<String, String>,
+        @Query(LANGUAGE) language: String,
+        @Query(PAGE) page: Int = DEFAULT_PAGE
+    ): ZedMoviesResult<TvShowResponseDto>
+
     @GET(TRENDING_TV_SHOW)
     suspend fun getTrending(
         @Query(LANGUAGE) language: String,
@@ -65,6 +75,7 @@ interface TvShowService {
     suspend fun search(
         @Query(QUERY) query: String,
         @Query(LANGUAGE) language: String,
-        @Query(PAGE) page: Int = DEFAULT_PAGE
+        @Query(PAGE) page: Int = DEFAULT_PAGE,
+        @Query(Discover.FIRST_AIR_DATE_YEAR) firstAirDateYear: Int? = null
     ): ZedMoviesResult<TvShowResponseDto>
 }

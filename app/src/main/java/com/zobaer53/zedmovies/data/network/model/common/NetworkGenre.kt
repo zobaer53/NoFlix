@@ -45,9 +45,8 @@ enum class NetworkGenreWithId(val genreName: String, val id: Int) {
 
     companion object {
         private val genres = values().associateBy(NetworkGenreWithId::id)
-        operator fun get(id: Int) = checkNotNull(genres[id]) {
-            "$INVALID_GENRE_ID_MESSAGE $id"
-        }
+        /** Null for a genre TMDB added after this list was written. */
+        operator fun get(id: Int): NetworkGenreWithId? = genres[id]
     }
 }
 
@@ -131,5 +130,3 @@ private const val WAR_POLITICS_GENRE_ID = 10768
 
 private const val WESTERN_NAME = "western"
 private const val WESTERN_GENRE_ID = 37
-
-private const val INVALID_GENRE_ID_MESSAGE = "Invalid genre id."

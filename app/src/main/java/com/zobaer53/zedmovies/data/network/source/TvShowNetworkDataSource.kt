@@ -20,9 +20,17 @@ class TvShowNetworkDataSource @Inject constructor(private val tvShowService: TvS
         NetworkMediaType.TvShow.TRENDING -> tvShowService.getTrending(language, page)
     }
 
+    /** [year]: release year (movies) or first air year (TV); null for any. */
     suspend fun search(
         query: String,
         language: String,
+        page: Int = DEFAULT_PAGE,
+        year: Int? = null
+    ): ZedMoviesResult<TvShowResponseDto> = tvShowService.search(query, language, page, year)
+
+    suspend fun discover(
+        filters: Map<String, String>,
+        language: String,
         page: Int = DEFAULT_PAGE
-    ): ZedMoviesResult<TvShowResponseDto> = tvShowService.search(query, language, page)
+    ): ZedMoviesResult<TvShowResponseDto> = tvShowService.discover(filters, language, page)
 }

@@ -34,8 +34,8 @@ internal fun TrailerItem(
             .clickable { context.startActivity(TrailerActivity.intent(context, trailerKey)) },
         shape = zedMoviesTheme.shapes.small,
         colors = CardDefaults.cardColors(
-            containerColor = zedMoviesTheme.colors.primaryVariant.copy(alpha = TrailerItemContainerColorAlpha),
-            contentColor = zedMoviesTheme.colors.secondaryVariant
+            containerColor = zedMoviesTheme.colors.mediaScrim,
+            contentColor = zedMoviesTheme.colors.textOnMedia
         )
     ) {
         Row(
@@ -59,4 +59,3 @@ internal fun TrailerItem(
 }
 
 private val TrailerIconSize = 16.dp
-private const val TrailerItemContainerColorAlpha = 0.72f

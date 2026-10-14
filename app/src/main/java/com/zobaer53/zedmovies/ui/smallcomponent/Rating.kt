@@ -35,10 +35,18 @@ fun RatingItem(
     Card(
         modifier = modifier,
         shape = zedMoviesTheme.shapes.small,
-        colors = CardDefaults.cardColors(
-            containerColor = zedMoviesTheme.colors.primaryVariant.copy(alpha = RatingItemContainerColorAlpha),
-            contentColor = zedMoviesTheme.colors.secondaryVariant
-        )
+        // Rating 0 turns this into the Play button: the details screen's main action.
+        colors = if (rating == 0.0) {
+            CardDefaults.cardColors(
+                containerColor = zedMoviesTheme.colors.accent,
+                contentColor = zedMoviesTheme.colors.primary
+            )
+        } else {
+            CardDefaults.cardColors(
+                containerColor = zedMoviesTheme.colors.mediaScrim,
+                contentColor = zedMoviesTheme.colors.secondaryVariant
+            )
+        }
     ) {
         Row(
             modifier = Modifier.padding(
@@ -91,5 +99,4 @@ fun RatingItem(
 }
 
 private val RatingIconSize = 16.dp
-private const val RatingItemContainerColorAlpha = 0.72f
 private const val RatingNotRatedValue = 0.0

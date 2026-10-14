@@ -5,6 +5,7 @@ package com.zobaer53.zedmovies.data.network.util
 internal object Constants {
     internal const val API_URL = "https://api.themoviedb.org/3/"
     internal const val IMAGE_URL = "https://image.tmdb.org/t/p/w500"
+    internal const val LOGO_URL = "https://image.tmdb.org/t/p/w92"
     internal const val API_KEY_QUERY_PARAM = "api_key"
     internal const val PAGE_SIZE = 20
     internal const val DEFAULT_PAGE = 1
@@ -26,6 +27,42 @@ internal object Constants {
         internal const val TRENDING_TV_SHOW = "trending/tv/day"
         internal const val DETAILS_TV_SHOW = "tv/{id}"
         internal const val SEARCH_TV_SHOW = "search/tv"
+
+        internal const val MOVIE_CERTIFICATIONS = "certification/movie/list"
+        internal const val MOVIE_WATCH_PROVIDERS = "watch/providers/movie"
+        internal const val TV_WATCH_PROVIDERS = "watch/providers/tv"
+    }
+
+    /** Query parameter names of `/discover/movie` and `/discover/tv`. */
+    internal object Discover {
+        internal const val SORT_BY = "sort_by"
+        internal const val WITH_GENRES = "with_genres"
+        internal const val VOTE_AVERAGE_GTE = "vote_average.gte"
+        internal const val VOTE_COUNT_GTE = "vote_count.gte"
+        internal const val WITH_ORIGINAL_LANGUAGE = "with_original_language"
+        internal const val PRIMARY_RELEASE_DATE_GTE = "primary_release_date.gte"
+        internal const val PRIMARY_RELEASE_DATE_LTE = "primary_release_date.lte"
+        internal const val FIRST_AIR_DATE_GTE = "first_air_date.gte"
+        internal const val FIRST_AIR_DATE_LTE = "first_air_date.lte"
+        internal const val INCLUDE_ADULT = "include_adult"
+        internal const val WITHOUT_GENRES = "without_genres"
+        internal const val WITH_RUNTIME_GTE = "with_runtime.gte"
+        internal const val WITH_RUNTIME_LTE = "with_runtime.lte"
+        internal const val WITH_ORIGIN_COUNTRY = "with_origin_country"
+        internal const val CERTIFICATION = "certification"
+        internal const val CERTIFICATION_COUNTRY = "certification_country"
+        internal const val WITH_WATCH_PROVIDERS = "with_watch_providers"
+        internal const val WATCH_REGION = "watch_region"
+        internal const val WITH_NETWORKS = "with_networks"
+        internal const val WITH_STATUS = "with_status"
+        internal const val WITH_TYPE = "with_type"
+
+        /** The only filters `/search/movie` and `/search/tv` take besides the query. */
+        internal const val PRIMARY_RELEASE_YEAR = "primary_release_year"
+        internal const val FIRST_AIR_DATE_YEAR = "first_air_date_year"
+
+        /** TMDB returns an error for any discover page above this. */
+        internal const val MAX_PAGE = 500
     }
 
     internal object Fields {
@@ -109,6 +146,12 @@ internal object Constants {
         internal const val INCLUDE_VIDEO_LANGUAGE = "include_video_language"
         internal const val QUERY = "query"
         internal const val LANGUAGE = "language"
+        internal const val CERTIFICATIONS = "certifications"
+        internal const val CERTIFICATION = "certification"
+        internal const val MEANING = "meaning"
+        internal const val PROVIDER_ID = "provider_id"
+        internal const val PROVIDER_NAME = "provider_name"
+        internal const val DISPLAY_PRIORITY = "display_priority"
 
         internal val DETAILS_APPEND_TO_RESPONSE = buildAppendToResponse(CREDITS, VIDEOS)
 

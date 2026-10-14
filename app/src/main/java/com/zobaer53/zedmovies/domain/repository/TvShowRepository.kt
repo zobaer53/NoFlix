@@ -6,10 +6,12 @@ import androidx.paging.PagingData
 import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.domain.model.MediaTypeModel
 import com.zobaer53.zedmovies.domain.model.TvShowModel
+import com.zobaer53.zedmovies.domain.model.SearchFiltersModel
 import kotlinx.coroutines.flow.Flow
 
 interface TvShowRepository {
     fun getByMediaType(mediaTypeModel: MediaTypeModel.TvShow): Flow<ZedMoviesResult<List<TvShowModel>>>
     fun getPagingByMediaType(mediaTypeModel: MediaTypeModel.TvShow): Flow<PagingData<TvShowModel>>
-    fun search(query: String): Flow<PagingData<TvShowModel>>
+    fun search(query: String, filters: SearchFiltersModel): Flow<PagingData<TvShowModel>>
+    fun discover(filters: SearchFiltersModel): Flow<PagingData<TvShowModel>>
 }
