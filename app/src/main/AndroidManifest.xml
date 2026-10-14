@@ -25,6 +25,11 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard"
             android:windowSoftInputMode="adjustPan"/>
         <activity
+            android:name=".ui.trailer.TrailerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.zedMovies.Trailer"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
+        <activity
             android:name=".zedMoviesActivity"
             android:exported="true"
             android:screenOrientation="portrait">

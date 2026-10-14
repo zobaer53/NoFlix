@@ -37,6 +37,10 @@ internal object Constants {
         internal const val CAST = "cast"
         internal const val CREW = "crew"
         internal const val CREDITS = "credits"
+        internal const val VIDEOS = "videos"
+        internal const val KEY = "key"
+        internal const val SITE = "site"
+        internal const val OFFICIAL = "official"
         internal const val CHARACTER = "character"
         internal const val BUDGET = "budget"
         internal const val BELONGS_TO_COLLECTION = "belongs_to_collection"
@@ -102,13 +106,25 @@ internal object Constants {
         internal const val ISO_3166_1 = "iso_3166_1"
         internal const val ISO_639_1 = "iso_639_1"
         internal const val APPEND_TO_RESPONSE = "append_to_response"
+        internal const val INCLUDE_VIDEO_LANGUAGE = "include_video_language"
         internal const val QUERY = "query"
         internal const val LANGUAGE = "language"
 
-        internal val DETAILS_APPEND_TO_RESPONSE = buildAppendToResponse(CREDITS)
+        internal val DETAILS_APPEND_TO_RESPONSE = buildAppendToResponse(CREDITS, VIDEOS)
 
         private fun buildAppendToResponse(vararg fields: String) =
             fields.joinToString(separator = APPEND_TO_RESPONSE_SEPARATOR)
+
+        /**
+         * TMDB only returns videos in the request language unless more are listed here, and most
+         * trailers are in English or have no language ("null").
+         */
+        internal fun buildIncludeVideoLanguage(language: String) =
+            listOf(language, ENGLISH_LANGUAGE, NO_LANGUAGE).distinct()
+                .joinToString(separator = APPEND_TO_RESPONSE_SEPARATOR)
+
+        private const val ENGLISH_LANGUAGE = "en"
+        private const val NO_LANGUAGE = "null"
 
         private const val APPEND_TO_RESPONSE_SEPARATOR = ","
     }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TrailerActivity's player view (also what the Maestro details flow waits for). -->
+    <item name="trailer_player" type="id" />
+</resources>

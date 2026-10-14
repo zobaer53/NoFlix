@@ -6,7 +6,7 @@ import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
 import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
 import com.zobaer53.zedmovies.domain.model.MovieDetailsModel
 
-fun NetworkMovieDetails.asMovieDetailsEntity() = MovieDetailsEntity(
+fun NetworkMovieDetails.asMovieDetailsEntity(contentLanguage: String) = MovieDetailsEntity(
     id = id,
     adult = adult,
     backdropPath = backdropPath?.asImageUrl(),
@@ -28,7 +28,8 @@ fun NetworkMovieDetails.asMovieDetailsEntity() = MovieDetailsEntity(
     video = video,
     voteAverage = voteAverage,
     voteCount = voteCount,
-    credits = credits.asCredits()
+    credits = credits.asCredits(),
+    trailerKey = videos.asTrailerKey(contentLanguage)
 )
 
 fun MovieDetailsEntity.asMovieDetailsModel(isWishlisted: Boolean) = MovieDetailsModel(
@@ -54,5 +55,6 @@ fun MovieDetailsEntity.asMovieDetailsModel(isWishlisted: Boolean) = MovieDetails
     voteAverage = voteAverage,
     voteCount = voteCount,
     credits = credits.asCreditsModel(),
+    trailerKey = trailerKey,
     isWishlisted = isWishlisted
 )

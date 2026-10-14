@@ -6,6 +6,7 @@ import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.APPEND_TO_RESPONSE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
+import com.zobaer53.zedmovies.data.network.util.Constants.Fields.INCLUDE_VIDEO_LANGUAGE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.ID
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.LANGUAGE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.PAGE
@@ -56,7 +57,8 @@ interface TvShowService {
     suspend fun getDetailsById(
         @Path(ID) id: Int,
         @Query(APPEND_TO_RESPONSE) appendToResponse: String = DETAILS_APPEND_TO_RESPONSE,
-        @Query(LANGUAGE) language: String
+        @Query(LANGUAGE) language: String,
+        @Query(INCLUDE_VIDEO_LANGUAGE) includeVideoLanguage: String
     ): ZedMoviesResult<NetworkTvShowDetails>
 
     @GET(SEARCH_TV_SHOW)

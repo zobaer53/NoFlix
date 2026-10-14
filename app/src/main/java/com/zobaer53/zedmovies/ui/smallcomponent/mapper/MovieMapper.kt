@@ -34,6 +34,7 @@ fun MovieDetailsModel.asMovieDetails() = MovieDetails(
     voteAverage = voteAverage.roundToOneDecimal(),
     voteCount = voteCount,
     credits = credits.asCredits(),
+    trailerKey = trailerKey,
     isWishlisted = isWishlisted
 )
 

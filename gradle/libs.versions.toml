@@ -29,6 +29,7 @@ coil = "3.6.3"
 lottie = "6.7.1"
 jsoup = "1.23.2"
 timber = "5.0.1"
+youtubePlayer = "13.0.0"
 
 desugarJdkLibs = "2.1.5"
 
@@ -89,6 +90,8 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+# Trailers: wraps YouTube's official IFrame embed player in a WebView (no native code).
+youtube-player-core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubePlayer" }
 
 
 # Backports java.time (used by kotlinx-datetime) to API 24-25.

@@ -7,6 +7,7 @@ import com.zobaer53.zedmovies.data.common.result.isSuccess
 import com.zobaer53.zedmovies.data.network.api.service.MovieService
 import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
+import com.zobaer53.zedmovies.data.network.util.Constants.Fields.buildIncludeVideoLanguage
 import com.zobaer53.zedmovies.data.network.util.MESSAGE_UNHANDLED_STATE
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class MovieDetailsNetworkDataSource @Inject constructor(private val movieService
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
     ): ZedMoviesResult<NetworkMovieDetails> =
-        movieService.getDetailsById(id, language, appendToResponse)
+        movieService.getDetailsById(id, language, buildIncludeVideoLanguage(language), appendToResponse)
 
     suspend fun getByIds(
         ids: List<Int>,
@@ -24,7 +25,7 @@ class MovieDetailsNetworkDataSource @Inject constructor(private val movieService
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
     ): ZedMoviesResult<List<NetworkMovieDetails>> {
         val movies = ids.map { id ->
-            val response = movieService.getDetailsById(id, language, appendToResponse)
+            val response = movieService.getDetailsById(id, language, buildIncludeVideoLanguage(language), appendToResponse)
 
             when {
                 response.isSuccess() -> response.value

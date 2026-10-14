@@ -11,7 +11,6 @@ import com.zobaer53.zedmovies.data.datastore.PreferencesDataStoreDataSource
 import com.zobaer53.zedmovies.domain.model.MovieDetailsModel
 import com.zobaer53.zedmovies.domain.repository.MovieDetailsRepository
 import com.zobaer53.zedmovies.data.network.common.networkBoundResource
-import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovieDetails
 import com.zobaer53.zedmovies.data.network.source.MovieDetailsNetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -39,7 +38,9 @@ class MovieDetailsRepositoryImpl @Inject constructor(
             )
         },
         saveFetchResult = { response ->
-            databaseDataSource.deleteAndInsert(response.asMovieDetailsEntity())
+            databaseDataSource.deleteAndInsert(
+                response.asMovieDetailsEntity(preferencesDataStoreDataSource.getContentLanguage().first())
+            )
         }
     )
 
@@ -59,8 +60,9 @@ class MovieDetailsRepositoryImpl @Inject constructor(
                 )
             },
             saveFetchResult = { response ->
+                val language = preferencesDataStoreDataSource.getContentLanguage().first()
                 databaseDataSource.deleteAndInsertAll(
-                    response.map(NetworkMovieDetails::asMovieDetailsEntity)
+                    response.map { it.asMovieDetailsEntity(language) }
                 )
             }
         )

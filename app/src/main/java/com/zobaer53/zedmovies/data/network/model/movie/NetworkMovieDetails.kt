@@ -3,6 +3,7 @@
 package com.zobaer53.zedmovies.data.network.model.movie
 
 import com.zobaer53.zedmovies.data.network.model.common.NetworkCredits
+import com.zobaer53.zedmovies.data.network.model.common.NetworkVideos
 import com.zobaer53.zedmovies.data.network.model.common.NetworkGenre
 import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCompany
 import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCountry
@@ -92,5 +93,8 @@ data class NetworkMovieDetails(
     val voteCount: Int,
 
     @SerialName(Constants.Fields.CREDITS)
-    val credits: NetworkCredits
+    val credits: NetworkCredits,
+
+    @SerialName(Constants.Fields.VIDEOS)
+    val videos: NetworkVideos? = null
 )

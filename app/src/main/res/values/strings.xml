@@ -13,6 +13,9 @@
     <string name="no_genre">No genre</string>
     <string name="rating">Rating</string>
     <string name="not_rated">Not rated</string>
+    <string name="trailer">Trailer</string>
+    <string name="close_trailer">Close trailer</string>
+    <string name="trailer_unavailable">Trailer unavailable</string>
     <string name="no_overview">No overview</string>
     <string name="no_release_date">No release date</string>
     <string name="wishlist">Wish list</string>

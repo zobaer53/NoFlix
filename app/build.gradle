@@ -120,6 +120,7 @@ dependencies {
     implementation libs.coil.network.okhttp
     implementation libs.lottie.compose
     implementation libs.jsoup
+    implementation libs.youtube.player.core
 
     // Ad blocker
     implementation project(':ad-filter')

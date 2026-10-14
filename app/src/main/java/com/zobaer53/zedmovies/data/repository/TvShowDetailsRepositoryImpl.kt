@@ -12,7 +12,6 @@ import com.zobaer53.zedmovies.data.datastore.PreferencesDataStoreDataSource
 import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
 import com.zobaer53.zedmovies.domain.repository.TvShowDetailsRepository
 import com.zobaer53.zedmovies.data.network.common.networkBoundResource
-import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.source.TvShowDetailsNetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -40,7 +39,9 @@ class TvShowDetailsRepositoryImpl @Inject constructor(
             )
         },
         saveFetchResult = { response ->
-            databaseDataSource.deleteAndInsert(response.asTvShowDetailsEntity())
+            databaseDataSource.deleteAndInsert(
+                response.asTvShowDetailsEntity(preferencesDataStoreDataSource.getContentLanguage().first())
+            )
         }
     )
 
@@ -60,8 +61,9 @@ class TvShowDetailsRepositoryImpl @Inject constructor(
                 )
             },
             saveFetchResult = { response ->
+                val language = preferencesDataStoreDataSource.getContentLanguage().first()
                 databaseDataSource.deleteAndInsertAll(
-                    response.map(NetworkTvShowDetails::asTvShowDetailsEntity)
+                    response.map { it.asTvShowDetailsEntity(language) }
                 )
             }
         )

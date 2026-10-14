@@ -14,6 +14,11 @@
         <item name="android:dialogTheme">@style/Theme.zedMovies.Dialog</item>
     </style>
 
+    <!-- Opaque on purpose: translucent activities may not request an orientation on API 26. -->
+    <style name="Theme.zedMovies.Trailer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <style name="Theme.zedMovies.Splash">
         <item name="android:windowSplashScreenBackground">@color/primaryDark</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/zed_movies_round</item>

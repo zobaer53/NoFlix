@@ -16,5 +16,6 @@ data class MovieDetails(
     val voteAverage: Double,
     val voteCount: Int,
     val credits: Credits,
+    val trailerKey: String?,
     val isWishlisted: Boolean
 )

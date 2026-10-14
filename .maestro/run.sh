@@ -4,6 +4,8 @@
 # Usage: .maestro/run.sh [--no-build] [flow.yaml ...]
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# With several devices attached, pick one with ANDROID_SERIAL (adb reads it; Maestro gets --device).
+MAESTRO=(maestro ${ANDROID_SERIAL:+--device "$ANDROID_SERIAL"})
 PKG=com.zobaer53.zedmovies
 OUT=build/maestro
 if [ "${1:-}" = "--no-build" ]; then shift; else ./gradlew :app:assembleDebug --console=plain -q; fi
@@ -28,14 +30,18 @@ if [ -n "$OBJDUMP" ]; then
 fi
 adb logcat -c
 rm -rf "$OUT"; mkdir -p "$OUT"
+# Stream logcat for the whole run: Maestro clears the device log at the start of every flow, so a
+# dump at the end would only cover the last flow.
+adb logcat > "$OUT/logcat.txt" 2>/dev/null &
+logcat_pid=$!
 status=0
 [ -n "${align_failed:-}" ] && status=1
 if [ $# -gt 0 ]; then
-  maestro test --test-output-dir "$OUT" "$@" || status=$?
+  "${MAESTRO[@]}" test --test-output-dir "$OUT" "$@" || status=$?
 else
-  maestro test --test-output-dir "$OUT" .maestro || status=$?
+  "${MAESTRO[@]}" test --test-output-dir "$OUT" .maestro || status=$?
 fi
-adb logcat -d > "$OUT/logcat.txt"
+sleep 2; kill "$logcat_pid" 2>/dev/null || true
 if grep -E "FATAL EXCEPTION|Fatal signal|AndroidRuntime: Process: $PKG" "$OUT/logcat.txt" | grep -q .; then
   echo "CRASH found in logcat:"; grep -A15 -E "FATAL EXCEPTION|Fatal signal" "$OUT/logcat.txt" | head -40
   status=1
@@ -58,7 +64,7 @@ blocked=$(grep -c "NoFlixAdBlock: blocked" "$OUT/logcat.txt" || true)
 scripts=$(grep -c "element hiding finished" "$OUT/logcat.txt" || true)
 echo "filter lists installed: $filters, requests blocked: $blocked, element-hiding script runs: $scripts"
 if [ "$scripts" -lt 1 ]; then echo "injected element-hiding script never finished"; status=1; fi
-fi
 if [ "$filters" -lt 6 ]; then echo "expected 6 installed filter lists"; status=1; fi
+fi
 [ $status -eq 0 ] && echo "ALL CHECKS PASSED" || echo "CHECKS FAILED (see $OUT)"
 exit $status

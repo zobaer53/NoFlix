@@ -86,5 +86,8 @@ data class TvShowDetailsEntity(
     val voteCount: Int,
 
     @ColumnInfo(name = Constants.Fields.CREDITS)
-    val credits: Credits
+    val credits: Credits,
+
+    @ColumnInfo(name = Constants.Fields.TRAILER_KEY)
+    val trailerKey: String?
 )
