@@ -28,7 +28,8 @@ if [ -n "$OBJDUMP" ]; then
   rm -rf "$libs"
   [ -z "${align_failed:-}" ] && echo "native libraries: 16 KB aligned"
 fi
-adb logcat -c
+# Old emulators (API 26) sometimes fail the first clear after boot ("failed to clear the 'main' log").
+adb logcat -c || { sleep 2; adb logcat -c; }
 rm -rf "$OUT"; mkdir -p "$OUT"
 # Stream logcat for the whole run: Maestro clears the device log at the start of every flow, so a
 # dump at the end would only cover the last flow.
