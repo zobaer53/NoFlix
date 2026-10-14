@@ -25,4 +25,10 @@ class TvShowNetworkDataSource @Inject constructor(private val tvShowService: TvS
         language: String,
         page: Int = DEFAULT_PAGE
     ): ZedMoviesResult<TvShowResponseDto> = tvShowService.search(query, language, page)
+
+    suspend fun discover(
+        filters: Map<String, String>,
+        language: String,
+        page: Int = DEFAULT_PAGE
+    ): ZedMoviesResult<TvShowResponseDto> = tvShowService.discover(filters, language, page)
 }

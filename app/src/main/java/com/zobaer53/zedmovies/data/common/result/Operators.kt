@@ -27,3 +27,10 @@ fun <T> ZedMoviesResult<T>.isFailure(): Boolean {
     }
     return this is ZedMoviesResult.Failure<T>
 }
+
+fun <T, R> ZedMoviesResult<T>.map(transform: (T) -> R): ZedMoviesResult<R> = when (this) {
+    is ZedMoviesResult.Success -> ZedMoviesResult.success(transform(value))
+    is ZedMoviesResult.Failure.Error -> ZedMoviesResult.failure(error, value?.let(transform))
+    is ZedMoviesResult.Failure.HttpError -> ZedMoviesResult.failure(error, value?.let(transform))
+    is ZedMoviesResult.Loading -> ZedMoviesResult.loading(value?.let(transform))
+}

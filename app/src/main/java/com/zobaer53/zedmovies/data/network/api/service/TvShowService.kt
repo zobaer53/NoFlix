@@ -21,6 +21,7 @@ import com.zobaer53.zedmovies.data.network.util.Constants.Path.TRENDING_TV_SHOW
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface TvShowService {
     @GET(TOP_RATED_TV_SHOW)
@@ -43,6 +44,14 @@ interface TvShowService {
 
     @GET(DISCOVER_TV_SHOW)
     suspend fun getDiscover(
+        @Query(LANGUAGE) language: String,
+        @Query(PAGE) page: Int = DEFAULT_PAGE
+    ): ZedMoviesResult<TvShowResponseDto>
+
+    /** [filters] are the discover parameters (see `Constants.Discover`). */
+    @GET(DISCOVER_TV_SHOW)
+    suspend fun discover(
+        @QueryMap filters: Map<String, String>,
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
     ): ZedMoviesResult<TvShowResponseDto>

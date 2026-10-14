@@ -28,6 +28,23 @@ internal object Constants {
         internal const val SEARCH_TV_SHOW = "search/tv"
     }
 
+    /** Query parameter names of `/discover/movie` and `/discover/tv`. */
+    internal object Discover {
+        internal const val SORT_BY = "sort_by"
+        internal const val WITH_GENRES = "with_genres"
+        internal const val VOTE_AVERAGE_GTE = "vote_average.gte"
+        internal const val VOTE_COUNT_GTE = "vote_count.gte"
+        internal const val WITH_ORIGINAL_LANGUAGE = "with_original_language"
+        internal const val PRIMARY_RELEASE_DATE_GTE = "primary_release_date.gte"
+        internal const val PRIMARY_RELEASE_DATE_LTE = "primary_release_date.lte"
+        internal const val FIRST_AIR_DATE_GTE = "first_air_date.gte"
+        internal const val FIRST_AIR_DATE_LTE = "first_air_date.lte"
+        internal const val INCLUDE_ADULT = "include_adult"
+
+        /** TMDB returns an error for any discover page above this. */
+        internal const val MAX_PAGE = 500
+    }
+
     internal object Fields {
         internal const val ID = "id"
         internal const val IMDB_ID = "imdb_id"

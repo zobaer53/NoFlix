@@ -1,0 +1,51 @@
+# Filters with no search text: a genre and a minimum rating show discover results and chips;
+# a result opens details; "Clear all" brings the Discover suggestions back.
+appId: com.zobaer53.zedmovies
+name: 07_filters
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- tapOn: "Search"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- tapOn: "Filters"
+- extendedWaitUntil:
+    visible: "Show results"
+    timeout: 10000
+- tapOn: "Drama"
+- scrollUntilVisible:
+    element:
+      id: "filters_rating_slider"
+    direction: DOWN
+# The middle of the 0–10 slider.
+- tapOn:
+    id: "filters_rating_slider"
+- assertVisible: "5\\.0\\+ ★"
+- takeScreenshot: filters_sheet
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Remove filter"
+    timeout: 10000
+- assertVisible: "Clear all"
+- extendedWaitUntil:
+    visible:
+      text: "Rating"
+      below: "Tv Shows"
+    timeout: 20000
+- takeScreenshot: filters_results
+- tapOn:
+    text: "Rating"
+    below: "Tv Shows"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- back
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- assertNotVisible: "Clear all"

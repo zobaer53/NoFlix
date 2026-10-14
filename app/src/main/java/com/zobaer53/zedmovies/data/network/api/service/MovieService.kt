@@ -24,6 +24,7 @@ import com.zobaer53.zedmovies.data.network.util.Constants.Path.UPCOMING_MOVIE
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface MovieService {
     @GET(UPCOMING_MOVIE)
@@ -52,6 +53,14 @@ interface MovieService {
 
     @GET(DISCOVER_MOVIE)
     suspend fun getDiscover(
+        @Query(LANGUAGE) language: String,
+        @Query(PAGE) page: Int = DEFAULT_PAGE
+    ): ZedMoviesResult<MovieResponseDto>
+
+    /** [filters] are the discover parameters (see `Constants.Discover`). */
+    @GET(DISCOVER_MOVIE)
+    suspend fun discover(
+        @QueryMap filters: Map<String, String>,
         @Query(LANGUAGE) language: String,
         @Query(PAGE) page: Int = DEFAULT_PAGE
     ): ZedMoviesResult<MovieResponseDto>

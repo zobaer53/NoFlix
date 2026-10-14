@@ -3,15 +3,22 @@
 package com.zobaer53.zedmovies.ui.search
 
 import androidx.paging.PagingData
+import com.zobaer53.zedmovies.data.model.FilterGenre
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.Movie
+import com.zobaer53.zedmovies.data.model.SearchFilters
 import com.zobaer53.zedmovies.data.model.TvShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 data class SearchUiState(
     val query: String = "",
+    val filters: SearchFilters = SearchFilters(),
+    /** True while the query or the filters are set: results replace the suggestions. */
     val isSearching: Boolean = false,
+    /** Selected genres the tab can't match (see `SearchFiltersModel.unmatchableGenres`). */
+    val unmatchableMovieGenres: List<FilterGenre> = emptyList(),
+    val unmatchableTvShowGenres: List<FilterGenre> = emptyList(),
     val searchMovies: Flow<PagingData<Movie>> = emptyFlow(),
     val searchTvShows: Flow<PagingData<TvShow>> = emptyFlow(),
     val movies: Map<MediaType.Movie, List<Movie>> = emptyMap(),

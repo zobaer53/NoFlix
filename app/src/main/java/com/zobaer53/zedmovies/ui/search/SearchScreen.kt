@@ -13,6 +13,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,8 +45,10 @@ import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesIconButton
 import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesSwipeRefresh
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesTextField
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
+import com.zobaer53.zedmovies.data.model.ActiveFilter
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.Movie
+import com.zobaer53.zedmovies.data.model.SearchFilters
 import com.zobaer53.zedmovies.data.model.TvShow
 import com.zobaer53.zedmovies.ui.smallcomponent.MediaTabPager
 import com.zobaer53.zedmovies.R
@@ -69,6 +76,9 @@ internal fun SearchRoute(
         searchTvShows = searchTvShows,
         onRefresh = { viewModel.onEvent(SearchEvent.Refresh) },
         onQueryChange = { viewModel.onEvent(SearchEvent.ChangeQuery(it)) },
+        onApplyFilters = { viewModel.onEvent(SearchEvent.ApplyFilters(it)) },
+        onRemoveFilter = { viewModel.onEvent(SearchEvent.RemoveFilter(it)) },
+        onResetFilters = { viewModel.onEvent(SearchEvent.ResetFilters) },
         onSeeAllClick = onSeeAllClick,
         onMovieClick = onMovieClick,
         onTvShowClick = onTvShowClick,
@@ -86,6 +96,9 @@ private fun SearchScreen(
     searchTvShows: LazyPagingItems<TvShow>,
     onRefresh: () -> Unit,
     onQueryChange: (String) -> Unit,
+    onApplyFilters: (SearchFilters) -> Unit,
+    onRemoveFilter: (ActiveFilter) -> Unit,
+    onResetFilters: () -> Unit,
     onSeeAllClick: (MediaType.Common) -> Unit,
     onMovieClick: (Int) -> Unit,
     onTvShowClick: (Int) -> Unit,
@@ -93,6 +106,16 @@ private fun SearchScreen(
     onOfflineModeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isFiltersSheetOpen by rememberSaveable { mutableStateOf(false) }
+    val activeFilters = uiState.filters.activeFilters
+    if (isFiltersSheetOpen) {
+        FiltersSheet(
+            filters = uiState.filters,
+            isSortEnabled = uiState.query.isBlank(),
+            onApply = onApplyFilters,
+            onDismiss = { isFiltersSheetOpen = false }
+        )
+    }
     Column(
         modifier = modifier
             .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -100,16 +123,66 @@ private fun SearchScreen(
     ) {
         SearchTextField(
             query = uiState.query,
-            onQueryChange = onQueryChange
+            onQueryChange = onQueryChange,
+            activeFilterCount = activeFilters.size,
+            onFiltersClick = { isFiltersSheetOpen = true }
         )
+        AnimatedVisibility(visible = activeFilters.isNotEmpty()) {
+            ActiveFiltersRow(
+                modifier = Modifier.padding(bottom = zedMoviesTheme.spacing.small),
+                filters = activeFilters,
+                onRemove = onRemoveFilter,
+                onClearAll = onResetFilters
+            )
+        }
         AnimatedContent(targetState = uiState.isSearching, label = "") { isSearching ->
             if (isSearching) {
+                val isFiltered = uiState.filters.isActive
                 MediaTabPager(
                     moviesTabContent = {
-                        MoviesContainer(movies = searchMovies, onClick = onMovieClick)
+                        if (uiState.unmatchableMovieGenres.isNotEmpty()) {
+                            NoFilterResults(
+                                modifier = Modifier.fillMaxSize(),
+                                onClearFilters = onResetFilters,
+                                unmatchableGenres = uiState.unmatchableMovieGenres
+                            )
+                        } else if (isFiltered) {
+                            MoviesContainer(
+                                movies = searchMovies,
+                                onClick = onMovieClick,
+                                emptyContent = {
+                                    NoFilterResults(
+                                        modifier = Modifier.fillParentMaxSize(),
+                                        onClearFilters = onResetFilters
+                                    )
+                                }
+                            )
+                        } else {
+                            MoviesContainer(movies = searchMovies, onClick = onMovieClick)
+                        }
                     },
                     tvShowsTabContent = {
-                        TvShowsContainer(tvShows = searchTvShows, onClick = onTvShowClick)
+                        if (uiState.unmatchableTvShowGenres.isNotEmpty()) {
+                            NoFilterResults(
+                                modifier = Modifier.fillMaxSize(),
+                                onClearFilters = onResetFilters,
+                                unmatchableGenres = uiState.unmatchableTvShowGenres,
+                                isTvShows = true
+                            )
+                        } else if (isFiltered) {
+                            TvShowsContainer(
+                                tvShows = searchTvShows,
+                                onClick = onTvShowClick,
+                                emptyContent = {
+                                    NoFilterResults(
+                                        modifier = Modifier.fillParentMaxSize(),
+                                        onClearFilters = onResetFilters
+                                    )
+                                }
+                            )
+                        } else {
+                            TvShowsContainer(tvShows = searchTvShows, onClick = onTvShowClick)
+                        }
                     }
                 )
             } else {
@@ -189,6 +262,8 @@ private fun SearchScreen(
 private fun SearchTextField(
     query: String,
     onQueryChange: (String) -> Unit,
+    activeFilterCount: Int,
+    onFiltersClick: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current
 ) {
@@ -206,16 +281,22 @@ private fun SearchTextField(
         placeholderResourceId = R.string.search_placeholder,
         iconResourceId = R.drawable.ic_search,
         trailingIcon = {
-            AnimatedVisibility(
-                visible = query.isNotEmpty(),
-                enter = fadeIn() + scaleIn(),
-                exit = scaleOut() + fadeOut()
+            Row(
+                modifier = Modifier.padding(end = zedMoviesTheme.spacing.small),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                zedMoviesIconButton(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = stringResource(id = R.string.clear),
-                    onClick = { onQueryChange("") }
-                )
+                AnimatedVisibility(
+                    visible = query.isNotEmpty(),
+                    enter = fadeIn() + scaleIn(),
+                    exit = scaleOut() + fadeOut()
+                ) {
+                    zedMoviesIconButton(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = stringResource(id = R.string.clear),
+                        onClick = { onQueryChange("") }
+                    )
+                }
+                FiltersButton(activeCount = activeFilterCount, onClick = onFiltersClick)
             }
         },
         keyboardOptions = KeyboardOptions(

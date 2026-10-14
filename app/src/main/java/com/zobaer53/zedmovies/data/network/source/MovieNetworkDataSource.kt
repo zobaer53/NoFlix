@@ -27,4 +27,10 @@ class MovieNetworkDataSource @Inject constructor(private val movieService: Movie
         language: String,
         page: Int = DEFAULT_PAGE
     ): ZedMoviesResult<MovieResponseDto> = movieService.search(query, language, page)
+
+    suspend fun discover(
+        filters: Map<String, String>,
+        language: String,
+        page: Int = DEFAULT_PAGE
+    ): ZedMoviesResult<MovieResponseDto> = movieService.discover(filters, language, page)
 }

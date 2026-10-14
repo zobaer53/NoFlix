@@ -20,8 +20,8 @@
     <string name="no_release_date">No release date</string>
     <string name="wishlist">Wish list</string>
     <string name="action">action</string>
-    <string name="adventure">advanture</string>
-    <string name="action_adventure">action advanture</string>
+    <string name="adventure">adventure</string>
+    <string name="action_adventure">action adventure</string>
     <string name="animation">animation</string>
     <string name="comedy">comedy</string>
     <string name="crime">crime</string>
@@ -68,4 +68,40 @@
     <string name="no_movie_wishlist">Wish list is empty</string>
     <string name="no_tv_show_wishlist">Wishlist is empty</string>
     <string name="home">Home</string>
+    <string name="filters">Filters</string>
+    <string name="filters_reset">Reset</string>
+    <string name="filters_show_results">Show results</string>
+    <string name="filters_clear_all">Clear all</string>
+    <string name="filters_clear">Clear filters</string>
+    <string name="filters_remove">Remove filter</string>
+    <string name="filters_no_results">No titles match these filters</string>
+    <string name="filters_sort">Sort by</string>
+    <string name="filters_sort_popular">Popular</string>
+    <string name="filters_sort_top_rated">Top rated</string>
+    <string name="filters_sort_newest">Newest</string>
+    <string name="filters_sort_oldest">Oldest</string>
+    <string name="filters_sort_title">A–Z</string>
+    <string name="filters_sort_disabled">Clear the search text to sort</string>
+    <string name="filters_genres">Genres</string>
+    <string name="filters_genres_any">Any of these</string>
+    <string name="filters_genres_all">All of these</string>
+    <string name="filters_release_year">Release year</string>
+    <string name="filters_year_range">%1$d–%2$d</string>
+    <string name="filters_year_from">From %1$d</string>
+    <string name="filters_year_to">Until %1$d</string>
+    <string name="filters_any_year">Any year</string>
+    <string name="filters_min_rating">Minimum rating</string>
+    <string name="filters_rating_value">%1$s+ ★</string>
+    <string name="filters_any_rating">Any rating</string>
+    <string name="filters_original_language">Original language</string>
+    <string name="filters_any_language">Any language</string>
+    <string name="filters_more_languages">More…</string>
+    <plurals name="filters_not_a_movie_genre">
+        <item quantity="one">%1$s isn\'t a movie genre on TMDB</item>
+        <item quantity="other">%1$s aren\'t movie genres on TMDB</item>
+    </plurals>
+    <plurals name="filters_not_a_tv_genre">
+        <item quantity="one">%1$s isn\'t a TV genre on TMDB</item>
+        <item quantity="other">%1$s aren\'t TV genres on TMDB</item>
+    </plurals>
 </resources>
