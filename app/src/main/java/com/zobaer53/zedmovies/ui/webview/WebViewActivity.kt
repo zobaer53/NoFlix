@@ -45,7 +45,7 @@ class WebViewActivity : ComponentActivity()  {
                         val websiteUrl = "https://sflix.to/search/"
                         backgroundTaskScreen(websiteUrl,replacedString,movieYear,type,this).apply {
                             if(this.isNotEmpty()){
-                                VideoWebView(url = this, lifecycleOwner =WebViewActivity())
+                                VideoWebView(url = this, lifecycleOwner = this@WebViewActivity)
                             }
                         }
                     }

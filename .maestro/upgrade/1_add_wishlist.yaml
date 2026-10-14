@@ -1,0 +1,29 @@
+# Upgrade test, part 1 (run on the OLD build): save the first top-rated movie to the wish list.
+appId: com.zobaer53.zedmovies
+name: upgrade_1_add_wishlist
+---
+- launchApp:
+    clearState: true
+# Old builds show a 16 KB compat-mode dialog on 16 KB page-size devices.
+- tapOn:
+    text: "OK"
+    optional: true
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 30000
+- tapOn:
+    text: "Rating"
+    below: "Movies"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- tapOn: "Wish list"
+- back
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 10000
+- tapOn:
+    text: "Wish list"
+    index: 0
+- assertNotVisible: "Wish list is empty"

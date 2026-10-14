@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,10 +24,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.calculateCurrentOffsetForPage
-import com.google.accompanist.pager.rememberPagerState
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesImagePlaceholder
 import com.zobaer53.zedmovies.ui.designsystem.component.ZedMoviesNetworkImage
 import com.zobaer53.zedmovies.ui.designsystem.component.zedMoviesPlaceholder
@@ -37,7 +35,6 @@ import com.zobaer53.zedmovies.ui.smallcomponent.MoviesContainer
 import kotlin.math.absoluteValue
 
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun UpcomingMoviesContainer(
     movies: List<Movie>,
@@ -45,9 +42,9 @@ internal fun UpcomingMoviesContainer(
     onMovieClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState()
-    val shouldShowPlaceholder = movies.isEmpty()
     val count = 10
+    val pagerState = rememberPagerState(pageCount = { count })
+    val shouldShowPlaceholder = movies.isEmpty()
 
     MoviesContainer(
         titleResourceId = R.string.upcoming_movies,
@@ -56,23 +53,19 @@ internal fun UpcomingMoviesContainer(
     ) {
         HorizontalPager(
             state = pagerState,
-            count = count,
             contentPadding = PaddingValues(horizontal = zedMoviesTheme.spacing.extraLarge)
         ) { page ->
-            val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+            val pageOffset = pagerState.offsetForPage(page).absoluteValue
             if (shouldShowPlaceholder) {
                 UpcomingMovieItemPlaceholder(
-                    modifier = Modifier.pagerTransition(pagerScope = this, page = page),
+                    modifier = Modifier.pagerTransition(pagerState = pagerState, page = page),
                     pageOffset
                 )
             } else {
                 with(movies[page]) {
                     UpcomingMovieItem(
                         pageOffset,
-                        modifier = Modifier.pagerTransition(
-                            pagerScope = this@HorizontalPager,
-                            page = page
-                        ),
+                        modifier = Modifier.pagerTransition(pagerState = pagerState, page = page),
                         title = title,
                         backdropPath = backdropPath,
                         releaseDate = releaseDate,

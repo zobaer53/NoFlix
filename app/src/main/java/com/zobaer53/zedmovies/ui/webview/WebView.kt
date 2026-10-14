@@ -1,16 +1,15 @@
 package com.zobaer53.zedmovies.ui.webview
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
-import android.os.Build
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,15 +17,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import io.github.edsuns.adfilter.AdFilter
-import okhttp3.OkHttpClient
-import java.net.InetSocketAddress
 
 // RestrictedApi: addDocumentStartJavaScript is still marked internal in androidx.webkit 1.4.0;
 // the public version needs webkit 1.9+, which requires compileSdk 34.
@@ -37,7 +33,7 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     val filterViewModel = filter.viewModel
     var rememberUrl by remember { mutableStateOf(url) }
     var isFullScreen by remember { mutableStateOf(false) }
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     var webView by remember { mutableStateOf<WebView?>(null) }
     var customView by remember { mutableStateOf<View?>(null) }
     var customViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
@@ -108,7 +104,10 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     javaScriptEnabled = true
                     domStorageEnabled = true
                     mediaPlaybackRequiresUserGesture = false
-                    WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
+                    // Never auto-darken the site (setForceDark is a no-op from targetSdk 33).
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                        WebSettingsCompat.setAlgorithmicDarkeningAllowed(this, false)
+                    }
                     cacheMode =WebSettings.LOAD_DEFAULT
                 }
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
@@ -116,14 +115,6 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                         this, STREAM_DOCUMENT_START_SCRIPT, setOf(STREAM_BASE_URL)
                     )
                 }
-                val proxyHost = "91.211.245.176"
-                val proxyPort = 8080 // Your proxy port
-
-                val okHttpClient = OkHttpClient.Builder()
-                    .proxy(java.net.Proxy(java.net.Proxy.Type.HTTP, InetSocketAddress(proxyHost, proxyPort)))
-                    .build()
-
-
                 webChromeClient = object : WebChromeClient() {
                     override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
                         val decor = activity?.window?.decorView as? FrameLayout
@@ -151,7 +142,6 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     }
                 }
 
-               // webViewClient = AdBlockingWebViewClient(okHttpClient)
                 webViewClient = MyWebClient { newUrl ->
                     pageUrl = newUrl
                     updateOrientation()

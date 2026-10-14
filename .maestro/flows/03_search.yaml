@@ -1,0 +1,44 @@
+# Search tab shows Discover; typing a query shows paged results; a result opens details.
+appId: com.zobaer53.zedmovies
+name: 03_search
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- tapOn: "Search"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- tapOn: "search place holder"
+# Maestro's inputText occasionally doubles the first key ("BBatman"), so clear and retype on a miss.
+- retry:
+    maxRetries: 2
+    commands:
+      - eraseText: 20
+      - inputText: "Batman"
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Batman Begins"
+          timeout: 20000
+- takeScreenshot: search
+# Tab pager: tap a tab, then swipe back to the first one.
+- tapOn: "Tv Shows"
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- swipe:
+    start: "20%, 60%"
+    end: "85%, 60%"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000
+# First result's poster (the search field also contains "Batman").
+- tapOn:
+    text: "Rating"
+    below: "Tv Shows"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- back

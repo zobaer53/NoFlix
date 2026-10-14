@@ -1,5 +1,3 @@
-
-
 package com.zobaer53.zedmovies.ui.designsystem.component
 
 import androidx.compose.foundation.layout.Box
@@ -7,8 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.placeholder.material.placeholder
+import androidx.compose.ui.graphics.drawOutline
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 
 @Composable
@@ -27,10 +26,10 @@ fun Modifier.zedMoviesPlaceholder() = composed {
     zedMoviesPlaceholder(color = zedMoviesTheme.colors.primaryVariant)
 }
 
+/** Draws a [color] shape in place of the content while it is loading. */
 fun Modifier.zedMoviesPlaceholder(color: Color) = composed {
-    placeholder(
-        visible = true,
-        color = color,
-        shape = zedMoviesTheme.shapes.medium
-    )
+    val shape = zedMoviesTheme.shapes.medium
+    drawWithContent {
+        drawOutline(outline = shape.createOutline(size, layoutDirection, this), color = color)
+    }
 }

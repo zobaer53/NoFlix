@@ -23,15 +23,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerScope
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import androidx.compose.foundation.pager.PagerState
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DefaultHorizontalPagerIndicator(
     pagerState: PagerState,
@@ -74,7 +70,7 @@ fun DefaultHorizontalPagerIndicator(
             Modifier
                 .offset {
                     val position = pageIndexMapping(pagerState.currentPage)
-                    val offset = pagerState.currentPageOffset
+                    val offset = pagerState.currentPageOffsetFraction
                     val next = pageIndexMapping(pagerState.currentPage + offset.sign.toInt())
                     val scrollPosition = ((next - position) * offset.absoluteValue + position)
                         .coerceIn(
@@ -95,12 +91,11 @@ fun DefaultHorizontalPagerIndicator(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 fun Modifier.pagerTransition(
-    pagerScope: PagerScope,
+    pagerState: PagerState,
     page: Int
 ) = graphicsLayer {
-    val pageOffset = pagerScope.calculateCurrentOffsetForPage(page).absoluteValue
+    val pageOffset = pagerState.offsetForPage(page).absoluteValue
 
     lerp(
         start = 0.85f,
@@ -117,5 +112,8 @@ fun Modifier.pagerTransition(
         fraction = 1f - pageOffset.coerceIn(0f, 1f)
     )
 }
+
+/** Signed distance of [page] from the current scroll position, in pages. */
+fun PagerState.offsetForPage(page: Int): Float = (currentPage - page) + currentPageOffsetFraction
 
 private const val PagerIndicatorInactiveColorAlpha = 0.32f

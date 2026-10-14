@@ -16,5 +16,6 @@ data class TvShowDetails(
     val posterPath: String?,
     val voteAverage: Double,
     val credits: Credits,
+    val trailerKey: String?,
     val isWishlisted: Boolean
 )

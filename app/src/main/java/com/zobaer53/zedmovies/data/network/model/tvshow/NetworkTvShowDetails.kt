@@ -3,6 +3,7 @@
 package com.zobaer53.zedmovies.data.network.model.tvshow
 
 import com.zobaer53.zedmovies.data.network.model.common.NetworkCredits
+import com.zobaer53.zedmovies.data.network.model.common.NetworkVideos
 import com.zobaer53.zedmovies.data.network.model.common.NetworkGenre
 import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCompany
 import com.zobaer53.zedmovies.data.network.model.common.NetworkProductionCountry
@@ -32,6 +33,9 @@ data class NetworkTvShowDetails(
 
     @SerialName(Constants.Fields.CREDITS)
     val credits: NetworkCredits,
+
+    @SerialName(Constants.Fields.VIDEOS)
+    val videos: NetworkVideos? = null,
 
     @SerialName(Constants.Fields.EPISODE_RUN_TIME)
     val episodeRunTime: List<Int>,

@@ -1,0 +1,36 @@
+# Trailer opens YouTube's embedded player for the first top-rated movie, survives rotation,
+# and Back returns to details.
+appId: com.zobaer53.zedmovies
+name: 06_trailer
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 30000
+- tapOn:
+    text: "Rating"
+    below: "Movies"
+    index: 0
+- extendedWaitUntil:
+    visible: "Trailer"
+    timeout: 20000
+- tapOn: "Trailer"
+- extendedWaitUntil:
+    visible:
+      id: ".*trailer_player"
+    timeout: 15000
+# Let the embed load and autoplay.
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: trailer_portrait
+- setOrientation: LANDSCAPE_LEFT
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
+    id: ".*trailer_player"
+- takeScreenshot: trailer_landscape
+- setOrientation: PORTRAIT
+- back
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 15000

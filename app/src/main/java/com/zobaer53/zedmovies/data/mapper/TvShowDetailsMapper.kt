@@ -6,7 +6,7 @@ import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowDetailsEntity
 import com.zobaer53.zedmovies.domain.model.TvShowDetailsModel
 
-fun NetworkTvShowDetails.asTvShowDetailsEntity() = TvShowDetailsEntity(
+fun NetworkTvShowDetails.asTvShowDetailsEntity(contentLanguage: String) = TvShowDetailsEntity(
     id = id,
     name = name,
     adult = adult,
@@ -31,7 +31,8 @@ fun NetworkTvShowDetails.asTvShowDetailsEntity() = TvShowDetailsEntity(
     type = type,
     voteAverage = voteAverage,
     voteCount = voteCount,
-    credits = credits.asCredits()
+    credits = credits.asCredits(),
+    trailerKey = videos.asTrailerKey(contentLanguage)
 )
 
 fun TvShowDetailsEntity.asTvShowDetailsModel(isWishlisted: Boolean) = TvShowDetailsModel(
@@ -60,5 +61,6 @@ fun TvShowDetailsEntity.asTvShowDetailsModel(isWishlisted: Boolean) = TvShowDeta
     voteAverage = voteAverage,
     voteCount = voteCount,
     credits = credits.asCreditsModel(),
+    trailerKey = trailerKey,
     isWishlisted = isWishlisted
 )

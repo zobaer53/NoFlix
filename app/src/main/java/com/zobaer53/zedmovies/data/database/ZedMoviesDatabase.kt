@@ -1,6 +1,7 @@
 
 package com.zobaer53.zedmovies.data.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -29,8 +30,12 @@ import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
         MovieDetailsEntity::class, TvShowDetailsEntity::class,
         WishlistEntity::class
     ],
-    version = 2,
-    exportSchema = false
+    version = 3,
+    exportSchema = true,
+    autoMigrations = [
+        // 2 -> 3: nullable trailer_key on movie_details and tv_show_details.
+        AutoMigration(from = 2, to = 3)
+    ]
 )
 @TypeConverters(ListConverter::class, LocalDateConverter::class, CreditsConverter::class)
 abstract class zedMoviesDatabase : RoomDatabase() {

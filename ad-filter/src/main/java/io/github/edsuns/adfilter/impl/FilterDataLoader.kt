@@ -3,6 +3,7 @@ package io.github.edsuns.adfilter.impl
 import io.github.edsuns.adblockclient.AdBlockClient
 import io.github.edsuns.adfilter.CustomFilter
 import timber.log.Timber
+import java.io.IOException
 
 /**
  * Created by Edsuns@qq.com on 2020/10/24.
@@ -15,7 +16,12 @@ internal class FilterDataLoader(
     fun load(id: String) {
         if (binaryDataStore.hasData(id)) {
             val client = AdBlockClient(id)
-            client.loadProcessedData(binaryDataStore.loadData(id))
+            try {
+                client.loadProcessedData(binaryDataStore.fileOf(id))
+            } catch (e: IOException) {
+                Timber.v(e, "Couldn't load client processed data: $id")
+                return
+            }
             if (id == ID_CUSTOM) {
                 detector.customFilterClient = client
             } else {
@@ -53,7 +59,7 @@ internal class FilterDataLoader(
         binaryDataStore.saveData(RAW_CUSTOM, rawData)
         val client = AdBlockClient(ID_CUSTOM)
         client.loadBasicData(rawData, true)
-        binaryDataStore.saveData(ID_CUSTOM, client.getProcessedData())
+        binaryDataStore.saveFile(ID_CUSTOM) { client.saveProcessedData(it) }
         load(ID_CUSTOM)
     }
 

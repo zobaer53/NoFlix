@@ -8,6 +8,7 @@ import com.zobaer53.zedmovies.data.common.result.isSuccess
 import com.zobaer53.zedmovies.data.network.api.service.TvShowService
 import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
+import com.zobaer53.zedmovies.data.network.util.Constants.Fields.buildIncludeVideoLanguage
 import com.zobaer53.zedmovies.data.network.util.MESSAGE_UNHANDLED_STATE
 import javax.inject.Inject
 
@@ -17,7 +18,7 @@ class TvShowDetailsNetworkDataSource @Inject constructor(private val tvShowServi
         language: String,
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
     ): ZedMoviesResult<NetworkTvShowDetails> =
-        tvShowService.getDetailsById(id,  appendToResponse,language)
+        tvShowService.getDetailsById(id, appendToResponse, language, buildIncludeVideoLanguage(language))
 
     suspend fun getByIds(
         ids: List<Int>,
@@ -25,7 +26,7 @@ class TvShowDetailsNetworkDataSource @Inject constructor(private val tvShowServi
         appendToResponse: String = DETAILS_APPEND_TO_RESPONSE
     ): ZedMoviesResult<List<NetworkTvShowDetails>> {
         val tvShows = ids.map { id ->
-            val response = tvShowService.getDetailsById(id, appendToResponse, language)
+            val response = tvShowService.getDetailsById(id, appendToResponse, language, buildIncludeVideoLanguage(language))
 
            // Log.i("tvDetails1","tv details id $id ")
             when {

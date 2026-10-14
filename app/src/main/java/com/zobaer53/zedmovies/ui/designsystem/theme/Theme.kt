@@ -4,7 +4,8 @@ package com.zobaer53.zedmovies.ui.designsystem.theme
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
@@ -36,11 +37,12 @@ private fun ProvidezedMoviesThemeDependencies(
     ) { ProvideMaterialThemeDependencies(content = content) }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProvideMaterialThemeDependencies(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalIndication provides rememberzedMoviesRipple(),
-        LocalRippleTheme provides zedMoviesRippleTheme
+        LocalRippleConfiguration provides zedMoviesRippleConfiguration()
     ) {
         ProvideTextStyle(value = zedMoviesTheme.typography.regular.h4, content = content)
     }

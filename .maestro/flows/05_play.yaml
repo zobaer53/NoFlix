@@ -1,0 +1,48 @@
+# Play opens the streaming WebView (ad filter + page script), and Back returns to details.
+appId: com.zobaer53.zedmovies
+name: 05_play
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 30000
+- tapOn:
+    text: "Rating"
+    below: "Movies"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+# Only the play icon is clickable (its content description is "Rating").
+- assertVisible: "Play"
+- tapOn:
+    text: "Rating"
+    above: "Overview"
+- extendedWaitUntil:
+    notVisible: "Overview"
+    timeout: 15000
+# Give the page time to load, the ad filter to install and the page script to run.
+- waitForAnimationToEnd:
+    timeout: 15000
+- takeScreenshot: play_webview
+# A fresh device shows Android's one-time "Viewing full screen" hint for hidden system bars.
+- tapOn:
+    text: "Got it"
+    optional: true
+- back
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 15000
+# Second load: the filter lists downloaded during the first one are installed now.
+- tapOn:
+    text: "Rating"
+    above: "Overview"
+- extendedWaitUntil:
+    notVisible: "Overview"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 15000
+- back
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 15000

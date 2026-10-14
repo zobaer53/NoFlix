@@ -34,6 +34,7 @@ internal fun TvShowDetailsItem(
             genres = genres.asNames(),
             voteAverage = 0.0,
             credits = credits,
+            trailerKey = trailerKey,
             isWishlisted = isWishlisted,
             onBackButtonClick = onBackButtonClick,
             onWishlistButtonClick = onWishlistButtonClick

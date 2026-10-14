@@ -1,0 +1,34 @@
+# "See all" opens the paged list; scrolling loads more pages; Back returns home.
+appId: com.zobaer53.zedmovies
+name: 02_see_all
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- tapOn:
+    text: "See all"
+    index: 0
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- assertNotVisible: "Top Rated"
+- takeScreenshot: list
+# Pull to refresh (Material 3 PullToRefreshBox), then the list is shown again.
+- swipe:
+    start: "50%, 25%"
+    end: "50%, 75%"
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- assertVisible: "Rating"
+- back
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 10000

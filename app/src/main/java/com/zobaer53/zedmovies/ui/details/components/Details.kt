@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -54,6 +55,7 @@ internal fun DetailsItem(
     genres: List<String>,
     voteAverage: Double,
     credits: Credits,
+    trailerKey: String?,
     isWishlisted: Boolean,
     onBackButtonClick: () -> Unit,
     onWishlistButtonClick: () -> Unit,
@@ -167,7 +169,13 @@ internal fun DetailsItem(
                                 rating = PlaceholderRating
                             )
                         } else {
-                            RatingItem(type,title,releaseDate.year,rating = voteAverage, tmdbId = id)
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(zedMoviesTheme.spacing.small),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RatingItem(type,title,releaseDate.year,rating = voteAverage, tmdbId = id)
+                                if (trailerKey != null) TrailerItem(trailerKey = trailerKey)
+                            }
                         }
                     }
                 }
@@ -203,6 +211,7 @@ internal fun DetailsItemPlaceholder(
         genres = emptyList(),
         voteAverage = 0.0,
         credits = Credits(cast = emptyList(), crew = emptyList()),
+        trailerKey = null,
         isWishlisted = false,
         onBackButtonClick = onBackButtonClick,
         onWishlistButtonClick = onWishlistButtonClick,

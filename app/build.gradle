@@ -1,33 +1,31 @@
 
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id("com.google.dagger.hilt.android")
-    id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.plugin.serialization'
-
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 
 android {
-    ext.kotlin_version = "1.4.21"
     namespace 'com.zobaer53.zedmovies'
-    compileSdk 33
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.zobaer53.zedmovies"
-        minSdk 24
-        targetSdk 33
+        minSdk 26
+        targetSdk 37
         // CI passes -PappVersionCode/-PappVersionName (see .github/workflows/release.yml).
         // To start a new minor/major line, raise versionName here; CI releases it next.
         versionCode project.hasProperty("appVersionCode") ? project.property("appVersionCode").toInteger() : 3
-        versionName project.findProperty("appVersionName") ?: "2.1.0"
+        versionName project.findProperty("appVersionName") ?: "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
-        buildFeatures.buildConfig = true
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String","API_KEY","\"${properties.getProperty("API_KEY")}\""
@@ -59,129 +57,73 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
     buildFeatures {
         compose true
+        buildConfig true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.3.2'
-    }
-    packagingOptions {
+    packaging {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
 }
 
-kapt {
-    correctErrorTypes = true
+
+room {
+    // Exported schemas are committed so schema changes can get tested migrations.
+    schemaDirectory "$projectDir/schemas"
 }
 
 dependencies {
+    implementation libs.androidx.core
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.runtime.compose
+    implementation libs.androidx.core.splashscreen
+    implementation libs.androidx.webkit
 
-    implementation 'androidx.core:core:1.10.1'
-    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.10')
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'com.google.android.gms:play-services-basement:18.2.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.ui.graphics
+    implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.compose.ui.util
+    implementation libs.androidx.compose.foundation
+    implementation libs.androidx.compose.material.icons.core
+    implementation libs.androidx.compose.material3
+    debugImplementation libs.androidx.compose.ui.tooling
+    debugImplementation libs.androidx.compose.ui.test.manifest
 
-    implementation 'androidx.activity:activity:1.7.2'
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.hilt.lifecycle.viewmodel.compose
+    implementation libs.hilt.android
+    ksp libs.hilt.compiler
 
+    implementation libs.androidx.paging.runtime
+    implementation libs.androidx.paging.compose
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    implementation libs.androidx.room.paging
+    ksp libs.androidx.room.compiler
+    implementation libs.androidx.datastore.preferences
 
-    implementation platform('androidx.compose:compose-bom:2023.05.00')
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material3:material3'
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.serialization.json
+    implementation libs.kotlinx.datetime
 
+    implementation libs.retrofit
+    implementation libs.retrofit.kotlinx.serialization
+    implementation libs.okhttp
+    implementation libs.coil.compose
+    implementation libs.coil.network.okhttp
+    implementation libs.lottie.compose
+    implementation libs.jsoup
+    implementation libs.youtube.player.core
 
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
-    implementation "androidx.compose.ui:ui-util:1.4.3"
-    implementation "androidx.compose.runtime:runtime:1.4.3"
-    implementation "androidx.compose.compiler:compiler:1.4.4"
+    // Ad blocker
+    implementation project(':ad-filter')
 
-
-
-    implementation "androidx.navigation:navigation-compose:2.5.3"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
-    implementation("com.google.dagger:hilt-android:2.46.1")
-    implementation("com.google.dagger:hilt-core:2.46.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.46.1")
-
-    implementation "androidx.startup:startup-runtime:1.1.1"
-
-    implementation"androidx.core:core-splashscreen:1.0.1"
-
-    def paging_version = "3.1.1"
-
-    implementation("androidx.paging:paging-runtime:$paging_version")
-
-    // optional - RxJava2 support
-    implementation("androidx.paging:paging-rxjava2:$paging_version")
-
-    // optional - RxJava3 support
-    implementation("androidx.paging:paging-rxjava3:$paging_version")
-
-    // optional - Guava ListenableFuture support
-    implementation("androidx.paging:paging-guava:$paging_version")
-
-    // optional - Jetpack Compose integration
-    implementation("androidx.paging:paging-compose:1.0.0-alpha20")
-
-
-    def room_version = "2.5.1"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-paging:$room_version"
-
-
-
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
-
-
-
-
-    implementation"org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
-
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-    implementation"org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-
-    implementation "androidx.datastore:datastore-preferences:1.1.0-alpha04"
-
-    implementation("io.coil-kt:coil-compose:2.4.0")
-
-    def pager_version = "0.29.1-alpha"
-
-    implementation "com.google.accompanist:accompanist-placeholder-material:$pager_version"
-    implementation("com.google.accompanist:accompanist-pager:$pager_version")
-    implementation "com.google.accompanist:accompanist-pager-indicators:$pager_version"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$pager_version"
-
-    implementation "androidx.compose.material:material:1.0.0"
-
-
-
-    implementation 'androidx.webkit:webkit:1.4.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'org.jsoup:jsoup:1.14.3'
-
-    //lottie
-    implementation("com.airbnb.android:lottie-compose:6.1.0")
-
-    //ad blocker
-    implementation(project(':ad-filter'))
-
-
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
 }

@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
-import coil.compose.SubcomposeAsyncImageScope
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import coil3.compose.AsyncImagePainter
+import coil3.compose.SubcomposeAsyncImage
+import coil3.compose.SubcomposeAsyncImageContent
+import coil3.compose.SubcomposeAsyncImageScope
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
 
 @Composable
@@ -51,7 +53,8 @@ fun ZedMoviesCardNetworkImage(
 
 @Composable
 private fun SubcomposeAsyncImageScope.SubcomposeAsyncImageHandler() {
-    when (painter.state) {
+    val state by painter.state.collectAsState()
+    when (state) {
         is AsyncImagePainter.State.Loading -> zedMoviesImagePlaceholder()
         is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
         AsyncImagePainter.State.Empty, is AsyncImagePainter.State.Error -> Box(

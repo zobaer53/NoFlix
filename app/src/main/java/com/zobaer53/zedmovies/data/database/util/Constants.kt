@@ -25,6 +25,7 @@ internal object Constants {
         internal const val CAST = "cast"
         internal const val CREW = "crew"
         internal const val CREDITS = "credits"
+        internal const val TRAILER_KEY = "trailer_key"
         internal const val CHARACTER = "character"
         internal const val BUDGET = "budget"
         internal const val PRODUCTION_COMPANIES = "production_companies"

@@ -1,31 +1,28 @@
-
 @file:Suppress("MatchingDeclarationName")
 
 package com.zobaer53.zedmovies.ui.designsystem.theme
 
 import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 
-@Immutable
-internal object zedMoviesRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = RippleColor
-
-    @Composable
-    override fun rippleAlpha() = RippleAlpha
-}
-
+/** Indication for clickable() and other foundation components. */
 @Composable
 internal fun rememberzedMoviesRipple(
     bounded: Boolean = true,
     radius: Dp = Dp.Unspecified,
     color: Color = RippleColor
-) = rememberRipple(bounded = bounded, radius = radius, color = color)
+) = ripple(bounded = bounded, radius = radius, color = color)
+
+/** Ripple color and alpha for Material 3 components (buttons, tabs, …). */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun zedMoviesRippleConfiguration() =
+    RippleConfiguration(color = RippleColor, rippleAlpha = RippleAlpha)
 
 private val RippleColor @Composable get() = zedMoviesTheme.colors.accent
 

@@ -18,6 +18,8 @@ package io.github.edsuns.adblockclient
 
 import android.net.Uri
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
 
 
 /**
@@ -77,6 +79,43 @@ class AdBlockClient(override val id: String) : Client {
     fun getProcessedData(): ByteArray = getProcessedData(nativeClientPointer)
 
     private external fun getProcessedData(clientPointer: Long): ByteArray
+
+    // The File variants do the I/O in native code, so large lists never pass through the Java heap.
+
+    /**
+     * @param file requires UTF-8 text
+     */
+    fun loadBasicData(file: File, preserveRules: Boolean = false) {
+        val timestamp = System.currentTimeMillis()
+        Timber.d("Loading basic data for $id from file")
+        val pointer = loadBasicDataFile(nativeClientPointer, file.path, preserveRules)
+        if (pointer == 0L) throw IOException("Couldn't read $file")
+        rawDataPointer = pointer
+        Timber.d("Loading basic data for $id completed in ${System.currentTimeMillis() - timestamp}ms")
+    }
+
+    private external fun loadBasicDataFile(
+        clientPointer: Long,
+        path: String,
+        preserveRules: Boolean
+    ): Long
+
+    fun loadProcessedData(file: File) {
+        val timestamp = System.currentTimeMillis()
+        Timber.d("Loading preprocessed data for $id from file")
+        val pointer = loadProcessedDataFile(nativeClientPointer, file.path)
+        if (pointer == 0L) throw IOException("Couldn't read $file")
+        processedDataPointer = pointer
+        Timber.d("Loading preprocessed data for $id completed in ${System.currentTimeMillis() - timestamp}ms")
+    }
+
+    private external fun loadProcessedDataFile(clientPointer: Long, path: String): Long
+
+    fun saveProcessedData(file: File) {
+        if (!saveProcessedData(nativeClientPointer, file.path)) throw IOException("Couldn't write $file")
+    }
+
+    private external fun saveProcessedData(clientPointer: Long, path: String): Boolean
 
     fun getFiltersCount(): Int = getFiltersCount(nativeClientPointer)
 

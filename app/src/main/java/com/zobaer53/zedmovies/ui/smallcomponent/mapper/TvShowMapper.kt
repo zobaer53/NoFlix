@@ -34,6 +34,7 @@ fun TvShowDetailsModel.asTvShowDetails() = TvShowDetails(
     posterPath = posterPath,
     voteAverage = voteAverage.roundToOneDecimal(),
     credits = credits.asCredits(),
+    trailerKey = trailerKey,
     isWishlisted = isWishlisted
 )
 

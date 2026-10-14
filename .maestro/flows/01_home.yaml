@@ -1,0 +1,32 @@
+# Cold start with cleared data: splash, then home sections load from TMDB and the bottom bar is shown.
+appId: com.zobaer53.zedmovies
+name: 01_home
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- assertVisible: "Top Rated"
+# On 16 KB page-size devices a misaligned native library shows a compat-mode warning dialog.
+- assertNotVisible: ".*16 KB compatible.*"
+- assertVisible: "Movies"
+- assertVisible: "Tv Shows"
+- assertVisible: "Search"
+- assertVisible: "Wish list"
+# Posters have loaded once a rating chip is shown on a card.
+- extendedWaitUntil:
+    visible: "Rating"
+    timeout: 20000
+- takeScreenshot: home
+# Swipe the upcoming-movies pager (foundation HorizontalPager).
+- swipe:
+    start: "80%, 22%"
+    end: "20%, 22%"
+- swipe:
+    start: "80%, 22%"
+    end: "20%, 22%"
+- assertVisible: "Upcoming Movies"
+- scrollUntilVisible:
+    element: "Tv Shows"
+    direction: DOWN

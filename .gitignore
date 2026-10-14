@@ -100,3 +100,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 /app/
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.idea/deploymentTargetSelector.xml
+.idea/deviceManager.xml
