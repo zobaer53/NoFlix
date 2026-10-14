@@ -8,7 +8,7 @@ The plan follows Google's [version upgrade strategy](https://developer.android.c
 
 ## Progress
 
-Each step is tested with the Maestro suite in `.maestro/` (see "Testing harness" below), mostly on a Pixel 9 Pro API 36 emulator with **16 KB pages** (`Pixel_9_Pro_16k`), plus API 24 and API 30 emulators and a signed release build. **Status: Phases 1–6 and targetSdk 37 done (tested on an Android 17 Pixel 10 Pro emulator); the minSdk decision and real-device testing are left (see "Open decisions" below).**
+Each step is tested with the Maestro suite in `.maestro/` (see "Testing harness" below), mostly on a Pixel 9 Pro API 36 emulator with **16 KB pages** (`Pixel_9_Pro_16k`), plus API 24 and API 30 emulators and a signed release build. **Status: Phases 1–6 and targetSdk 37 done (tested on an Android 17 Pixel 10 Pro emulator); tested on a real Pixel 6a (Android 16); the minSdk decision and a real Android 17 device are left (see "Open decisions" below).**
 
 | Step                                                      | Status  | Maestro                          | Notes                                                                                                                         |
 | --------------------------------------------------------- | ------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -34,12 +34,13 @@ Each step is tested with the Maestro suite in `.maestro/` (see "Testing harness"
 | Room schema export (`androidx.room` plugin, `app/schemas/`) | ✅ done | 5/5 pass + upgrade-in-place pass | Identity hash `318b45f8…` matches existing installs |
 | Phase 8 (part): API 30 (Android 11, 3-button nav) emulator | ✅ done | 5/5 pass (exit 0); re-verified on 16 KB API 36 | Restored the pre-migration nav-bar look (no white scrim) |
 | Phase 8 (part): Android 17 emulator | ✅ done | 5/5 pass; 6/6 with the trailer flow under `-feature GuestAngle` | Pixel 10 Pro profile, Play image, 20 GB |
-| Phase 8: remaining matrix (real phone, physical tablet, Android 17 with 16 KB pages) | ⏳ remaining | | |
+| Phase 8 (part): real phone (Pixel 6a, Android 16, 4 KB pages, WebView 151) | ✅ done | 6/6 pass; upgrade 2.1.2 → 3.0.0 passes | A stream plays full screen in landscape after switching server |
+| Phase 8: remaining matrix (physical tablet, real Android 17 device, Android 17 with 16 KB pages) | ⏳ remaining | | |
 | Phase 3: rest of the ad-block modules (deps bump) | ✅ done (in 5a) | | timber 5.0.1, coroutines/serialization/WorkManager/core-ktx from the catalog, appcompat removed |
 
 ### Open decisions / remaining work (need the owner or hardware)
 
-1. **targetSdk 37 follow-ups:** (a) confirm a video actually streams on Android 17 once the site's providers recover. On 2026-10-14 every title stayed on "Connecting…" in the app **and in Chrome** on the same emulator, and one upstream source host timed out from the Mac too, so this is upstream, not the app (see the API 37 notes). (b) Re-run `.maestro/upgrade.sh` (2.1.2 → 3.0.0 at target 37) on a clean tree. The first attempt was invalidated by another session using the same emulator and working tree. (c) The 16 KB Android 17 image (`android-37.2 … ps16k`) isn't installed, so the 16 KB update-path finding is still only tested on API 36.
+1. **targetSdk 37 follow-ups:** (a) confirm a video actually streams on Android 17. **Partly resolved 2026-10-14:** on the Pixel 6a (Android 16) the site's default server ("Headhunter XXXI") also stays on "Connecting…", but picking the next server in the site's server list plays the movie full screen in landscape. So the stall is that one server, not the app. Still to do: the same check on Android 17 (emulator with `-feature GuestAngle`). On 2026-10-14 every title stayed on "Connecting…" in the app **and in Chrome** on the same emulator, and one upstream source host timed out from the Mac too, so this is upstream, not the app (see the API 37 notes). (b) ~~Re-run `.maestro/upgrade.sh` (2.1.2 → 3.0.0 at target 37) on a clean tree.~~ **Done 2026-10-14** on the Pixel 6a: public 2.1.2 release → signed 3.0.0 release (`fbaf989`, versionCode 30000, targetSdk 37, same `CN=zeD, O=NoFlix` cert), wish list item kept, no crash. (c) The 16 KB Android 17 image (`android-37.2 … ps16k`) isn't installed, so the 16 KB update-path finding is still only tested on API 36.
 2. **minSdk 24 vs 26:** on Android 7.x the catalog works now, but ad blocking and playback can't (TLS roots). The recommendation is minSdk 26 (see the API 24 notes).
 3. **Updating from 2.1.x on 16 KB devices** keeps Android's compat-mode warning (see the open 16 KB finding). Mention it in the 3.0.0 release notes, or test on a real 16 KB phone first.
 4. **Release:** merging `upgrade` into `master` publishes **3.0.0** through CI. Do it after a real-phone smoke test.
