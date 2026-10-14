@@ -23,7 +23,7 @@ There is no lint/format config beyond Android defaults, and unit/instrumented co
 
 Requirements:
 - JDK 17+, Gradle 9.7.1, AGP 9.4.1 with **built-in Kotlin** (no `kotlin-android` plugin; never re-add it or `kotlin-kapt`), Kotlin 2.4.21 pinned through the root `buildscript` classpath, Compose compiler = the `org.jetbrains.kotlin.plugin.compose` plugin at the Kotlin version, KSP for Room and Hilt. All versions live in `gradle/libs.versions.toml`, including `compileSdk` (37), `ndk` and `cmake`.
-- compileSdk 37, targetSdk 37, minSdk 24 (raising minSdk to 26 is an open decision, see `doc/android-17-migration-plan.md`).
+- compileSdk 37, targetSdk 37, minSdk 26 (Android 8.0). Android 7.x can't download the filter lists or play (missing TLS roots), and with 26 `java.time` (kotlinx-datetime) needs no core library desugaring.
 - NDK r28c (`28.2.13676358`) + CMake 3.22.1 for `:adblock-client`'s native library. NDK r28+ is what makes the 64-bit `.so` 16 KB-page aligned. Every native library in the APK must stay 16 KB aligned (AndroidX ones too), or Android 15+ 16 KB devices run the app in compat mode with a warning.
 - AGP 9 no longer aligns compile and runtime classpath versions (`android.dependency.useConstraints=false`), so declare the versions you actually ship (for example the Compose BOM) rather than relying on a transitive bump.
 - `local.properties` must contain `API_KEY=<TMDB key>`; `app/build.gradle` reads it into `BuildConfig.API_KEY` and fails to configure without the file. Optional `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD` enable release signing; without them the release build is unsigned.
@@ -74,10 +74,10 @@ The details screen shows a "Trailer" chip next to Play when TMDB has a YouTube t
 
 ### Ad-blocking modules
 
-- `:ad-filter` (`io.github.edsuns.adfilter`) — Kotlin API (`AdFilter.create/get`, `FilterViewModel`); downloads and installs filter lists with WorkManager (`DownloadWorker`, `InstallationWorker`) and injects element-hiding/scriptlet JS that `script/JsAssets.kt` reads from `src/main/assets/adfilter/` at runtime. `scriptlets.min.js` is generated from `scriptlets_src/` with `gulp`; `extended-css.min.js` is vendored from AdGuard ExtendedCss.
+- `:ad-filter` (`io.github.edsuns.adfilter`) — Kotlin API (`AdFilter.create/get`, `FilterViewModel`); downloads and installs filter lists with WorkManager (`DownloadWorker`, `InstallationWorker`) and injects element-hiding/scriptlet JS that `script/JsAssets.kt` reads from `src/main/assets/adfilter/` at runtime. `scriptlets.min.js` is generated from `scriptlets_src/` with `gulp`; `extended-css.min.js` is vendored from AdGuard ExtendedCss. The workers open the filter store with `BinaryDataStore.of(context)`; never create `AdFilter` from a worker: its init blocks on a WorkManager query queued behind that worker, deadlocks while holding the singleton lock, and the next `WebViewActivity` launch ANRs.
 - `:adblock-client` (`io.github.edsuns.adblockclient`) — JNI wrapper (`src/main/cpp/adblockclient-lib.cpp`) around Brave's C++ ad-block engine in `src/main/cpp/third-party/`. Native bugs here crash the app with SIGSEGV (e.g. strings passed to `parse()` must be NUL-terminated).
 
-Both library modules share the app's catalog versions (compileSdk 37, minSdk 24, Java 17) and have their own namespaces (AGP 9 requires unique package names). The vendored brave/ad-block C++ engine is deprecated upstream (successor: adblock-rust).
+Both library modules share the app's catalog versions (compileSdk 37, minSdk 26, Java 17) and have their own namespaces (AGP 9 requires unique package names). The vendored brave/ad-block C++ engine is deprecated upstream (successor: adblock-rust).
 
 ### System bars
 

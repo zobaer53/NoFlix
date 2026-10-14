@@ -17,7 +17,7 @@
 <p align="center">
   <a href="https://github.com/zobaer53/NoFlix/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/zobaer53/NoFlix"/></a>
   <a href="https://github.com/zobaer53/NoFlix/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/zobaer53/NoFlix/total"/></a>
-  <a href="https://android-arsenal.com/api?level=24"><img alt="API 24+" src="https://img.shields.io/badge/API-24%2B-brightgreen.svg"/></a>
+  <a href="https://android-arsenal.com/api?level=26"><img alt="API 26+" src="https://img.shields.io/badge/API-26%2B-brightgreen.svg"/></a>
   <a href="LICENSE.txt"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
   <a href="https://github.com/zobaer53/NoFlix/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zobaer53/NoFlix?style=social"/></a>
 </p>
@@ -45,7 +45,7 @@ If you've been looking for a way to **watch free movies without ads**, **stream 
 
 Get the latest signed APK from **[GitHub Releases](https://github.com/zobaer53/NoFlix/releases/latest)**. Every update on `master` is published there automatically.
 
-1. Download `NoFlix.apk` on your Android phone (Android 7.0 or newer).
+1. Download `NoFlix.apk` on your Android phone (Android 8.0 or newer).
 2. Open it and allow *Install unknown apps* if prompted.
 3. Open NoFlix, pick a movie or series and tap **Play**.
 
