@@ -5,8 +5,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import io.github.edsuns.adblockclient.AdBlockClient
-import io.github.edsuns.adfilter.AdFilter
-import io.github.edsuns.adfilter.impl.AdFilterImpl
+import io.github.edsuns.adfilter.impl.BinaryDataStore
 import io.github.edsuns.adfilter.impl.Constants.KEY_ALREADY_UP_TO_DATE
 import io.github.edsuns.adfilter.impl.Constants.KEY_CHECK_LICENSE
 import io.github.edsuns.adfilter.impl.Constants.KEY_DOWNLOADED_DATA
@@ -24,7 +23,7 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
     context,
     params
 ) {
-    private val binaryDataStore = (AdFilter.get(applicationContext) as AdFilterImpl).binaryDataStore
+    private val binaryDataStore = BinaryDataStore.of(applicationContext)
 
     override fun doWork(): Result {
         val id = inputData.getString(KEY_FILTER_ID) ?: return Result.failure()

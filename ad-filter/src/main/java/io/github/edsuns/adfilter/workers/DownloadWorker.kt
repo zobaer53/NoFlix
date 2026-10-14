@@ -4,8 +4,7 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import io.github.edsuns.adfilter.AdFilter
-import io.github.edsuns.adfilter.impl.AdFilterImpl
+import io.github.edsuns.adfilter.impl.BinaryDataStore
 import io.github.edsuns.adfilter.impl.Constants.KEY_DOWNLOADED_DATA
 import io.github.edsuns.adfilter.impl.Constants.KEY_DOWNLOAD_URL
 import io.github.edsuns.adfilter.impl.Constants.KEY_FILTER_ID
@@ -23,7 +22,7 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
     context,
     params
 ) {
-    private val binaryDataStore = (AdFilter.get(applicationContext) as AdFilterImpl).binaryDataStore
+    private val binaryDataStore = BinaryDataStore.of(applicationContext)
 
     override fun doWork(): Result {
         val id = inputData.getString(KEY_FILTER_ID) ?: return Result.failure()

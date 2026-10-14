@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.work.WorkInfo
 import io.github.edsuns.adblockclient.ResourceType
 import io.github.edsuns.adfilter.*
-import io.github.edsuns.adfilter.impl.Constants.FILE_STORE_DIR
 import io.github.edsuns.adfilter.impl.Constants.KEY_ALREADY_UP_TO_DATE
 import io.github.edsuns.adfilter.impl.Constants.KEY_FILTERS_COUNT
 import io.github.edsuns.adfilter.impl.Constants.KEY_FILTER_NAME
@@ -23,7 +22,6 @@ import io.github.edsuns.adfilter.util.None
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /**
  * Created by Edsuns@qq.com on 2021/7/29.
@@ -35,8 +33,7 @@ internal class AdFilterImpl constructor(appContext: Context) : AdFilter {
     }
 
     private val detector: Detector = DetectorImpl()
-    internal val binaryDataStore: BinaryDataStore =
-        BinaryDataStore(File(appContext.filesDir, FILE_STORE_DIR))
+    internal val binaryDataStore: BinaryDataStore = BinaryDataStore.of(appContext)
     private val filterDataLoader: FilterDataLoader = FilterDataLoader(detector, binaryDataStore)
 
     private val elementHiding: ElementHiding = ElementHiding(detector)

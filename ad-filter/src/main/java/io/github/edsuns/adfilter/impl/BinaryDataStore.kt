@@ -1,5 +1,7 @@
 package io.github.edsuns.adfilter.impl
 
+import android.content.Context
+import io.github.edsuns.adfilter.impl.Constants.FILE_STORE_DIR
 import timber.log.Timber
 import java.io.File
 
@@ -25,5 +27,14 @@ internal class BinaryDataStore(private val dir: File) {
 
     fun clearData(name: String) {
         File(dir, name).delete()
+    }
+
+    companion object {
+        /**
+         * The filter data store. Workers open it with this instead of through [AdFilterImpl]:
+         * creating the singleton in a worker deadlocks (its init waits for a WorkManager query
+         * queued behind that worker) and ANRs the next WebView launch.
+         */
+        fun of(context: Context) = BinaryDataStore(File(context.filesDir, FILE_STORE_DIR))
     }
 }
