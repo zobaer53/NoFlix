@@ -23,7 +23,7 @@ There is no lint/format config beyond Android defaults, and unit/instrumented co
 
 Requirements:
 - JDK 17+, Gradle 9.7.1, AGP 9.4.1 with **built-in Kotlin** (no `kotlin-android` plugin; never re-add it or `kotlin-kapt`), Kotlin 2.4.21 pinned through the root `buildscript` classpath, Compose compiler = the `org.jetbrains.kotlin.plugin.compose` plugin at the Kotlin version, KSP for Room and Hilt. All versions live in `gradle/libs.versions.toml`, including `compileSdk` (37), `ndk` and `cmake`.
-- compileSdk 37, targetSdk 36, minSdk 24. targetSdk 37 is pending an on-device test on Android 17 (see `doc/android-17-migration-plan.md`).
+- compileSdk 37, targetSdk 37, minSdk 24 (raising minSdk to 26 is an open decision, see `doc/android-17-migration-plan.md`).
 - NDK r28c (`28.2.13676358`) + CMake 3.22.1 for `:adblock-client`'s native library. NDK r28+ is what makes the 64-bit `.so` 16 KB-page aligned. Every native library in the APK must stay 16 KB aligned (AndroidX ones too), or Android 15+ 16 KB devices run the app in compat mode with a warning.
 - AGP 9 no longer aligns compile and runtime classpath versions (`android.dependency.useConstraints=false`), so declare the versions you actually ship (for example the Compose BOM) rather than relying on a transitive bump.
 - `local.properties` must contain `API_KEY=<TMDB key>`; `app/build.gradle` reads it into `BuildConfig.API_KEY` and fails to configure without the file. Optional `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD` enable release signing; without them the release build is unsigned.
