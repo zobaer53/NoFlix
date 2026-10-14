@@ -13,7 +13,7 @@ This document is the plan and the progress tracker.
 | Phase | Status | Tested |
 | --- | --- | --- |
 | 1. Core filters, no search text | Done (14 Oct 2026) | 17 JVM unit tests; full Maestro suite incl. new `07_filters.yaml` on a Pixel 6a (Android 17) |
-| 2. Filters with search text | Not started | |
+| 2. Filters with search text | Done (14 Oct 2026) | 23 JVM unit tests; full Maestro suite incl. extended `07_filters.yaml` on a Pixel 6a |
 | 3. More filters | Not started | |
 
 Open decisions were taken with the recommended defaults: one filter set for both tabs, filters reset on each launch (kept across process death only), applied with "Show results".
@@ -228,10 +228,19 @@ Phase 1 notes (where the code differs from the design above):
 
 ### Phase 2: Filters with search text
 
-- [ ] `SearchMovie/TvShowPagingSource` take filters: single year sent to TMDB, other Phase 1 filters checked in the app, up to 5 TMDB pages per load.
-- [ ] Unit tests for the in-app matcher and the "empty page doesn't stop paging" case.
-- [ ] Sheet greys out sort while text is entered, with the note.
-- [ ] Extend `07_filters.yaml`: type "Batman", set year range 2000–2010 → "Batman Begins" is shown, a later Batman film isn't.
+- [x] ~~`SearchMovie/TvShowPagingSource`~~ search takes filters: single year sent to TMDB, other Phase 1 filters checked in the app, up to 5 TMDB pages per load.
+- [x] Unit tests for the in-app matcher and the "empty page doesn't stop paging" case.
+- [x] Sheet greys out sort while text is entered, with the note.
+- [x] Extend `07_filters.yaml`: type "Batman", set ~~year range 2000–2010~~ "until ≈2012" → "Batman Begins" is shown, a later Batman film ("The Batman", 2022) isn't. Also: Japanese → "Batman Ninja" is shown, "Batman Begins" isn't.
+
+Phase 2 notes:
+
+- `MovieRepository.search(query, filters)` / `TvShowRepository.search(query, filters)` build a `TmdbPagingSource` whose `fetch` drops non-matching results (`SearchFiltersModel.matches(NetworkMovie | NetworkTvShow)` in `data/mapper/SearchFiltersMapper.kt`). It allows `FILTERED_REQUESTS_PER_LOAD` = 5 requests per load only when a filter can drop results (`filtersSearchResults`), otherwise 1, as before.
+- The matcher uses the same genre rules as discover (genres a media type lacks are left out; the ViewModel shows the "isn't a TV genre" message when nothing is left). Titles without a release date fail any year bound. The minimum rating has no vote floor here: search keeps TMDB's relevance order, and a floor would hide most matches.
+- Only a one-year range is sent to TMDB (`primary_release_year` / `first_air_date_year`); any other range is checked in the app.
+- A sort chip stays in the active-filter row while text is entered, even though search ignores it; the sheet explains why it's greyed out.
+- **Maestro:** a tap on the `RangeSlider` moves whichever thumb is closer, so a flow can't set the start of the range to 2000 by tapping. The flow taps at 88% of the slider (Maestro's element-relative `point`), which sets the end to about 2012, and accepts any end year from 2006 to 2021.
+- With a strict filter on a broad query (Japanese + "Batman"), the list shows its matches and then keeps loading later TMDB pages for a few seconds until `total_pages`: expected, since every 5 empty pages produce one empty load.
 
 ### Phase 3: More filters
 

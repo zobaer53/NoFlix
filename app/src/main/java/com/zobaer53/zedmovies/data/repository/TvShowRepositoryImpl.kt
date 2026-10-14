@@ -14,6 +14,10 @@ import com.zobaer53.zedmovies.data.mapper.asTvShowModel
 import com.zobaer53.zedmovies.data.mapper.listMap
 import com.zobaer53.zedmovies.data.mapper.asDiscoverTvQuery
 import com.zobaer53.zedmovies.data.mapper.pagingMap
+import com.zobaer53.zedmovies.data.mapper.filtersSearchResults
+import com.zobaer53.zedmovies.data.mapper.matches
+import com.zobaer53.zedmovies.data.mapper.searchYear
+import com.zobaer53.zedmovies.data.paging.FILTERED_REQUESTS_PER_LOAD
 import com.zobaer53.zedmovies.data.paging.ResultsPage
 import com.zobaer53.zedmovies.data.paging.TmdbPagingSource
 import com.zobaer53.zedmovies.data.paging.TvShowRemoteMediator
@@ -84,15 +88,20 @@ class TvShowRepositoryImpl @Inject constructor(
         ).flow.pagingMap(TvShowEntity::asTvShowModel)
     }
 
-    override fun search(query: String): Flow<PagingData<TvShowModel>> = Pager(
+    override fun search(
+        query: String,
+        filters: SearchFiltersModel
+    ): Flow<PagingData<TvShowModel>> = Pager(
         config = defaultPagingConfig,
         pagingSourceFactory = {
-            TmdbPagingSource { page ->
+            val requestsPerLoad = if (filters.filtersSearchResults) FILTERED_REQUESTS_PER_LOAD else 1
+            TmdbPagingSource(maxRequestsPerLoad = requestsPerLoad) { page ->
                 networkDataSource.search(
                     query = query,
                     language = preferencesDataStoreDataSource.getContentLanguage().first(),
-                    page = page
-                ).map(TvShowResponseDto::asResultsPage)
+                    page = page,
+                    year = filters.searchYear
+                ).map { response -> response.asResultsPage { filters.matches(it) } }
             }
         }
     ).flow
@@ -112,5 +121,7 @@ class TvShowRepositoryImpl @Inject constructor(
     ).flow
 }
 
-private fun TvShowResponseDto.asResultsPage() =
-    ResultsPage(results = results.map(NetworkTvShow::asTvShowModel), totalPages = totalPages)
+private fun TvShowResponseDto.asResultsPage(keep: (NetworkTvShow) -> Boolean = { true }) = ResultsPage(
+    results = results.filter(keep).map(NetworkTvShow::asTvShowModel),
+    totalPages = totalPages
+)

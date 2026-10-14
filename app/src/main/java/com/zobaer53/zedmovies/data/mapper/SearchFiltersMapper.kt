@@ -1,5 +1,7 @@
 package com.zobaer53.zedmovies.data.mapper
 
+import com.zobaer53.zedmovies.data.network.model.movie.NetworkMovie
+import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShow
 import com.zobaer53.zedmovies.data.network.util.Constants.Discover
 import com.zobaer53.zedmovies.domain.model.FilterMediaTypeModel
 import com.zobaer53.zedmovies.domain.model.GenreMatchModel
@@ -46,6 +48,53 @@ private fun SearchFiltersModel.asDiscoverQuery(
     minVotes?.let { put(Discover.VOTE_COUNT_GTE, it.toString()) }
 
     originalLanguage?.let { put(Discover.WITH_ORIGINAL_LANGUAGE, it) }
+}
+
+/** The year `/search/movie` and `/search/tv` can filter by themselves: only a range of one year. */
+internal val SearchFiltersModel.searchYear: Int? get() = yearFrom?.takeIf { it == yearTo }
+
+/** Whether [matches] can drop search results (sort doesn't apply to search). */
+internal val SearchFiltersModel.filtersSearchResults: Boolean
+    get() = genres.isNotEmpty() || yearFrom != null || yearTo != null ||
+        minRating != null || originalLanguage != null
+
+/** Applies the filters `/search/movie` can't, to one of its results. */
+internal fun SearchFiltersModel.matches(movie: NetworkMovie) = matches(
+    mediaType = FilterMediaTypeModel.MOVIE,
+    genreIds = movie.genreIds,
+    year = movie.releaseDate?.year,
+    voteAverage = movie.voteAverage,
+    language = movie.originalLanguage
+)
+
+/** Applies the filters `/search/tv` can't, to one of its results. */
+internal fun SearchFiltersModel.matches(tvShow: NetworkTvShow) = matches(
+    mediaType = FilterMediaTypeModel.TV_SHOW,
+    genreIds = tvShow.genreIds,
+    year = tvShow.firstAirDate?.year,
+    voteAverage = tvShow.voteAverage,
+    language = tvShow.originalLanguage
+)
+
+/** Same rules as the discover query: genres the media type lacks are left out. */
+private fun SearchFiltersModel.matches(
+    mediaType: FilterMediaTypeModel,
+    genreIds: List<Int>,
+    year: Int?,
+    voteAverage: Double,
+    language: String
+): Boolean {
+    val wantedGenres = genres.mapNotNullTo(mutableSetOf()) { it.idFor(mediaType) }
+    val genresMatch = when {
+        wantedGenres.isEmpty() -> true
+        genreMatch == GenreMatchModel.ALL -> genreIds.containsAll(wantedGenres)
+        else -> genreIds.any { it in wantedGenres }
+    }
+    val yearMatches = (yearFrom == null || year != null && year >= yearFrom) &&
+        (yearTo == null || year != null && year <= yearTo)
+    val ratingMatches = minRating == null || voteAverage >= minRating
+    val languageMatches = originalLanguage == null || originalLanguage == language
+    return genresMatch && yearMatches && ratingMatches && languageMatches
 }
 
 private fun SortModel.asSortBy(isMovie: Boolean) = when (this) {

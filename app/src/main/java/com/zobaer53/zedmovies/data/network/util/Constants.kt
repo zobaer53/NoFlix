@@ -41,6 +41,10 @@ internal object Constants {
         internal const val FIRST_AIR_DATE_LTE = "first_air_date.lte"
         internal const val INCLUDE_ADULT = "include_adult"
 
+        /** The only filters `/search/movie` and `/search/tv` take besides the query. */
+        internal const val PRIMARY_RELEASE_YEAR = "primary_release_year"
+        internal const val FIRST_AIR_DATE_YEAR = "first_air_date_year"
+
         /** TMDB returns an error for any discover page above this. */
         internal const val MAX_PAGE = 500
     }

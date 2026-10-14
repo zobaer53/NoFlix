@@ -114,7 +114,7 @@ class SearchViewModel @Inject constructor(
         resultsScope?.cancel()
     }
 
-    /** Blank query: discover with the filters. Otherwise: search. */
+    /** Blank query: discover with the filters. Otherwise: search, filtered in the app. */
     private fun showResults() {
         resultsScope?.cancel()
         val state = _uiState.value
@@ -142,13 +142,13 @@ class SearchViewModel @Inject constructor(
         val searchMovies = when {
             unmatchableMovieGenres.isNotEmpty() -> emptyFlow()
             query.isEmpty() -> discoverMoviesUseCase(filters)
-            else -> searchMoviesUseCase(query)
+            else -> searchMoviesUseCase(query, filters)
         }.pagingMap(MovieModel::asMovie).cachedIn(scope)
 
         val searchTvShows = when {
             unmatchableTvShowGenres.isNotEmpty() -> emptyFlow()
             query.isEmpty() -> discoverTvShowsUseCase(filters)
-            else -> searchTvShowsUseCase(query)
+            else -> searchTvShowsUseCase(query, filters)
         }.pagingMap(TvShowModel::asTvShow).cachedIn(scope)
 
         _uiState.update {

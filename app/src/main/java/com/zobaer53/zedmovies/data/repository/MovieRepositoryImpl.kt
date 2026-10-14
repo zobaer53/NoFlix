@@ -14,6 +14,10 @@ import com.zobaer53.zedmovies.data.mapper.listMap
 import com.zobaer53.zedmovies.data.mapper.asDiscoverMovieQuery
 import com.zobaer53.zedmovies.data.mapper.pagingMap
 import com.zobaer53.zedmovies.data.paging.MovieRemoteMediator
+import com.zobaer53.zedmovies.data.mapper.filtersSearchResults
+import com.zobaer53.zedmovies.data.mapper.matches
+import com.zobaer53.zedmovies.data.mapper.searchYear
+import com.zobaer53.zedmovies.data.paging.FILTERED_REQUESTS_PER_LOAD
 import com.zobaer53.zedmovies.data.paging.ResultsPage
 import com.zobaer53.zedmovies.data.paging.TmdbPagingSource
 import com.zobaer53.zedmovies.data.util.defaultPagingConfig
@@ -83,15 +87,20 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow.pagingMap(MovieEntity::asMovieModel)
     }
 
-    override fun search(query: String): Flow<PagingData<MovieModel>> = Pager(
+    override fun search(
+        query: String,
+        filters: SearchFiltersModel
+    ): Flow<PagingData<MovieModel>> = Pager(
         config = defaultPagingConfig,
         pagingSourceFactory = {
-            TmdbPagingSource { page ->
+            val requestsPerLoad = if (filters.filtersSearchResults) FILTERED_REQUESTS_PER_LOAD else 1
+            TmdbPagingSource(maxRequestsPerLoad = requestsPerLoad) { page ->
                 networkDataSource.search(
                     query = query,
                     language = preferencesDataStoreDataSource.getContentLanguage().first(),
-                    page = page
-                ).map(MovieResponseDto::asResultsPage)
+                    page = page,
+                    year = filters.searchYear
+                ).map { response -> response.asResultsPage { filters.matches(it) } }
             }
         }
     ).flow
@@ -111,5 +120,7 @@ class MovieRepositoryImpl @Inject constructor(
     ).flow
 }
 
-private fun MovieResponseDto.asResultsPage() =
-    ResultsPage(results = results.map(NetworkMovie::asMovieModel), totalPages = totalPages)
+private fun MovieResponseDto.asResultsPage(keep: (NetworkMovie) -> Boolean = { true }) = ResultsPage(
+    results = results.filter(keep).map(NetworkMovie::asMovieModel),
+    totalPages = totalPages
+)

@@ -11,6 +11,6 @@ import kotlinx.coroutines.flow.Flow
 interface MovieRepository {
     fun getByMediaType(mediaTypeModel: MediaTypeModel.Movie): Flow<ZedMoviesResult<List<MovieModel>>>
     fun getPagingByMediaType(mediaTypeModel: MediaTypeModel.Movie): Flow<PagingData<MovieModel>>
-    fun search(query: String): Flow<PagingData<MovieModel>>
+    fun search(query: String, filters: SearchFiltersModel): Flow<PagingData<MovieModel>>
     fun discover(filters: SearchFiltersModel): Flow<PagingData<MovieModel>>
 }

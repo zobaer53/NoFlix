@@ -4,6 +4,7 @@ import com.zobaer53.zedmovies.data.common.result.ZedMoviesResult
 import com.zobaer53.zedmovies.data.network.model.response.TvShowResponseDto
 import com.zobaer53.zedmovies.data.network.model.tvshow.NetworkTvShowDetails
 import com.zobaer53.zedmovies.data.network.util.Constants.DEFAULT_PAGE
+import com.zobaer53.zedmovies.data.network.util.Constants.Discover
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.APPEND_TO_RESPONSE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.DETAILS_APPEND_TO_RESPONSE
 import com.zobaer53.zedmovies.data.network.util.Constants.Fields.INCLUDE_VIDEO_LANGUAGE
@@ -74,6 +75,7 @@ interface TvShowService {
     suspend fun search(
         @Query(QUERY) query: String,
         @Query(LANGUAGE) language: String,
-        @Query(PAGE) page: Int = DEFAULT_PAGE
+        @Query(PAGE) page: Int = DEFAULT_PAGE,
+        @Query(Discover.FIRST_AIR_DATE_YEAR) firstAirDateYear: Int? = null
     ): ZedMoviesResult<TvShowResponseDto>
 }

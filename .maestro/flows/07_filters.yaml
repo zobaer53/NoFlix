@@ -1,5 +1,7 @@
 # Filters with no search text: a genre and a minimum rating show discover results and chips;
 # a result opens details; "Clear all" brings the Discover suggestions back.
+# Then filters with search text: sort is disabled, an upper year bound and an original language
+# narrow the "Batman" results (filtered in the app).
 appId: com.zobaer53.zedmovies
 name: 07_filters
 ---
@@ -49,3 +51,51 @@ name: 07_filters
     visible: "Discover"
     timeout: 20000
 - assertNotVisible: "Clear all"
+# --- With search text ---
+- tapOn: "search place holder"
+# Maestro's inputText occasionally doubles the first key ("BBatman"), so clear and retype on a miss.
+- retry:
+    maxRetries: 2
+    commands:
+      - eraseText: 20
+      - inputText: "Batman"
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Batman Begins"
+          timeout: 20000
+- tapOn: "Filters"
+- extendedWaitUntil:
+    visible: "Clear the search text to sort"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "filters_year_slider"
+    direction: DOWN
+# Moves the end thumb to about 2012 (a tap moves the closer thumb).
+- tapOn:
+    id: "filters_year_slider"
+    point: "88%,50%"
+- assertVisible: "Until 20(0[6-9]|1[0-9]|2[01])"
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000
+- assertNotVisible: "The Batman"
+- takeScreenshot: filters_search_year
+# Tapping the chip removes the year bound.
+- tapOn: "Until \\d+"
+- tapOn: "Filters"
+- scrollUntilVisible:
+    element: "Japanese"
+    direction: DOWN
+- tapOn: "Japanese"
+- tapOn: "Show results"
+- extendedWaitUntil:
+    visible: "Batman Ninja"
+    timeout: 20000
+- assertNotVisible: "Batman Begins"
+- takeScreenshot: filters_search_language
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Batman Begins"
+    timeout: 20000
