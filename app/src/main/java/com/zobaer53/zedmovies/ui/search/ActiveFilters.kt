@@ -104,6 +104,15 @@ private fun ActiveFilter.label(): String = when (this) {
     is ActiveFilter.Years -> yearsLabel(from, to)
     is ActiveFilter.Rating -> stringResource(id = R.string.filters_rating_value, formatRating(minRating))
     is ActiveFilter.Language -> languageName(code)
+    is ActiveFilter.MinVotes -> stringResource(id = R.string.filters_votes_chip, formatVotes(minVotes))
+    is ActiveFilter.Runtime -> runtimeLabel(min, max)
+    is ActiveFilter.Country -> countryName(code)
+    is ActiveFilter.ExcludedGenre -> stringResource(id = R.string.filters_excluded_genre_chip, genre.displayName())
+    is ActiveFilter.Certification -> stringResource(id = R.string.filters_age_rating_chip, code)
+    is ActiveFilter.Provider -> provider.name
+    is ActiveFilter.Network -> network.displayName
+    is ActiveFilter.TvStatus -> stringResource(id = status.labelResourceId)
+    is ActiveFilter.TvType -> stringResource(id = type.labelResourceId)
 }
 
 /** Empty results while filters are set, or a tab whose media type lacks the selected genres. */

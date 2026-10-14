@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +80,7 @@ internal fun SearchRoute(
         onApplyFilters = { viewModel.onEvent(SearchEvent.ApplyFilters(it)) },
         onRemoveFilter = { viewModel.onEvent(SearchEvent.RemoveFilter(it)) },
         onResetFilters = { viewModel.onEvent(SearchEvent.ResetFilters) },
+        onLoadFilterOptions = { viewModel.onEvent(SearchEvent.LoadFilterOptions) },
         onSeeAllClick = onSeeAllClick,
         onMovieClick = onMovieClick,
         onTvShowClick = onTvShowClick,
@@ -99,6 +101,7 @@ private fun SearchScreen(
     onApplyFilters: (SearchFilters) -> Unit,
     onRemoveFilter: (ActiveFilter) -> Unit,
     onResetFilters: () -> Unit,
+    onLoadFilterOptions: () -> Unit,
     onSeeAllClick: (MediaType.Common) -> Unit,
     onMovieClick: (Int) -> Unit,
     onTvShowClick: (Int) -> Unit,
@@ -111,7 +114,11 @@ private fun SearchScreen(
     if (isFiltersSheetOpen) {
         FiltersSheet(
             filters = uiState.filters,
-            isSortEnabled = uiState.query.isBlank(),
+            isSearchTextEntered = uiState.query.isNotBlank(),
+            options = uiState.filterOptions,
+            isOptionsLoading = uiState.isFilterOptionsLoading,
+            optionsError = uiState.filterOptionsError,
+            onLoadOptions = onLoadFilterOptions,
             onApply = onApplyFilters,
             onDismiss = { isFiltersSheetOpen = false }
         )
@@ -128,12 +135,21 @@ private fun SearchScreen(
             onFiltersClick = { isFiltersSheetOpen = true }
         )
         AnimatedVisibility(visible = activeFilters.isNotEmpty()) {
-            ActiveFiltersRow(
-                modifier = Modifier.padding(bottom = zedMoviesTheme.spacing.small),
-                filters = activeFilters,
-                onRemove = onRemoveFilter,
-                onClearAll = onResetFilters
-            )
+            Column(modifier = Modifier.padding(bottom = zedMoviesTheme.spacing.small)) {
+                ActiveFiltersRow(
+                    filters = activeFilters,
+                    onRemove = onRemoveFilter,
+                    onClearAll = onResetFilters
+                )
+                if (uiState.query.isNotBlank() && uiState.filters.hasSearchIgnoredFilters) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = zedMoviesTheme.spacing.extraMedium),
+                        text = stringResource(id = R.string.filters_search_ignored_hint),
+                        style = zedMoviesTheme.typography.regular.h6,
+                        color = zedMoviesTheme.colors.textSecondary
+                    )
+                }
+            }
         }
         AnimatedContent(targetState = uiState.isSearching, label = "") { isSearching ->
             if (isSearching) {

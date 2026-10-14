@@ -9,6 +9,7 @@ sealed interface SearchEvent {
     data class RemoveFilter(val filter: ActiveFilter) : SearchEvent
 
     object ResetFilters : SearchEvent
+    object LoadFilterOptions : SearchEvent
     object Refresh : SearchEvent
     object Retry : SearchEvent
     object ClearError : SearchEvent

@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.zobaer53.zedmovies.R
 import com.zobaer53.zedmovies.data.model.FilterGenre
+import com.zobaer53.zedmovies.data.model.FilterOptions
 import com.zobaer53.zedmovies.data.model.FilterSort
 import com.zobaer53.zedmovies.data.model.SearchFilters
 import com.zobaer53.zedmovies.ui.designsystem.theme.zedMoviesTheme
@@ -58,21 +60,29 @@ import kotlin.math.roundToInt
 
 /**
  * Edits a copy of [filters] and hands it to [onApply] on "Show results", so dragging a slider
- * doesn't start a request per step. [isSortEnabled] is false while search text is entered: search
- * results keep TMDB's relevance order.
+ * doesn't start a request per step. While search text is entered ([isSearchTextEntered]), sort and
+ * the filters search results can't be checked against are disabled: search keeps TMDB's relevance
+ * order. [options] (age ratings, streaming services) come from TMDB; [onLoadOptions] fetches them.
  */
+@Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun FiltersSheet(
     filters: SearchFilters,
-    isSortEnabled: Boolean,
+    isSearchTextEntered: Boolean,
+    options: FilterOptions?,
+    isOptionsLoading: Boolean,
+    optionsError: Throwable?,
+    onLoadOptions: () -> Unit,
     onApply: (SearchFilters) -> Unit,
     onDismiss: () -> Unit
 ) {
     var draft by rememberSaveable(stateSaver = SearchFiltersSaver) { mutableStateOf(filters) }
-    var isLanguageListOpen by rememberSaveable { mutableStateOf(false) }
+    var openCodeList by rememberSaveable { mutableStateOf<CodeList?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
+    val isSortEnabled = !isSearchTextEntered
+    LaunchedEffect(Unit) { onLoadOptions() }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -147,8 +157,8 @@ internal fun FiltersSheet(
                                     }
                                     draft = draft.copy(
                                         genres = genres,
-                                        matchAllGenres = draft.matchAllGenres && genres.size > 1
-                                    )
+                                        excludedGenres = draft.excludedGenres - genre
+                                    ).normalized()
                                 }
                             )
                         }
@@ -230,10 +240,21 @@ internal fun FiltersSheet(
                         FilterOptionChip(
                             label = stringResource(id = R.string.filters_more_languages),
                             selected = false,
-                            onClick = { isLanguageListOpen = true }
+                            onClick = { openCodeList = CodeList.LANGUAGES }
                         )
                     }
                 }
+
+                MoreFilters(
+                    draft = draft,
+                    onDraftChange = { draft = it.normalized() },
+                    isSearchTextEntered = isSearchTextEntered,
+                    options = options,
+                    isOptionsLoading = isOptionsLoading,
+                    optionsError = optionsError,
+                    onRetryOptions = onLoadOptions,
+                    onMoreCountries = { openCodeList = CodeList.COUNTRIES }
+                )
                 Spacer(modifier = Modifier.padding(zedMoviesTheme.spacing.extraSmall))
             }
 
@@ -262,30 +283,46 @@ internal fun FiltersSheet(
         }
     }
 
-    if (isLanguageListOpen) {
-        LanguageListDialog(
+    openCodeList?.let { list ->
+        CodeListDialog(
+            list = list,
             onSelect = { code ->
-                draft = draft.copy(originalLanguage = code)
-                isLanguageListOpen = false
+                draft = when (list) {
+                    CodeList.LANGUAGES -> draft.copy(originalLanguage = code)
+                    CodeList.COUNTRIES -> draft.copy(originCountry = code)
+                }
+                openCodeList = null
             },
-            onDismiss = { isLanguageListOpen = false }
+            onDismiss = { openCodeList = null }
         )
     }
 }
 
+/** The full lists behind the "More…" chips. */
+internal enum class CodeList { LANGUAGES, COUNTRIES }
+
+/** [noteResourceId]: a short qualifier after the title, such as "TV only". */
 @Composable
-private fun FilterSection(
+internal fun FilterSection(
     @StringRes titleResourceId: Int,
     value: String? = null,
+    @StringRes noteResourceId: Int? = null,
     content: @Composable () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(zedMoviesTheme.spacing.small)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                modifier = Modifier.weight(1f),
                 text = stringResource(id = titleResourceId),
                 style = zedMoviesTheme.typography.semiBold.h4,
                 color = zedMoviesTheme.colors.textPrimary
+            )
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = zedMoviesTheme.spacing.small),
+                text = noteResourceId?.let { stringResource(id = it) }.orEmpty(),
+                style = zedMoviesTheme.typography.regular.h6,
+                color = zedMoviesTheme.colors.textSecondary
             )
             value?.let {
                 Text(
@@ -301,24 +338,26 @@ private fun FilterSection(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ChipFlow(content: @Composable () -> Unit) {
+internal fun ChipFlow(content: @Composable () -> Unit) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(zedMoviesTheme.spacing.small)) {
         content()
     }
 }
 
 @Composable
-private fun FilterOptionChip(
+internal fun FilterOptionChip(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     FilterChip(
         selected = selected,
         onClick = onClick,
         enabled = enabled,
         label = { Text(text = label, style = zedMoviesTheme.typography.medium.h5) },
+        leadingIcon = leadingIcon,
         shape = zedMoviesTheme.shapes.small,
         colors = filterChipColors(),
         border = null
@@ -340,7 +379,7 @@ internal fun filterChipColors(): SelectableChipColors = FilterChipDefaults.filte
 )
 
 @Composable
-private fun sliderColors() = SliderDefaults.colors(
+internal fun sliderColors() = SliderDefaults.colors(
     thumbColor = zedMoviesTheme.colors.accent,
     activeTrackColor = zedMoviesTheme.colors.accent,
     activeTickColor = zedMoviesTheme.colors.primary,
@@ -348,13 +387,21 @@ private fun sliderColors() = SliderDefaults.colors(
     inactiveTickColor = zedMoviesTheme.colors.textSecondary
 )
 
-/** Every ISO 639-1 language, named in the device language. */
+/** Every ISO 639-1 language or ISO 3166-1 country, named in the device language. */
 @Composable
-private fun LanguageListDialog(onSelect: (String) -> Unit, onDismiss: () -> Unit) {
-    val languages = remember {
-        Locale.getISOLanguages()
-            .map { code -> code to displayLanguage(code) }
-            .filter { (code, name) -> name.isNotBlank() && name != code }
+private fun CodeListDialog(list: CodeList, onSelect: (String) -> Unit, onDismiss: () -> Unit) {
+    val entries = remember(list) {
+        val codes = when (list) {
+            CodeList.LANGUAGES -> Locale.getISOLanguages()
+            CodeList.COUNTRIES -> Locale.getISOCountries()
+        }
+        codes.map { code ->
+            code to when (list) {
+                CodeList.LANGUAGES -> languageName(code)
+                CodeList.COUNTRIES -> countryName(code)
+            }
+        }
+            .filter { (code, name) -> name.isNotBlank() && !name.equals(code, ignoreCase = true) }
             .sortedBy { (_, name) -> name }
     }
     AlertDialog(
@@ -365,10 +412,19 @@ private fun LanguageListDialog(onSelect: (String) -> Unit, onDismiss: () -> Unit
                 Text(text = stringResource(id = android.R.string.cancel), color = zedMoviesTheme.colors.accent)
             }
         },
-        title = { Text(text = stringResource(id = R.string.filters_original_language)) },
+        title = {
+            Text(
+                text = stringResource(
+                    id = when (list) {
+                        CodeList.LANGUAGES -> R.string.filters_original_language
+                        CodeList.COUNTRIES -> R.string.filters_origin_country
+                    }
+                )
+            )
+        },
         text = {
             LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
-                items(languages, key = { it.first }) { (code, name) ->
+                items(entries, key = { it.first }) { (code, name) ->
                     TextButton(modifier = Modifier.fillMaxWidth(), onClick = { onSelect(code) }) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
@@ -397,13 +453,15 @@ internal fun yearsLabel(from: Int?, to: Int?) = when {
     else -> stringResource(id = R.string.filters_any_year)
 }
 
-internal fun languageName(code: String) = displayLanguage(code)
-
-internal fun formatRating(rating: Double) = String.format(Locale.getDefault(), "%.1f", rating)
-
-private fun displayLanguage(code: String) = Locale.forLanguageTag(code)
+internal fun languageName(code: String) = Locale.forLanguageTag(code)
     .getDisplayLanguage(Locale.getDefault())
     .replaceFirstChar { it.titlecase(Locale.getDefault()) }
+
+internal fun countryName(code: String): String =
+    runCatching { Locale.Builder().setRegion(code).build().getDisplayCountry(Locale.getDefault()) }
+        .getOrDefault(code)
+
+internal fun formatRating(rating: Double) = String.format(Locale.getDefault(), "%.1f", rating)
 
 private val SearchFiltersSaver = Saver<SearchFilters, String>(
     save = { Json.encodeToString(SearchFilters.serializer(), it) },

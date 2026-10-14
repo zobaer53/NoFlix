@@ -26,4 +26,7 @@ object NetworkModule {
 
     @Provides
     fun provideTvShowService(api: zedMoviesApi) = api.tvShowService
+
+    @Provides
+    fun provideFilterOptionsService(api: zedMoviesApi) = api.filterOptionsService
 }

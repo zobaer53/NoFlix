@@ -8,7 +8,25 @@ data class SearchFiltersModel(
     val yearFrom: Int? = null,
     val yearTo: Int? = null,
     val minRating: Double? = null,
-    val originalLanguage: String? = null
+    val originalLanguage: String? = null,
+    /** Replaces the hidden vote floors of the rating sort and the minimum rating. */
+    val minVotes: Int? = null,
+    /** Minutes; episode length for TV. */
+    val runtimeMin: Int? = null,
+    val runtimeMax: Int? = null,
+    /** ISO 3166-1. */
+    val originCountry: String? = null,
+    val excludedGenres: Set<FilterGenreModel> = emptySet(),
+    /** Movies only; codes of [certificationCountry] (e.g. "PG-13" for "US"). */
+    val certifications: Set<String> = emptySet(),
+    val certificationCountry: String? = null,
+    /** TMDB provider ids, available in [watchRegion]. */
+    val watchProviders: Set<Int> = emptySet(),
+    val watchRegion: String? = null,
+    /** TV only; TMDB network ids. */
+    val tvNetworks: Set<Int> = emptySet(),
+    val tvStatuses: Set<TvStatusModel> = emptySet(),
+    val tvTypes: Set<TvTypeModel> = emptySet()
 ) {
     val isActive: Boolean get() = this != SearchFiltersModel()
 
@@ -27,6 +45,27 @@ data class SearchFiltersModel(
 }
 
 enum class FilterMediaTypeModel { MOVIE, TV_SHOW }
+
+/** `with_status` values of `/discover/tv`. */
+enum class TvStatusModel(val id: Int) {
+    RETURNING(0),
+    PLANNED(1),
+    IN_PRODUCTION(2),
+    ENDED(3),
+    CANCELLED(4),
+    PILOT(5)
+}
+
+/** `with_type` values of `/discover/tv`. */
+enum class TvTypeModel(val id: Int) {
+    DOCUMENTARY(0),
+    NEWS(1),
+    MINISERIES(2),
+    REALITY(3),
+    SCRIPTED(4),
+    TALK_SHOW(5),
+    VIDEO(6)
+}
 
 enum class GenreMatchModel { ANY, ALL }
 

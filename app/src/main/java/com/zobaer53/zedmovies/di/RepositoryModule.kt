@@ -2,11 +2,13 @@
 
 package com.zobaer53.zedmovies.di
 
+import com.zobaer53.zedmovies.data.repository.FilterOptionsRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.MovieDetailsRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.MovieRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.TvShowDetailsRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.TvShowRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.WishlistRepositoryImpl
+import com.zobaer53.zedmovies.domain.repository.FilterOptionsRepository
 import com.zobaer53.zedmovies.domain.repository.MovieDetailsRepository
 import com.zobaer53.zedmovies.domain.repository.MovieRepository
 import com.zobaer53.zedmovies.domain.repository.TvShowDetailsRepository
@@ -44,6 +46,12 @@ interface RepositoryModule {
     @Binds
     @ViewModelScoped
     fun bindWishlistRepository(wishlistRepositoryImpl: WishlistRepositoryImpl): WishlistRepository
+
+    // Unscoped here: the implementation is a @Singleton that caches for the session.
+    @Binds
+    fun bindFilterOptionsRepository(
+        filterOptionsRepositoryImpl: FilterOptionsRepositoryImpl
+    ): FilterOptionsRepository
 
 
 }

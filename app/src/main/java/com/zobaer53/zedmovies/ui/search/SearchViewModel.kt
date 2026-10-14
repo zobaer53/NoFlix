@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.zobaer53.zedmovies.data.common.result.handle
+import com.zobaer53.zedmovies.data.common.result.isFailure
+import com.zobaer53.zedmovies.data.common.result.isSuccess
 import com.zobaer53.zedmovies.data.model.SearchFilters
 import com.zobaer53.zedmovies.domain.model.FilterMediaTypeModel
 import com.zobaer53.zedmovies.domain.model.MovieModel
 import com.zobaer53.zedmovies.domain.usecase.DiscoverMoviesUseCase
 import com.zobaer53.zedmovies.domain.usecase.DiscoverTvShowsUseCase
+import com.zobaer53.zedmovies.domain.usecase.GetFilterOptionsUseCase
 import com.zobaer53.zedmovies.domain.model.TvShowModel
 import com.zobaer53.zedmovies.domain.usecase.GetMoviesUseCase
 import com.zobaer53.zedmovies.domain.usecase.SearchMoviesUseCase
@@ -22,6 +25,7 @@ import com.zobaer53.zedmovies.data.model.TvShow
 import com.zobaer53.zedmovies.domain.usecase.GetTvShowsUseCase
 import com.zobaer53.zedmovies.ui.smallcomponent.common.EventHandler
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asFilterGenre
+import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asFilterOptions
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMediaTypeModel
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asMovie
 import com.zobaer53.zedmovies.ui.smallcomponent.mapper.asSearchFiltersModel
@@ -52,7 +56,8 @@ class SearchViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase,
     private val searchTvShowsUseCase: SearchTvShowsUseCase,
     private val discoverMoviesUseCase: DiscoverMoviesUseCase,
-    private val discoverTvShowsUseCase: DiscoverTvShowsUseCase
+    private val discoverTvShowsUseCase: DiscoverTvShowsUseCase,
+    private val getFilterOptionsUseCase: GetFilterOptionsUseCase
 ) : ViewModel(), EventHandler<SearchEvent> {
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState = _uiState.asStateFlow()
@@ -76,6 +81,7 @@ class SearchViewModel @Inject constructor(
         is SearchEvent.ApplyFilters -> onFiltersChange(event.filters)
         is SearchEvent.RemoveFilter -> onFiltersChange(_uiState.value.filters.without(event.filter))
         SearchEvent.ResetFilters -> onFiltersChange(SearchFilters())
+        SearchEvent.LoadFilterOptions -> loadFilterOptions()
         SearchEvent.Refresh -> onRefresh()
         SearchEvent.Retry -> onRetry()
         SearchEvent.ClearError -> onClearError()
@@ -96,6 +102,28 @@ class SearchViewModel @Inject constructor(
         }
         searchJob?.cancel()
         showResults()
+    }
+
+    private fun loadFilterOptions() {
+        val state = _uiState.value
+        if (state.filterOptions != null || state.isFilterOptionsLoading) return
+        _uiState.update { it.copy(isFilterOptionsLoading = true, filterOptionsError = null) }
+        viewModelScope.launch {
+            val result = getFilterOptionsUseCase()
+            _uiState.update {
+                when {
+                    result.isSuccess() -> it.copy(
+                        filterOptions = result.value.asFilterOptions(),
+                        isFilterOptionsLoading = false
+                    )
+                    result.isFailure() -> it.copy(
+                        filterOptionsError = result.error,
+                        isFilterOptionsLoading = false
+                    )
+                    else -> it
+                }
+            }
+        }
     }
 
     private fun restoreFilters(): SearchFilters = savedStateHandle.get<String>(FILTERS_KEY)

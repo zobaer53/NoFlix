@@ -4,6 +4,7 @@ package com.zobaer53.zedmovies.ui.search
 
 import androidx.paging.PagingData
 import com.zobaer53.zedmovies.data.model.FilterGenre
+import com.zobaer53.zedmovies.data.model.FilterOptions
 import com.zobaer53.zedmovies.data.model.MediaType
 import com.zobaer53.zedmovies.data.model.Movie
 import com.zobaer53.zedmovies.data.model.SearchFilters
@@ -19,6 +20,10 @@ data class SearchUiState(
     /** Selected genres the tab can't match (see `SearchFiltersModel.unmatchableGenres`). */
     val unmatchableMovieGenres: List<FilterGenre> = emptyList(),
     val unmatchableTvShowGenres: List<FilterGenre> = emptyList(),
+    /** Age ratings and streaming services for the sheet; loaded when it first opens. */
+    val filterOptions: FilterOptions? = null,
+    val isFilterOptionsLoading: Boolean = false,
+    val filterOptionsError: Throwable? = null,
     val searchMovies: Flow<PagingData<Movie>> = emptyFlow(),
     val searchTvShows: Flow<PagingData<TvShow>> = emptyFlow(),
     val movies: Map<MediaType.Movie, List<Movie>> = emptyMap(),

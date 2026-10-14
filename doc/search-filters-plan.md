@@ -14,7 +14,7 @@ This document is the plan and the progress tracker.
 | --- | --- | --- |
 | 1. Core filters, no search text | Done (14 Oct 2026) | 17 JVM unit tests; full Maestro suite incl. new `07_filters.yaml` on a Pixel 6a (Android 17) |
 | 2. Filters with search text | Done (14 Oct 2026) | 23 JVM unit tests; full Maestro suite incl. extended `07_filters.yaml` on a Pixel 6a |
-| 3. More filters | Not started | |
+| 3. More filters | Done (14 Oct 2026) | 33 JVM unit tests; full Maestro suite incl. extended `07_filters.yaml` on a Pixel 6a (en-US) |
 
 Open decisions were taken with the recommended defaults: one filter set for both tabs, filters reset on each launch (kept across process death only), applied with "Show results".
 
@@ -244,11 +244,22 @@ Phase 2 notes:
 
 ### Phase 3: More filters
 
-- [ ] Minimum votes, runtime range, origin country, excluded genres.
-- [ ] Movie age rating (`certification` + `certification_country` from the device region).
-- [ ] Streaming services (`with_watch_providers` + `watch_region`), with logos and the JustWatch credit TMDB requires.
-- [ ] TV only: network, status, type.
-- [ ] Lookup data loading and error states for the sheet.
+- [x] Minimum votes, runtime range, origin country, excluded genres.
+- [x] Movie age rating (`certification` + `certification_country` from the device region).
+- [x] Streaming services (`with_watch_providers` + `watch_region`), with logos and the JustWatch credit TMDB requires.
+- [x] TV only: network, status, type.
+- [x] Lookup data loading and error states for the sheet.
+
+Phase 3 notes:
+
+- **TMDB behaviour, checked against the live API:** `without_genres` drops titles with *any* listed genre, with `,` or `|`. For `with_networks`, `with_status`, `with_type`, `certification` and `with_watch_providers`, `|` means OR (`with_networks=213,49` returned 1 show, `213|49` returned 3,286). The app sends `|` for all of these and `,` for `without_genres`.
+- **Region:** the device's (`Locale.getDefault().country`). TMDB has no age ratings and no streaming services for some regions, Bangladesh included, so both lookups fall back to the US, and the sheet shows the country next to each section title. The country is stored in the filters with the picks (`certificationCountry`, `watchRegion`), so a saved filter keeps working. Only the US path ran on the device (the phone is en-US); the fallback is unit-tested.
+- **Lookups:** `FilterOptionsRepository` (a `@Singleton`, cached for the process) fetches `/certification/movie/list` and `/watch/providers/movie` + `/watch/providers/tv` in parallel (merged by id, sorted by TMDB's display priority, logos at `w92`) when the sheet first opens. While loading, those two sections show a spinner; on failure, "Couldn't load these choices" with Retry. The rest of the sheet works without them. Countries come from `Locale.getISOCountries()` (no `/configuration/countries` call), like languages.
+- **TV networks** are a hard-coded list of 22 (TMDB has no network list endpoint), with ids and names checked against `/network/{id}`: Netflix, Prime Video, Disney+, HBO, HBO Max, Apple TV, Hulu, Paramount+, Peacock, Crunchyroll, BBC One, AMC, FX, ABC, NBC, CBS, FOX, tvN, JTBC, KBS2, MBC, SBS.
+- **Movies-only / TV-only filters** are marked in the sheet and **ignored by the other tab** (age rating doesn't empty the TV tab; a TV network doesn't empty the Movies tab). This differs from genres, where a genre a type lacks shows an explanation, because there the user picked content, not a source.
+- **Minimum votes** (Any, 50+, 100+, 500+, 1,000+) replaces the hidden vote floors when set. Runtime is a 0–240 min `RangeSlider` in 5-minute steps; the ends mean no bound. Picking a genre to exclude removes it from the included genres, and the other way round.
+- **With search text**, minimum votes and excluded genres are checked in the app (search results have `vote_count` and `genre_ids`). Runtime, origin country, age rating, streaming services and the TV-only filters are disabled in the sheet ("With search text, only minimum votes and excluded genres apply here"), and if they're active, the results show "Some filters apply only without search text" under the chips.
+- Streaming services: the 20 most popular are shown, then "Show all"; selected ones always stay visible. The credit "Streaming data from JustWatch" sits under the section.
 
 ### Later ideas
 
@@ -267,7 +278,7 @@ Phase 2 notes:
 - [x] One filter set for both tabs (recommended above), or separate filters per tab? **One set.**
 - [x] Remember filters across app launches (DataStore), or reset on each launch (recommended)? **Reset; kept across process death.**
 - [x] Apply with a "Show results" button (recommended) or live as the user changes them? **"Show results".**
-- [ ] Are streaming-service filters worth it, given NoFlix plays titles itself? They're still useful for "what's on Netflix", but need logos and the JustWatch credit.
+- [x] Are streaming-service filters worth it, given NoFlix plays titles itself? They're still useful for "what's on Netflix", but need logos and the JustWatch credit. **Built as planned (Phase 3); easy to drop if unwanted: the "Streaming services" section in `ui/search/MoreFilters.kt`.**
 - [x] Which languages go in the short list? **en, ko, ja, zh, hi, bn, es, fr, de, it, tr** (easy to change: `CommonLanguages` in `ui/search/FiltersSheet.kt`).
 
 ### Sources

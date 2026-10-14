@@ -1,5 +1,6 @@
 # Filters with no search text: a genre and a minimum rating show discover results and chips;
 # a result opens details; "Clear all" brings the Discover suggestions back.
+# Then "More filters" (TMDB-backed choices, a TV-only network).
 # Then filters with search text: sort is disabled, an upper year bound and an original language
 # narrow the "Batman" results (filtered in the app).
 appId: com.zobaer53.zedmovies
@@ -51,6 +52,35 @@ name: 07_filters
     visible: "Discover"
     timeout: 20000
 - assertNotVisible: "Clear all"
+# --- More filters: TMDB-backed choices load; a TV network narrows the TV tab ---
+- tapOn: "Filters"
+- scrollUntilVisible:
+    element: "More filters"
+    direction: DOWN
+- tapOn: "More filters"
+# Age ratings and streaming services come from TMDB; the credit shows once they've loaded.
+- scrollUntilVisible:
+    element: "Streaming data from JustWatch"
+    direction: DOWN
+    timeout: 30000
+- scrollUntilVisible:
+    element: "JTBC"
+    direction: DOWN
+- tapOn: "JTBC"
+- takeScreenshot: filters_more
+- tapOn: "Show results"
+- tapOn: "Tv Shows"
+- extendedWaitUntil:
+    visible:
+      text: "Rating"
+      below: "Tv Shows"
+    timeout: 20000
+- assertVisible: "JTBC"
+- takeScreenshot: filters_network
+- tapOn: "Clear all"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
 # --- With search text ---
 - tapOn: "search place holder"
 # Maestro's inputText occasionally doubles the first key ("BBatman"), so clear and retype on a miss.

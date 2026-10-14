@@ -70,11 +70,29 @@ class SearchFiltersMatcherTest {
         assertTrue(SearchFiltersModel(originalLanguage = "ko").matches(tvShow(language = "ko")))
     }
 
+    @Test
+    fun `minimum votes and excluded genres are checked in the app`() {
+        assertTrue(SearchFiltersModel(minVotes = 100).filtersSearchResults)
+        assertTrue(SearchFiltersModel(minVotes = 100).matches(movie(voteCount = 100)))
+        assertFalse(SearchFiltersModel(minVotes = 100).matches(movie(voteCount = 99)))
+        val notCrime = SearchFiltersModel(excludedGenres = setOf(FilterGenreModel.CRIME))
+        assertFalse(notCrime.matches(batmanBegins))
+        assertTrue(SearchFiltersModel(excludedGenres = setOf(FilterGenreModel.HORROR)).matches(batmanBegins))
+    }
+
+    @Test
+    fun `discover-only filters don't make search filter in the app`() {
+        val filters = SearchFiltersModel(watchProviders = setOf(8), watchRegion = "US", runtimeMin = 90)
+        assertFalse(filters.filtersSearchResults)
+        assertTrue(filters.matches(batmanBegins))
+    }
+
     private fun movie(
         year: Int? = 2005,
         genreIds: List<Int> = emptyList(),
         voteAverage: Double = 0.0,
-        language: String = "en"
+        language: String = "en",
+        voteCount: Int = 0
     ) = NetworkMovie(
         id = 1,
         title = "",
@@ -86,7 +104,7 @@ class SearchFiltersMatcherTest {
         originalTitle = "",
         originalLanguage = language,
         voteAverage = voteAverage,
-        voteCount = 0,
+        voteCount = voteCount,
         posterPath = null,
         backdropPath = null,
         video = false
