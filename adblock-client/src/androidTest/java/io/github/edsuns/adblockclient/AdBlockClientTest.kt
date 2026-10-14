@@ -16,8 +16,11 @@
 
 package io.github.edsuns.adblockclient
 
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
+import java.io.IOException
 
 /**
  * Modified by Edsuns@qq.com.
@@ -125,6 +128,30 @@ class AdBlockClientTest {
         assertTrue(selectors.contains("#videoad"))
         assertTrue(selectors.contains(".video_ads"))
         assertFalse(selectors.contains("#videoads"))
+    }
+
+    @Test
+    fun whenDataGoesThroughFilesThenTrackerIsBlocked() {
+        val dir = InstrumentationRegistry.getInstrumentation().targetContext.cacheDir
+        val raw = File(dir, "raw").apply { writeBytes(data()) }
+        val processed = File(dir, "processed")
+        val original = AdBlockClient(id)
+        original.loadBasicData(raw, true)
+        original.saveProcessedData(processed)
+        assertArrayEquals(original.getProcessedData(), processed.readBytes())
+
+        val testee = AdBlockClient(id)
+        testee.loadProcessedData(processed)
+        assertEquals(original.getFiltersCount(), testee.getFiltersCount())
+        assertTrue(testee.matches(trackerUrl, documentUrl, resourceType).shouldBlock)
+        assertFalse(testee.matches(nonTrackerUrl, documentUrl, resourceType).shouldBlock)
+        raw.delete()
+        processed.delete()
+    }
+
+    @Test(expected = IOException::class)
+    fun whenFileIsMissingThenLoadThrows() {
+        AdBlockClient(id).loadProcessedData(File("/nonexistent/processed"))
     }
 
     private fun loadClientFromProcessedData(): AdBlockClient {

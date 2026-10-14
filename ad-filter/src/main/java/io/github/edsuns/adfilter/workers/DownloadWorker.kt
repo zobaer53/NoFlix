@@ -29,12 +29,11 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
         val url = inputData.getString(KEY_DOWNLOAD_URL) ?: return Result.failure()
         Timber.v("Start download: $url $id")
         try {
-            val bodyBytes = download(url) ?: run {
+            val dataName = "_$id"
+            if (!download(url, dataName)) {
                 Timber.v("Failed to download: $url $id")
                 return Result.failure(inputData)
             }
-            val dataName = "_$id"
-            binaryDataStore.saveData(dataName, bodyBytes)
             return Result.success(
                 workDataOf(
                     KEY_FILTER_ID to id,
@@ -47,17 +46,30 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
         return Result.failure(inputData)
     }
 
-    /** GETs [url] and returns the body as UTF-8 bytes, or null on a non-2xx response. */
-    private fun download(url: String): ByteArray? {
+    /**
+     * GETs [url] into the [dataName] file as UTF-8, streamed so the list never sits in memory.
+     * Returns false on a non-2xx response.
+     */
+    private fun download(url: String, dataName: String): Boolean {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.connectTimeout = TIMEOUT_MS
         connection.readTimeout = TIMEOUT_MS
         try {
-            if (connection.responseCode !in 200..299) return null
-            val bytes = connection.inputStream.use { it.readBytes() }
+            if (connection.responseCode !in 200..299) return false
             // convert to UTF-8 if needed
             val charset = charsetOf(connection.contentType) ?: StandardCharsets.UTF_8
-            return if (charset == StandardCharsets.UTF_8) bytes else String(bytes, charset).toByteArray()
+            binaryDataStore.saveFile(dataName) { file ->
+                connection.inputStream.use { input ->
+                    file.outputStream().use { output ->
+                        if (charset == StandardCharsets.UTF_8) {
+                            input.copyTo(output)
+                        } else {
+                            output.writer().use { input.reader(charset).copyTo(it) }
+                        }
+                    }
+                }
+            }
+            return true
         } finally {
             connection.disconnect()
         }

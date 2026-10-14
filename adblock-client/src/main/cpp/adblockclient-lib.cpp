@@ -1,4 +1,5 @@
 #include <jni.h>
+#include <cstdio>
 #include "third-party/ad-block/ad_block_client.h"
 
 extern "C"
@@ -103,6 +104,84 @@ Java_io_github_edsuns_adblockclient_AdBlockClient_getProcessedData(JNIEnv *env,
 
     delete[] data;
     return dataBytes;
+}
+
+// The *File variants read and write the data directly, so a filter list (tens of MB once
+// processed) never has to fit in the Java heap.
+
+// Reads the whole file into a new NUL-terminated buffer, or returns nullptr.
+static char *readFile(JNIEnv *env, jstring path) {
+    const char *pathChars = env->GetStringUTFChars(path, nullptr);
+    FILE *file = fopen(pathChars, "rb");
+    env->ReleaseStringUTFChars(path, pathChars);
+    if (file == nullptr) return nullptr;
+    char *data = nullptr;
+    long length;
+    if (fseek(file, 0, SEEK_END) == 0 && (length = ftell(file)) >= 0
+        && fseek(file, 0, SEEK_SET) == 0) {
+        data = new char[length + 1];
+        if (fread(data, 1, length, file) == (size_t) length) {
+            data[length] = '\0';
+        } else {
+            delete[] data;
+            data = nullptr;
+        }
+    }
+    fclose(file);
+    return data;
+}
+
+extern "C"
+JNIEXPORT jlong
+JNICALL
+Java_io_github_edsuns_adblockclient_AdBlockClient_loadBasicDataFile(JNIEnv *env,
+                                                                    jobject,
+                                                                    jlong clientPointer,
+                                                                    jstring path,
+                                                                    jboolean preserveRules) {
+    char *dataChars = readFile(env, path);
+    if (dataChars == nullptr) return 0;
+    auto *client = (AdBlockClient *) clientPointer;
+    client->parse(dataChars, preserveRules);
+    return (long) dataChars;
+}
+
+extern "C"
+JNIEXPORT jlong
+JNICALL
+Java_io_github_edsuns_adblockclient_AdBlockClient_loadProcessedDataFile(JNIEnv *env,
+                                                                        jobject /* this */,
+                                                                        jlong clientPointer,
+                                                                        jstring path) {
+    char *dataChars = readFile(env, path);
+    if (dataChars == nullptr) return 0;
+    auto *client = (AdBlockClient *) clientPointer;
+    client->deserialize(dataChars);
+    // Kept until releaseClient, like loadProcessedData's buffer.
+    return (long) dataChars;
+}
+
+extern "C"
+JNIEXPORT jboolean
+JNICALL
+Java_io_github_edsuns_adblockclient_AdBlockClient_saveProcessedData(JNIEnv *env,
+                                                                    jobject /* this */,
+                                                                    jlong clientPointer,
+                                                                    jstring path) {
+    auto *client = (AdBlockClient *) clientPointer;
+    int size;
+    char *data = client->serialize(&size, false);
+
+    const char *pathChars = env->GetStringUTFChars(path, nullptr);
+    FILE *file = fopen(pathChars, "wb");
+    env->ReleaseStringUTFChars(path, pathChars);
+    bool written = false;
+    if (file != nullptr) {
+        written = fwrite(data, 1, size, file) == (size_t) size;
+        written = fclose(file) == 0 && written;
+    }
+    delete[] data;
+    return written;
 }
 
 extern "C"
