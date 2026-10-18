@@ -142,6 +142,7 @@ private fun DetailsContent(
                 } else {
                     TvShowDetailsItem(
                         tvShowDetails = uiState.tvShow,
+                        lastWatchedEpisode = uiState.lastWatchedEpisode,
                         onBackButtonClick = onBackButtonClick,
                         onWishlistButtonClick = onWishlistTvShowClick
                     )

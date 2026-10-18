@@ -29,7 +29,8 @@ fun RatingItem(
     releaseDate: String,
     rating: Double,
     modifier: Modifier = Modifier,
-    tmdbId: Int = 0
+    tmdbId: Int = 0,
+    playLabel: String? = null
 ) {
     val context = LocalContext.current
     Card(
@@ -73,7 +74,7 @@ fun RatingItem(
                 )
                 Spacer(modifier = Modifier.width(zedMoviesTheme.spacing.extraSmall))
                 Text(
-                    text = "Play",
+                    text = playLabel ?: stringResource(id = R.string.play),
                     style = zedMoviesTheme.typography.semiBold.h6
                 )
 

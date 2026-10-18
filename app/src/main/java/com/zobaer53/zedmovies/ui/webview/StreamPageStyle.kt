@@ -8,10 +8,34 @@ fun isStreamSiteUrl(url: String?): Boolean =
 fun isStreamWatchUrl(url: String?): Boolean =
     isStreamSiteUrl(url) && Uri.parse(url).path?.startsWith("/watch/") == true
 
-// The site's welcome popup reads this flag once, when its scripts start, so it has to be
-// set before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads).
-const val STREAM_DOCUMENT_START_SCRIPT =
-    "try { localStorage.setItem('framextv_welcome_seen', 'true'); } catch (e) {}"
+/** The JS object the stream site's pages post its resume data to (see [STREAM_DOCUMENT_START_SCRIPT]). */
+const val STREAM_BRIDGE_NAME = "NoFlixBridge"
+
+// Runs in every stream-site frame before the site's own scripts.
+// - The site's welcome popup reads its flag once, when its scripts start, so it has to be set
+//   before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads).
+// - The top frame posts the site's resume data to the app whenever it changes. The player
+//   iframe saves it, which the top frame sees as a `storage` event; the site also fires
+//   `framextv:progress_updated` in the frame that saved. Posts are coalesced to one a second.
+val STREAM_DOCUMENT_START_SCRIPT = """
+(function () {
+  try { localStorage.setItem('framextv_welcome_seen', 'true'); } catch (e) {}
+  if (window.top !== window) return;
+  var key = '$STREAM_WATCH_PROGRESS_KEY', last = null, timer = 0;
+  function post() {
+    timer = 0;
+    try {
+      var bridge = window.$STREAM_BRIDGE_NAME, value = localStorage.getItem(key);
+      if (bridge && value && value !== last) { last = value; bridge.postMessage(value); }
+    } catch (e) {}
+  }
+  function schedule() { if (!timer) timer = setTimeout(post, 1000); }
+  window.addEventListener('storage', function (e) { if (e.key === key) schedule(); });
+  window.addEventListener('framextv:progress_updated', schedule);
+  window.addEventListener('load', schedule);
+  window.addEventListener('pagehide', post);
+})();
+"""
 
 // Hides the site's logo header, bottom menu bar and footer, plus the "Cast" and
 // "More Like This" sections (tagged nfx-hidden by the script below). On /watch/ pages

@@ -14,6 +14,11 @@
     <string name="rating">Rating</string>
     <string name="not_rated">Not rated</string>
     <string name="trailer">Trailer</string>
+    <string name="play">Play</string>
+    <string name="continue_episode">Continue S%1$d · E%2$d</string>
+    <string name="resume_episode_progress">Resume at %1$s · %2$s</string>
+    <string name="minutes_left">%1$d min left</string>
+    <string name="less_than_a_minute_left">&lt; 1 min left</string>
     <string name="close_trailer">Close trailer</string>
     <string name="trailer_unavailable">Trailer unavailable</string>
     <string name="no_overview">No overview</string>

@@ -14,6 +14,7 @@ import com.zobaer53.zedmovies.data.database.dao.movie.MovieRemoteKeyDao
 import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDao
 import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowDetailsDao
 import com.zobaer53.zedmovies.data.database.dao.tvshow.TvShowRemoteKeyDao
+import com.zobaer53.zedmovies.data.database.dao.watch.LastWatchedEpisodeDao
 import com.zobaer53.zedmovies.data.database.dao.wishlist.WishlistDao
 import com.zobaer53.zedmovies.data.database.model.movie.MovieDetailsEntity
 import com.zobaer53.zedmovies.data.database.model.movie.MovieEntity
@@ -21,6 +22,7 @@ import com.zobaer53.zedmovies.data.database.model.movie.MovieRemoteKeyEntity
 import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowDetailsEntity
 import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowEntity
 import com.zobaer53.zedmovies.data.database.model.tvshow.TvShowRemoteKeyEntity
+import com.zobaer53.zedmovies.data.database.model.watch.LastWatchedEpisodeEntity
 import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
 
 @Database(
@@ -28,13 +30,15 @@ import com.zobaer53.zedmovies.data.database.model.wishlist.WishlistEntity
         MovieEntity::class, MovieRemoteKeyEntity::class,
         TvShowEntity::class, TvShowRemoteKeyEntity::class,
         MovieDetailsEntity::class, TvShowDetailsEntity::class,
-        WishlistEntity::class
+        WishlistEntity::class, LastWatchedEpisodeEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
     autoMigrations = [
         // 2 -> 3: nullable trailer_key on movie_details and tv_show_details.
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        // 3 -> 4: last_watched_episodes (resume a TV show at the last opened episode).
+        AutoMigration(from = 3, to = 4)
     ]
 )
 @TypeConverters(ListConverter::class, LocalDateConverter::class, CreditsConverter::class)
@@ -49,6 +53,8 @@ abstract class zedMoviesDatabase : RoomDatabase() {
     abstract val tvShowDetailsDao: TvShowDetailsDao
 
     abstract val wishlistDao: WishlistDao
+
+    abstract val lastWatchedEpisodeDao: LastWatchedEpisodeDao
 
     companion object {
         const val zedMovies_DATABASE = "zedMovies.db"

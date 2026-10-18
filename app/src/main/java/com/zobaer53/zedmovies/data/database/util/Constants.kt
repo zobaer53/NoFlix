@@ -14,6 +14,8 @@ internal object Constants {
         internal const val TV_SHOW_DETAILS = "tv_show_details"
 
         internal const val WISHLIST = "wishlist"
+
+        internal const val LAST_WATCHED_EPISODES = "last_watched_episodes"
     }
 
     internal object Fields {
@@ -74,6 +76,13 @@ internal object Constants {
         internal const val MEDIA_TYPE = "media_type"
         internal const val PREV_PAGE = "prev_page"
         internal const val NEXT_PAGE = "next_page"
+        internal const val TV_SHOW_ID = "tv_show_id"
+        internal const val SEASON = "season"
+        internal const val EPISODE = "episode"
+        internal const val POSITION_SECONDS = "position_seconds"
+        internal const val DURATION_SECONDS = "duration_seconds"
+        internal const val COMPLETED = "completed"
+        internal const val UPDATED_AT = "updated_at"
     }
 
 }

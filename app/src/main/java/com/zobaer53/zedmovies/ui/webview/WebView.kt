@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -28,7 +29,12 @@ import io.github.edsuns.adfilter.AdFilter
 // the public version needs webkit 1.9+, which requires compileSdk 34.
 @SuppressLint("SetJavaScriptEnabled", "RequiresFeature", "RestrictedApi")
 @Composable
-fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
+fun VideoWebView(
+    url: String,
+    lifecycleOwner: LifecycleOwner,
+    onEpisodeOpened: (StreamEpisode) -> Unit = {},
+    onWatchProgress: (String) -> Unit = {}
+) {
     val filter = AdFilter.get()
     val filterViewModel = filter.viewModel
     var rememberUrl by remember { mutableStateOf(url) }
@@ -38,6 +44,9 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
     var customView by remember { mutableStateOf<View?>(null) }
     var customViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var pageUrl by remember { mutableStateOf(url) }
+    var clearHistoryOnShowPage by remember { mutableStateOf<Int?>(null) }
+    val currentOnEpisodeOpened by rememberUpdatedState(onEpisodeOpened)
+    val currentOnWatchProgress by rememberUpdatedState(onWatchProgress)
 
     // Videos (watch pages and full-screen players) play in landscape; every other page is
     // a phone layout, so it's locked to portrait. Unlocking instead would leave the app
@@ -59,10 +68,27 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
         updateOrientation()
     }
 
+    // Back from an episode goes to its show page. Playback can start straight on an episode,
+    // and auto-advance adds a history entry per episode, so plain goBack() would step through
+    // earlier episodes first. A freshly loaded show page drops the history behind it.
+    fun openShowPage(view: WebView, episode: StreamEpisode) {
+        val history = view.copyBackForwardList()
+        val previousUrl = history.getItemAtIndex(history.currentIndex - 1)?.url
+        if (isStreamShowUrl(previousUrl, episode.tvShowId)) {
+            view.goBack()
+        } else {
+            clearHistoryOnShowPage = episode.tvShowId
+            view.loadUrl(buildStreamShowUrl(episode.tvShowId, episode.season))
+        }
+    }
+
     BackHandler {
+        val view = webView
+        val episode = parseStreamEpisode(pageUrl)
         when {
             customView != null -> hideCustomView()
-            webView?.canGoBack() == true -> webView?.goBack()
+            view != null && episode != null -> openShowPage(view, episode)
+            view?.canGoBack() == true -> view.goBack()
             else -> activity?.finish()
         }
     }
@@ -115,6 +141,14 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                         this, STREAM_DOCUMENT_START_SCRIPT, setOf(STREAM_BASE_URL)
                     )
                 }
+                // Only the stream site's own origin gets the bridge object.
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+                    WebViewCompat.addWebMessageListener(
+                        this, STREAM_BRIDGE_NAME, setOf(STREAM_BASE_URL)
+                    ) { _, message, _, isMainFrame, _ ->
+                        if (isMainFrame) message.data?.let { currentOnWatchProgress(it) }
+                    }
+                }
                 webChromeClient = object : WebChromeClient() {
                     override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
                         val decor = activity?.window?.decorView as? FrameLayout
@@ -142,10 +176,20 @@ fun VideoWebView(url: String, lifecycleOwner: LifecycleOwner) {
                     }
                 }
 
-                webViewClient = MyWebClient { newUrl ->
-                    pageUrl = newUrl
-                    updateOrientation()
-                }
+                webViewClient = MyWebClient(
+                    onUrlChange = { newUrl ->
+                        pageUrl = newUrl
+                        updateOrientation()
+                        parseStreamEpisode(newUrl)?.let { currentOnEpisodeOpened(it) }
+                    },
+                    onPageLoaded = { view, loadedUrl ->
+                        val showId = clearHistoryOnShowPage
+                        if (showId != null && isStreamShowUrl(loadedUrl, showId)) {
+                            view.clearHistory()
+                            clearHistoryOnShowPage = null
+                        }
+                    }
+                )
                 webView = this
 
                 // Load the video URL

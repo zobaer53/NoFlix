@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,8 @@ internal fun DetailsItem(
     onBackButtonClick: () -> Unit,
     onWishlistButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    playLabel: String? = null,
+    playCaption: String? = null,
     windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top
     ),
@@ -173,8 +176,22 @@ internal fun DetailsItem(
                                 horizontalArrangement = Arrangement.spacedBy(zedMoviesTheme.spacing.small),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                RatingItem(type,title,releaseDate.year,rating = voteAverage, tmdbId = id)
+                                RatingItem(
+                                    type,
+                                    title,
+                                    releaseDate.year,
+                                    rating = voteAverage,
+                                    tmdbId = id,
+                                    playLabel = playLabel
+                                )
                                 if (trailerKey != null) TrailerItem(trailerKey = trailerKey)
+                            }
+                            if (playCaption != null) {
+                                Text(
+                                    text = playCaption,
+                                    style = zedMoviesTheme.typography.medium.h6,
+                                    color = zedMoviesTheme.colors.textSecondary
+                                )
                             }
                         }
                     }

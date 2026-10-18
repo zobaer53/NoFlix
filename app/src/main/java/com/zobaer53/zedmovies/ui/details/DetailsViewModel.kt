@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.zobaer53.zedmovies.data.common.result.handle
 import com.zobaer53.zedmovies.domain.usecase.AddMovieToWishlistUseCase
 import com.zobaer53.zedmovies.domain.usecase.AddTvShowToWishlistUseCase
+import com.zobaer53.zedmovies.domain.usecase.GetLastWatchedEpisodeUseCase
 import com.zobaer53.zedmovies.domain.usecase.GetMovieDetailsUseCase
 import com.zobaer53.zedmovies.domain.usecase.GetTvShowDetailsUseCase
 import com.zobaer53.zedmovies.domain.usecase.RemoveMovieFromWishlistUseCase
@@ -35,12 +36,17 @@ class DetailsViewModel @Inject constructor(
     private val addTvShowToWishlistUseCase: AddTvShowToWishlistUseCase,
     private val removeMovieFromWishlistUseCase: RemoveMovieFromWishlistUseCase,
     private val removeTvShowFromWishlistUseCase: RemoveTvShowFromWishlistUseCase,
+    private val getLastWatchedEpisodeUseCase: GetLastWatchedEpisodeUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), EventHandler<DetailsEvent> {
     private val _uiState = MutableStateFlow(getInitialUiState(savedStateHandle))
     val uiState = _uiState.asStateFlow()
 
     private var contentJob = loadContent()
+
+    init {
+        observeLastWatchedEpisode()
+    }
 
     override fun onEvent(event: DetailsEvent) = when (event) {
         DetailsEvent.WishlistMovie -> onWishlistMovie()
@@ -132,6 +138,16 @@ class DetailsViewModel @Inject constructor(
                 _uiState.update { it.copy(tvShow = tvShow?.asTvShowDetails(), isLoading = false) }
             }
             onFailure(::handleFailure)
+        }
+    }
+
+    // Updates live, so the Play button shows the new episode when the user comes back from the player.
+    private fun observeLastWatchedEpisode() {
+        val tvShow = uiState.value.mediaType as? MediaType.Details.TvShow ?: return
+        viewModelScope.launch {
+            getLastWatchedEpisodeUseCase(tvShow.id).collect { episode ->
+                _uiState.update { it.copy(lastWatchedEpisode = episode) }
+            }
         }
     }
 
