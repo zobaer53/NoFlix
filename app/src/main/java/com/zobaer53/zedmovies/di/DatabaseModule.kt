@@ -50,4 +50,7 @@ object DatabaseModule {
 
     @Provides
     fun provideWishlistDao(database: zedMoviesDatabase) = database.wishlistDao
+
+    @Provides
+    fun provideLastWatchedEpisodeDao(database: zedMoviesDatabase) = database.lastWatchedEpisodeDao
 }

@@ -9,7 +9,10 @@ import android.webkit.WebViewClient
 import com.zobaer53.zedmovies.BuildConfig
 import io.github.edsuns.adfilter.AdFilter
 
-class MyWebClient(private val onUrlChange: (String) -> Unit = {}) : WebViewClient() {
+class MyWebClient(
+    private val onUrlChange: (String) -> Unit = {},
+    private val onPageLoaded: (WebView, String) -> Unit = { _, _ -> }
+) : WebViewClient() {
 
     private val filter = AdFilter.get()
 
@@ -33,6 +36,7 @@ class MyWebClient(private val onUrlChange: (String) -> Unit = {}) : WebViewClien
 
     override fun onPageFinished(view: WebView?, url: String?) {
         injectStreamPageStyle(view, url)
+        if (view != null && url != null) onPageLoaded(view, url)
     }
 
     override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {

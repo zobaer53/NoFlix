@@ -1,0 +1,95 @@
+# A TV show resumes at the last watched episode: play S2E3 from the show page, come back, and
+# Play (now "Continue S2 · E3") opens that episode directly. Back from it goes to the show page.
+appId: com.zobaer53.zedmovies
+name: 08_resume_episode
+---
+# Clear state: no recorded episode and no site history in the WebView.
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Upcoming Movies"
+    timeout: 30000
+- tapOn: "Search"
+- extendedWaitUntil:
+    visible: "Discover"
+    timeout: 20000
+- tapOn: "search place holder"
+- retry:
+    maxRetries: 2
+    commands:
+      - eraseText: 20
+      - inputText: "Breaking Bad"
+      - hideKeyboard
+      - tapOn: "Tv Shows"
+      - extendedWaitUntil:
+          visible: "Breaking Bad"
+          timeout: 20000
+- tapOn:
+    text: "Rating"
+    below: "Tv Shows"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- assertVisible: "Play"
+- assertNotVisible: "Continue.*"
+# Only the play icon is clickable (its content description is "Rating").
+- tapOn:
+    text: "Rating"
+    above: "Overview"
+# Never opened: the show page. Pick Season 2, episode 3.
+- extendedWaitUntil:
+    visible: "Season 2.*"
+    timeout: 30000
+- tapOn: "Season 2.*"
+- scrollUntilVisible:
+    element: ".*Bit by a Dead Bee.*"
+    direction: DOWN
+    timeout: 20000
+    centerElement: true
+- tapOn: ".*Bit by a Dead Bee.*"
+# The episode page (its "Back to Series" link is hidden under the player but readable).
+- extendedWaitUntil:
+    visible: "Back to Series"
+    timeout: 30000
+# A fresh device shows Android's one-time "Viewing full screen" hint for hidden system bars.
+- tapOn:
+    text: "Got it"
+    optional: true
+# Let the episode play long enough for the site to save its position (it resumes after 15 s).
+- waitForAnimationToEnd:
+    timeout: 20000
+- takeScreenshot: resume_first_play
+# Back: the show page (it is the previous history entry, scrolled to where it was), then details.
+- back
+- scrollUntilVisible:
+    element: "Season 2.*"
+    direction: UP
+    timeout: 20000
+- back
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 15000
+- assertVisible: "Continue S2 · E3"
+- takeScreenshot: resume_details
+# Continue opens the episode itself (its page, not the show page with Season tabs).
+- tapOn:
+    text: "Rating"
+    above: "Overview"
+- extendedWaitUntil:
+    visible: ".*Bit by a Dead Bee.*"
+    timeout: 30000
+- assertVisible: "Back to Series"
+- assertNotVisible: "Season 1.*"
+- takeScreenshot: resume_episode
+# Back: the show page, loaded fresh with nothing behind it, so the next Back closes the player.
+- back
+- scrollUntilVisible:
+    element: "Season 2.*"
+    direction: UP
+    timeout: 30000
+- back
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 15000
+- assertVisible: "Continue S2 · E3"

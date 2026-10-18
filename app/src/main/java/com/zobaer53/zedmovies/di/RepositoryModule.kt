@@ -7,12 +7,14 @@ import com.zobaer53.zedmovies.data.repository.MovieDetailsRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.MovieRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.TvShowDetailsRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.TvShowRepositoryImpl
+import com.zobaer53.zedmovies.data.repository.WatchProgressRepositoryImpl
 import com.zobaer53.zedmovies.data.repository.WishlistRepositoryImpl
 import com.zobaer53.zedmovies.domain.repository.FilterOptionsRepository
 import com.zobaer53.zedmovies.domain.repository.MovieDetailsRepository
 import com.zobaer53.zedmovies.domain.repository.MovieRepository
 import com.zobaer53.zedmovies.domain.repository.TvShowDetailsRepository
 import com.zobaer53.zedmovies.domain.repository.TvShowRepository
+import com.zobaer53.zedmovies.domain.repository.WatchProgressRepository
 import com.zobaer53.zedmovies.domain.repository.WishlistRepository
 import dagger.Binds
 import dagger.Module
@@ -46,6 +48,12 @@ interface RepositoryModule {
     @Binds
     @ViewModelScoped
     fun bindWishlistRepository(wishlistRepositoryImpl: WishlistRepositoryImpl): WishlistRepository
+
+    @Binds
+    @ViewModelScoped
+    fun bindWatchProgressRepository(
+        watchProgressRepositoryImpl: WatchProgressRepositoryImpl
+    ): WatchProgressRepository
 
     // Unscoped here: the implementation is a @Singleton that caches for the session.
     @Binds
