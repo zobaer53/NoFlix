@@ -26,8 +26,6 @@ datetime = "0.8.0"
 retrofit = "3.0.0"
 okhttp = "5.5.0"
 coil = "3.6.3"
-lottie = "6.7.1"
-jsoup = "1.23.2"
 timber = "5.0.1"
 youtubePlayer = "13.0.0"
 
@@ -85,8 +83,6 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 # Coil 3 needs a network fetcher on the classpath (registers itself) or remote images never load.
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 # Trailers: wraps YouTube's official IFrame embed player in a WebView (no native code).
 youtube-player-core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubePlayer" }

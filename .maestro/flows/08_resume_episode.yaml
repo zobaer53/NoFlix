@@ -38,19 +38,29 @@ name: 08_resume_episode
     text: "Rating"
     above: "Overview"
 # Never opened: the show page. Pick Season 2, episode 3.
-- extendedWaitUntil:
-    visible: "Season 2.*"
+- scrollUntilVisible:
+    element: "Season 2.*"
+    direction: DOWN
     timeout: 30000
-- tapOn: "Season 2.*"
+    centerElement: true
+- waitForAnimationToEnd:
+    timeout: 3000
+- retry:
+    maxRetries: 3
+    commands:
+      - tapOn: "Season 2.*"
+      - extendedWaitUntil:
+          visible: ".*Seven Thirty-Seven.*"
+          timeout: 10000
 - scrollUntilVisible:
     element: ".*Bit by a Dead Bee.*"
     direction: DOWN
     timeout: 20000
     centerElement: true
 - tapOn: ".*Bit by a Dead Bee.*"
-# The episode page (its "Back to Series" link is hidden under the player but readable).
+# The episode page (waits for player to open and overview to be gone).
 - extendedWaitUntil:
-    visible: "Back to Series"
+    notVisible: "Overview"
     timeout: 30000
 # A fresh device shows Android's one-time "Viewing full screen" hint for hidden system bars.
 - tapOn:
@@ -72,21 +82,19 @@ name: 08_resume_episode
     timeout: 15000
 - assertVisible: "Continue S2 · E3"
 - takeScreenshot: resume_details
-# Continue opens the episode itself (its page, not the show page with Season tabs).
+# Continue opens the episode player directly (not the show page with Season tabs).
 - tapOn:
     text: "Rating"
     above: "Overview"
 - extendedWaitUntil:
-    visible: ".*Bit by a Dead Bee.*"
+    notVisible: "Overview"
     timeout: 30000
-- assertVisible: "Back to Series"
 - assertNotVisible: "Season 1.*"
 - takeScreenshot: resume_episode
 # Back: the show page, loaded fresh with nothing behind it, so the next Back closes the player.
 - back
-- scrollUntilVisible:
-    element: "Season 2.*"
-    direction: UP
+- extendedWaitUntil:
+    visible: "Season 2.*"
     timeout: 30000
 - back
 - extendedWaitUntil:

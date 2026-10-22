@@ -103,3 +103,4 @@ lint/tmp/
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
 .idea/deploymentTargetSelector.xml
 .idea/deviceManager.xml
+/doc/local/

@@ -432,7 +432,7 @@ Do these as separate commits, roughly in this order. Each one should build and r
 - [x] **Coil 2.4 → 3.6.3** (`designsystem/component/Image.kt` and any `AsyncImage` users): artifacts move to `io.coil-kt.coil3:coil-compose` + `io.coil-kt.coil3:coil-network-okhttp`. Package `coil` → `coil3` (`coil3.compose.SubcomposeAsyncImage`, `coil3.request.ImageRequest`, `coil3.request.crossfade`). Network loading needs the network artifact, or images silently fail to load. Follow the official guide at coil-kt.github.io/coil/upgrading_to_coil3/. To move faster, go to 2.7.0 now and Coil 3 in a later commit.
 - [x] Lottie 6.7.1, splashscreen 1.2.0, webkit 1.17.1, core 1.19.1, activity 1.13.0.
   > **Partly done (5a):** splashscreen, webkit, core done. Lottie and activity go in 5b/5c. API compatible.
-- [ ] Jsoup → 1.23.2, or, better, **remove the scraping fallback**. `WebViewActivity` only uses it when `tmdbId == 0`, which the Play button shouldn't send. Removing it drops Jsoup, `RunOn Background.kt` and `scrapeMovieData()`. Update CLAUDE.md if you do.
+- [x] Removed the scraping fallback (`RunOn Background.kt`, `scrapeMovieData.kt`), dropped Jsoup, Lottie, and old site URLs (sflix, 1movieshd). `WebViewActivity` now finishes immediately if `tmdbId <= 0`.
 - [x] Tests: junit-ext 1.3.0, espresso 3.7.0.
 
 ## 9. Phase 6: CI and release workflow (`.github/workflows/release.yml`)

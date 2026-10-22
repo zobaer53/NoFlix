@@ -138,13 +138,13 @@ fun VideoWebView(
                 }
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
                     WebViewCompat.addDocumentStartJavaScript(
-                        this, STREAM_DOCUMENT_START_SCRIPT, setOf(STREAM_BASE_URL)
+                        this, STREAM_DOCUMENT_START_SCRIPT, STREAM_ALLOWED_ORIGIN_RULES
                     )
                 }
                 // Only the stream site's own origin gets the bridge object.
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
                     WebViewCompat.addWebMessageListener(
-                        this, STREAM_BRIDGE_NAME, setOf(STREAM_BASE_URL)
+                        this, STREAM_BRIDGE_NAME, STREAM_ALLOWED_ORIGIN_RULES
                     ) { _, message, _, isMainFrame, _ ->
                         if (isMainFrame) message.data?.let { currentOnWatchProgress(it) }
                     }

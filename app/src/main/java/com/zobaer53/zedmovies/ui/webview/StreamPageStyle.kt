@@ -1,12 +1,21 @@
 package com.zobaer53.zedmovies.ui.webview
 
-import android.net.Uri
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-fun isStreamSiteUrl(url: String?): Boolean =
-    url != null && Uri.parse(url).host?.endsWith(Uri.parse(STREAM_BASE_URL).host!!) == true
-
-fun isStreamWatchUrl(url: String?): Boolean =
-    isStreamSiteUrl(url) && Uri.parse(url).path?.startsWith("/watch/") == true
+/** Allowed origin rules for WebMessageListener and DocumentStartScript. */
+val STREAM_ALLOWED_ORIGIN_RULES = setOf(
+    STREAM_BASE_URL,
+    "https://*.framextv.cc",
+    "https://framextv.com",
+    "https://*.framextv.com",
+    "https://framextv.xyz",
+    "https://*.framextv.xyz",
+    "https://framextv.to",
+    "https://*.framextv.to",
+    "https://framextv.net",
+    "https://*.framextv.net"
+)
 
 /** The JS object the stream site's pages post its resume data to (see [STREAM_DOCUMENT_START_SCRIPT]). */
 const val STREAM_BRIDGE_NAME = "NoFlixBridge"
@@ -15,11 +24,16 @@ const val STREAM_BRIDGE_NAME = "NoFlixBridge"
 // - The site's welcome popup reads its flag once, when its scripts start, so it has to be set
 //   before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads).
 // - The top frame posts the site's resume data to the app whenever it changes. The player
-//   iframe saves it, which the top frame sees as a `storage` event; the site also fires
-//   `framextv:progress_updated` in the frame that saved. Posts are coalesced to one a second.
+//   saves progress to localStorage, which the top frame posts via the bridge. Posts are coalesced to one a second.
 val STREAM_DOCUMENT_START_SCRIPT = """
 (function () {
-  try { localStorage.setItem('framextv_welcome_seen', 'true'); } catch (e) {}
+  try {
+    localStorage.setItem('framextv_welcome_seen', 'true');
+    var p = location.pathname || '';
+    if (p.indexOf('/watch/') === 0 || p.indexOf('/embed') === 0) {
+      document.documentElement.classList.add('nfx-watch');
+    }
+  } catch (e) {}
   if (window.top !== window) return;
   var key = '$STREAM_WATCH_PROGRESS_KEY', last = null, timer = 0;
   function post() {
@@ -34,23 +48,108 @@ val STREAM_DOCUMENT_START_SCRIPT = """
   window.addEventListener('framextv:progress_updated', schedule);
   window.addEventListener('load', schedule);
   window.addEventListener('pagehide', post);
+
+  function recordVideoProgress(video) {
+    if (!video || !video.duration || isNaN(video.duration)) return;
+    var path = location.pathname || '';
+    var epMatch = path.match(/\/(?:watch|embed(?:\/tv)?)\/(\d+)\/(\d+)\/(\d+)/);
+    var movieMatch = !epMatch && path.match(/\/(?:watch|embed(?:\/movie)?)\/(\d+)/);
+    if (!epMatch && !movieMatch) return;
+
+    var mediaType = epMatch ? 'tv' : 'movie';
+    var id = epMatch ? epMatch[1] : movieMatch[1];
+    var season = epMatch ? parseInt(epMatch[2], 10) : undefined;
+    var episode = epMatch ? parseInt(epMatch[3], 10) : undefined;
+    var currentTime = video.currentTime || 0;
+    var duration = video.duration || 0;
+    var completed = duration > 0 && (currentTime / duration >= 0.92);
+
+    try {
+      var raw = localStorage.getItem(key);
+      var list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) list = [];
+
+      var entryKey = mediaType === 'tv'
+        ? ('tv:' + id + ':s' + (season || 1) + ':e' + (episode || 1))
+        : ('movie:' + id);
+
+      var entry = {
+        mediaType: mediaType,
+        id: id,
+        timestamp: currentTime,
+        duration: duration,
+        completed: completed,
+        updatedAt: Date.now()
+      };
+      if (season !== undefined) entry.season = season;
+      if (episode !== undefined) entry.episode = episode;
+
+      var filtered = list.filter(function (it) {
+        if (!it || !it.id) return false;
+        var k = it.mediaType === 'tv'
+          ? ('tv:' + it.id + ':s' + (it.season || 1) + ':e' + (it.episode || 1))
+          : ('movie:' + it.id);
+        return k !== entryKey;
+      });
+      filtered.unshift(entry);
+      localStorage.setItem(key, JSON.stringify(filtered.slice(0, 30)));
+      schedule();
+    } catch (e) {}
+  }
+
+  var lastRecord = 0;
+  document.addEventListener('timeupdate', function (e) {
+    var now = Date.now();
+    if (now - lastRecord < 3000) return;
+    lastRecord = now;
+    if (e.target && e.target.tagName === 'VIDEO') recordVideoProgress(e.target);
+  }, true);
+  document.addEventListener('pause', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO') recordVideoProgress(e.target);
+  }, true);
+  document.addEventListener('ended', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO') recordVideoProgress(e.target);
+  }, true);
 })();
 """
 
 // Hides the site's logo header, bottom menu bar and footer, plus the "Cast" and
-// "More Like This" sections (tagged nfx-hidden by the script below). On /watch/ pages
-// the player iframe is stretched over the whole viewport so the video plays full screen.
+// "More Like This" sections (tagged nfx-hidden by the script below). On /watch/ and /embed/ pages
+// the player is stretched over the whole viewport so the video plays full screen.
+// Tailwind's h-screen uses 100vh which collapses to 0 inside Compose-hosted WebViews,
+// so explicit 100% height and fixed inset pinning are required.
 private const val STREAM_PAGE_CSS = """
 header.sticky.top-0,
 nav.fixed.bottom-0,
 #root footer,
 section.nfx-hidden { display: none !important; }
 
-html.nfx-watch, html.nfx-watch body { overflow: hidden !important; background: #000 !important; }
+html.nfx-watch, html.nfx-watch body {
+  width: 100% !important;
+  height: 100% !important;
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+
+html.nfx-watch #root,
+html.nfx-watch #root > div,
+html.nfx-watch .h-screen,
+html.nfx-watch [class*="h-screen"] {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+
 html.nfx-watch iframe[data-testid="player-iframe"] {
   position: fixed !important;
   inset: 0 !important;
-  /* 100% rather than vw/vh: vh resolves to 0 inside the Compose-hosted WebView. */
   width: 100% !important;
   height: 100% !important;
   z-index: 2147483647 !important;
@@ -66,11 +165,12 @@ val STREAM_PAGE_SCRIPT = """
   if (!d.getElementById('nfx-style')) {
     var s = d.createElement('style');
     s.id = 'nfx-style';
-    s.textContent = ${org.json.JSONObject.quote(STREAM_PAGE_CSS)};
+    s.textContent = ${Json.encodeToString(STREAM_PAGE_CSS)};
     (d.head || d.documentElement).appendChild(s);
   }
   function sync() {
-    d.documentElement.classList.toggle('nfx-watch', location.pathname.indexOf('/watch/') === 0);
+    var p = location.pathname;
+    d.documentElement.classList.toggle('nfx-watch', p.indexOf('/watch/') === 0 || p.indexOf('/embed') === 0);
   }
   // These sections have no stable class names, so they are matched by heading text.
   function hideSections() {

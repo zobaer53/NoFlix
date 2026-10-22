@@ -23,7 +23,12 @@ class PlaybackViewModel @Inject constructor(
 
     suspend fun getLastWatchedEpisode(tvShowId: Int): StreamEpisode? =
         getLastWatchedEpisodeUseCase(tvShowId).first()?.let {
-            StreamEpisode(it.tvShowId, it.season, it.episode)
+            StreamEpisode(
+                tvShowId = it.tvShowId,
+                season = it.season,
+                episode = it.episode,
+                positionSeconds = it.positionSeconds?.toInt()
+            )
         }
 
     // URL changes repeat for reloads and history updates, so only a new episode is saved.
