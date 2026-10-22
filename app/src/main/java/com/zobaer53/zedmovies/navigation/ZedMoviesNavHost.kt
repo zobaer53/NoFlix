@@ -11,6 +11,7 @@ import com.zobaer53.zedmovies.ui.home.navigation.homeGraph
 import com.zobaer53.zedmovies.ui.list.navigation.ListDestination
 import com.zobaer53.zedmovies.ui.list.navigation.listGraph
 import com.zobaer53.zedmovies.ui.search.navigation.searchGraph
+import com.zobaer53.zedmovies.ui.stremio.navigation.stremioGraph
 import com.zobaer53.zedmovies.ui.wishlist.navigation.wishlistGraph
 
 @Composable
@@ -59,6 +60,7 @@ fun ZedMoviesNavHost(
                 )
             }
         )
+        stremioGraph()
         listGraph(
             onBackButtonClick = onBackClick,
             onNavigateToDetailsDestination = {

@@ -99,7 +99,9 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
-/app/
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
 .idea/deploymentTargetSelector.xml
 .idea/deviceManager.xml
+
+# Local-only notes and drafts (not tracked)
+/doc/local/

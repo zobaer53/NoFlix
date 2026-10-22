@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.zobaer53.zedmovies.ui.home.navigation.HomeDestination
 import com.zobaer53.zedmovies.ui.search.navigation.SearchDestination
 import com.zobaer53.zedmovies.ui.wishlist.navigation.WishlistDestination
+import com.zobaer53.zedmovies.ui.stremio.navigation.StremioDestination
 import com.zobaer53.zedmovies.R
 
 enum class TopLevelDestination(
@@ -30,6 +31,11 @@ enum class TopLevelDestination(
         destination = WishlistDestination.destination,
         iconResourceId = R.drawable.ic_wishlist,
         textResourceId = R.string.wishlist
+    ),
+    Stremio(
+        route = StremioDestination.route,
+        destination = StremioDestination.destination,
+        iconResourceId = R.drawable.ic_download,
+        textResourceId = R.string.stremio
     )
-
 }
