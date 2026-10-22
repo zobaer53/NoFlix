@@ -54,12 +54,46 @@ fi
 shot=$(find "$OUT" -name 'play_webview.png' | head -1)
 if [ -n "$shot" ]; then
   python3 -I - "$shot" <<'PY' || status=1
-import struct, sys
+import struct, sys, zlib
 with open(sys.argv[1], 'rb') as f:
-    w, h = struct.unpack('>II', f.read(24)[16:24])
-print(f"play screenshot {w}x{h}: {'landscape OK' if w > h else 'NOT landscape'}")
-sys.exit(0 if w > h else 1)
+    sig = f.read(8)
+    if sig != b'\x89PNG\r\n\x1a\n':
+        print(f"screenshot is not valid PNG: {sys.argv[1]}")
+        sys.exit(1)
+    chunks = []
+    w, h = 0, 0
+    while True:
+        hdr = f.read(8)
+        if not hdr or len(hdr) < 8: break
+        length, ctype = struct.unpack('>I4s', hdr)
+        data = f.read(length)
+        f.read(4)
+        if ctype == b'IHDR':
+            w, h = struct.unpack('>II', data[:8])
+        elif ctype == b'IDAT':
+            chunks.append(data)
+        elif ctype == b'IEND':
+            break
+
+if w <= h:
+    print(f"play screenshot {w}x{h}: NOT landscape")
+    sys.exit(1)
+
+raw = zlib.decompress(b''.join(chunks))
+visible_content_bytes = sum(1 for b in raw if b > 20)
+if visible_content_bytes < 500:
+    print(f"play screenshot {w}x{h}: FAILED (solid black screen! video or controls did not render, visible_content_bytes={visible_content_bytes})")
+    sys.exit(1)
+
+print(f"play screenshot {w}x{h}: landscape OK and verified non-blank ({visible_content_bytes} visible content bytes)")
+sys.exit(0)
 PY
+  if grep -E "NoFlixPlayback: Playback verified" "$OUT/logcat.txt" | grep -q .; then
+    echo "playback verification: PASSED ($(grep -E 'NoFlixPlayback: Playback verified' "$OUT/logcat.txt" | tail -1))"
+  else
+    echo "playback verification: FAILED (NoFlixPlayback active signal missing from logcat!)"
+    status=1
+  fi
 fi
 # Ad-filter checks need the Play flow, so they only apply to a full run.
 if [ $# -eq 0 ]; then

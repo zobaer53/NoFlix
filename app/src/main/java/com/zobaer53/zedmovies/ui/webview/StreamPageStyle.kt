@@ -97,12 +97,41 @@ val STREAM_DOCUMENT_START_SCRIPT = """
     } catch (e) {}
   }
 
+  function notifyPlaybackActive(video) {
+    if (!video || video.tagName !== 'VIDEO') return;
+    var r = video.getBoundingClientRect();
+    if (video.videoWidth > 0 && video.videoHeight > 0 && r.height > 50 && !video.paused && video.currentTime > 0) {
+      try {
+        var bridge = window.$STREAM_BRIDGE_NAME;
+        if (bridge) {
+          bridge.postMessage(JSON.stringify({
+            type: 'playback_active',
+            videoWidth: video.videoWidth,
+            videoHeight: video.videoHeight,
+            renderedWidth: Math.round(r.width),
+            renderedHeight: Math.round(r.height),
+            currentTime: Math.round(video.currentTime * 10) / 10
+          }));
+        }
+      } catch (e) {}
+    }
+  }
+
   var lastRecord = 0;
   document.addEventListener('timeupdate', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO') {
+      notifyPlaybackActive(e.target);
+    }
     var now = Date.now();
     if (now - lastRecord < 3000) return;
     lastRecord = now;
     if (e.target && e.target.tagName === 'VIDEO') recordVideoProgress(e.target);
+  }, true);
+  document.addEventListener('playing', function (e) {
+    if (e.target && e.target.tagName === 'VIDEO') {
+      notifyPlaybackActive(e.target);
+      recordVideoProgress(e.target);
+    }
   }, true);
   document.addEventListener('pause', function (e) {
     if (e.target && e.target.tagName === 'VIDEO') recordVideoProgress(e.target);

@@ -39,6 +39,13 @@ class PlaybackViewModel @Inject constructor(
     }
 
     fun onSiteWatchProgress(json: String) {
+        parsePlaybackActiveSignal(json)?.let { signal ->
+            android.util.Log.i(
+                "NoFlixPlayback",
+                "Playback verified: video ${signal.videoWidth}x${signal.videoHeight}, rendered ${signal.renderedWidth}x${signal.renderedHeight}px at ${signal.currentTime}s"
+            )
+            return
+        }
         val progress = parseStreamWatchProgress(json)
         if (progress.isNotEmpty()) save { saveSiteWatchProgressUseCase(progress) }
     }

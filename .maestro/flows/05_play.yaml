@@ -23,12 +23,17 @@ name: 05_play
     timeout: 15000
 # Give the page time to load, the ad filter to install and the page script to run.
 - waitForAnimationToEnd:
-    timeout: 15000
-- takeScreenshot: play_webview
+    timeout: 5000
 # A fresh device shows Android's one-time "Viewing full screen" hint for hidden system bars.
 - tapOn:
     text: "Got it"
     optional: true
+# Tap center to start playback and decode video frames
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: play_webview
 - back
 - extendedWaitUntil:
     visible: "Overview"

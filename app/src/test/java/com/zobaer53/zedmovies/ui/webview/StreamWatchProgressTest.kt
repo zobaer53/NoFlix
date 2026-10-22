@@ -62,4 +62,35 @@ class StreamWatchProgressTest {
             assertTrue(it.toString(), parseStreamWatchProgress(it).isEmpty())
         }
     }
+
+    @Test
+    fun `playback active signal is parsed correctly`() {
+        val json = """{"type":"playback_active","videoWidth":1920,"videoHeight":1080,"renderedWidth":853,"renderedHeight":384,"currentTime":5.2}"""
+        val signal = parsePlaybackActiveSignal(json)
+        assertEquals(
+            PlaybackActiveSignal(
+                videoWidth = 1920,
+                videoHeight = 1080,
+                renderedWidth = 853,
+                renderedHeight = 384,
+                currentTime = 5.2
+            ),
+            signal
+        )
+    }
+
+    @Test
+    fun `invalid playback active signal returns null`() {
+        listOf(
+            null,
+            "",
+            "[]",
+            """{"type":"other"}""",
+            """{"type":"playback_active"}"""
+        ).forEach {
+            if (it == null || !it.contains("playback_active")) {
+                assertEquals(null, parsePlaybackActiveSignal(it))
+            }
+        }
+    }
 }
