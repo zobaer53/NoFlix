@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import render
 
 ROOT = str(Path(__file__).resolve().parents[2])
+SHOWCASE = f"{ROOT}/showcase"
 FONT = f"{ROOT}/app/src/main/res/font/montserrat_%s.ttf"
 W, H = 1280, 640
 
@@ -67,8 +68,8 @@ def social_preview():
     img = background()
 
     # Phones on the right, the back one slightly lower.
-    for path, x, y in ((f"{ROOT}/screenshot-4-details.png", 966, 104),
-                       (f"{ROOT}/screenshot-1-home.png", 770, 56)):
+    for path, x, y in ((f"{SHOWCASE}/screenshot-3-details.png", 966, 104),
+                       (f"{SHOWCASE}/screenshot-1-home.png", 770, 56)):
         p = phone(path, 500)
         s, pad = shadow(p)
         img.alpha_composite(s, (x - pad, y - pad + 12))

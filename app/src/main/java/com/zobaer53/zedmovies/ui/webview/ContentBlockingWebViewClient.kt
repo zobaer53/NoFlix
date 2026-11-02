@@ -26,6 +26,17 @@ class MyWebClient(
         return result.resourceResponse
     }
 
+    // The site's ad scripts send the whole page to other domains ("click-under" redirects on a
+    // tap). The player only ever needs the stream site, so top-level navigations elsewhere are
+    // dropped. The first loadUrl() doesn't come through here.
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        if (request == null || !request.isForMainFrame) return false
+        val url = request.url.toString()
+        if (isStreamSiteUrl(url)) return false
+        if (BuildConfig.DEBUG) Log.d("NoFlixAdBlock", "blocked navigation to $url")
+        return true
+    }
+
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         filter.performScript(view, url)
     }

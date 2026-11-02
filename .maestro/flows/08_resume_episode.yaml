@@ -66,12 +66,21 @@ name: 08_resume_episode
 - tapOn:
     text: "Got it"
     optional: true
-# Tap center to start playback so video frames decode and progress accumulates (>15s)
-- tapOn:
-    point: "50%,50%"
+# Start playback if the player didn't autoplay, so progress accumulates (>15s). A blind tap on
+# the video would pause it again when it did autoplay.
+- extendedWaitUntil:
+    visible: "(Play|Pause)"
+    timeout: 30000
+- runFlow:
+    when:
+      visible: "Play"
+    commands:
+      - tapOn: "Play"
 # Let the episode play long enough for the site to save its position (it resumes after 15 s).
-- waitForAnimationToEnd:
-    timeout: 20000
+# Wait on the player's clock: a buffering (black, still) screen ends waitForAnimationToEnd early.
+- extendedWaitUntil:
+    visible: "0:(1[6-9]|[2-5][0-9])"
+    timeout: 90000
 - takeScreenshot: resume_first_play
 # Back: the show page (it is the previous history entry, scrolled to where it was), then details.
 - back

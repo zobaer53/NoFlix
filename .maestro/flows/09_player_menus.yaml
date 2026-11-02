@@ -1,0 +1,70 @@
+# The player's subtitle upload opens the system file picker (WebView onShowFileChooser), and its
+# settings menu doesn't offer the site's wallet items (hidden by the injected page script).
+appId: com.zobaer53.zedmovies
+name: 09_player_menus
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Top Rated"
+    timeout: 30000
+- tapOn:
+    text: "Rating"
+    below: "Movies"
+    index: 0
+- extendedWaitUntil:
+    visible: "Overview"
+    timeout: 20000
+- tapOn:
+    text: "Rating"
+    above: "Overview"
+- extendedWaitUntil:
+    notVisible: "Overview"
+    timeout: 15000
+- tapOn:
+    text: "Got it"
+    optional: true
+# Start playback (the control bar differs before the first play), then pause: paused controls
+# stay on screen. The subtitle and settings buttons have no accessible name, so they're tapped
+# by position (bottom right, left of Cast).
+- extendedWaitUntil:
+    visible: "(Play|Pause)"
+    timeout: 30000
+- runFlow:
+    when:
+      visible: "Play"
+    commands:
+      - tapOn: "Play"
+- extendedWaitUntil:
+    visible: "Pause"
+    timeout: 30000
+- tapOn: "Pause"
+- tapOn:
+    point: "84%,93%"
+- extendedWaitUntil:
+    visible: "Autoplay Next.*"
+    timeout: 10000
+- assertNotVisible: "Connect Wallet.*"
+- assertNotVisible: "Download.*"
+- tapOn: "Close settings"
+- tapOn:
+    point: "80%,93%"
+- tapOn: "Upload custom subtitle file"
+- extendedWaitUntil:
+    visible:
+      id: "com.google.android.documentsui:id/.*"
+    timeout: 10000
+- takeScreenshot: subtitle_file_picker
+# Cancelling must leave the input usable: the picker opens again (the menu closes on upload).
+- back
+- extendedWaitUntil:
+    notVisible:
+      id: "com.google.android.documentsui:id/.*"
+    timeout: 10000
+- tapOn:
+    point: "80%,93%"
+- tapOn: "Upload custom subtitle file"
+- extendedWaitUntil:
+    visible:
+      id: "com.google.android.documentsui:id/.*"
+    timeout: 10000
+- back

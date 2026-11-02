@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="noflix-ad-free-movies-app-icon.png" alt="NoFlix – ad-free movies and TV series app for Android" width="128"/>
+  <img src="showcase/noflix-ad-free-movies-app-icon.png" alt="NoFlix – ad-free movies and TV series app for Android" width="128"/>
 </p>
 
 <h1 align="center">NoFlix – Watch Movies &amp; TV Series Ad-Free on Android</h1>
@@ -22,7 +22,24 @@
   <a href="https://github.com/zobaer53/NoFlix/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zobaer53/NoFlix?style=social"/></a>
 </p>
 
-![NoFlix ad-free movie streaming app for Android](<Product Card (1).png>)
+![NoFlix ad-free movie streaming app for Android](showcase/banner.png)
+
+## What's new: should I update?
+
+> **Latest: [v3.0.4](https://github.com/zobaer53/NoFlix/releases/latest) (2 Nov 2026). Recommended for everyone.**
+> You can now upload your own subtitles in the player, and ads can no longer redirect the player to other websites.
+> [Download the APK](https://github.com/zobaer53/NoFlix/releases/latest/download/NoFlix.apk) and install it over your current version. Your watchlist and history are kept.
+
+| Version | Released | What changed | Should you update? |
+| --- | --- | --- | --- |
+| **3.0.4** | 2 Nov 2026 | **Fix:** "Upload .srt / .vtt" in the player's subtitle menu now opens your phone's files ([#3](https://github.com/zobaer53/NoFlix/issues/3), [#4](https://github.com/zobaer53/NoFlix/issues/4)). Ads can no longer redirect the player to other websites. | ✅ **Yes**, everyone |
+| 3.0.3 | 22 Oct 2026 | Smoother playback: the video fills the screen, and the watch position is saved more reliably | Update to 3.0.4 |
+| 3.0.2 | 18 Oct 2026 | TV shows resume at the last episode you watched | Update to 3.0.4 |
+| 3.0.1 | 14 Oct 2026 | Search filters (genre, year, rating and more) and a refreshed light theme | Update to 3.0.4 |
+| 3.0.0 | 14 Oct 2026 | Android 17 support, YouTube trailers, crash and freeze fixes; needs Android 8.0+ | Update to 3.0.4 |
+| 2.0.2 or older | 2023 | Signed with an old key | ⚠️ **Uninstall it first**, then install 3.0.4 (Android can't update across keys) |
+
+Proof of the subtitle fix, recorded on a Pixel 6a: [video](showcase/fixes/subtitle-upload-fix.mp4). Every release is listed on the [Releases page](https://github.com/zobaer53/NoFlix/releases).
 
 ## What is NoFlix?
 
@@ -35,7 +52,10 @@ If you've been looking for a way to **watch free movies without ads**, **stream 
 - 🚫 **Ad-free streaming.** A built-in ad blocker (AdGuard / EasyPrivacy filter lists and a native ad-block engine) removes ads, pop-ups, redirects and crypto-miners.
 - 🎬 **Movies and TV series.** Trending, popular, top-rated, now playing, upcoming and discover lists, powered by [The Movie Database (TMDB)](https://www.themoviedb.org/).
 - ▶️ **One-tap full-screen player.** Videos open in landscape full screen; the rest of the app stays portrait.
-- 🔍 **Search** any movie or TV show by title.
+- 💬 **Subtitles.** Pick a built-in track or upload your own `.srt` / `.vtt` file.
+- ⏯️ **Resume where you left off.** TV shows reopen at the last episode you watched.
+- 🎞️ **Trailers.** Watch the YouTube trailer from the details screen.
+- 🔍 **Search and filters.** Find any movie or TV show by title, or browse by genre, year and rating.
 - ❤️ **Watchlist.** Save movies and series to watch later.
 - 📶 **Offline browsing.** Lists and details are cached, so you can browse without a connection.
 - 🔒 **Private.** No account, no sign-up, no analytics.
@@ -51,20 +71,26 @@ Get the latest signed APK from **[GitHub Releases](https://github.com/zobaer53/N
 
 ## Demo
 
-https://github.com/zobaer53/zeDMoviesApp/assets/61627836/3743cf43-8afc-4984-b392-b425784ef823
+<p align="center">
+  <a href="showcase/demo.mp4"><img src="showcase/demo.gif" alt="NoFlix demo: browse movies, open details, play ad-free, search with filters and the watchlist" width="300"/></a>
+  <br/><sub>Tap the animation for the full-quality video.</sub>
+</p>
 
 ## Screenshots
 
 <table width="100%">
   <tbody>
     <tr>
-      <td width="25%"><img src="screenshot-1-home.png" alt="NoFlix home screen with trending movies"/></td>
-      <td width="25%"><img src="screenshot-2-home.png" alt="NoFlix TV series and popular movies"/></td>
-      <td width="25%"><img src="screenshot-4-details.png" alt="NoFlix movie details screen with Play button"/></td>
-      <td width="25%"><img src="screenshot-7-wishlist.png" alt="NoFlix watchlist of saved movies and TV shows"/></td>
+      <td width="20%"><img src="showcase/screenshot-1-home.png" alt="NoFlix home screen with upcoming and top-rated movies"/></td>
+      <td width="20%"><img src="showcase/screenshot-2-lists.png" alt="NoFlix popular movies and TV series lists"/></td>
+      <td width="20%"><img src="showcase/screenshot-3-details.png" alt="NoFlix movie details screen with Play and Trailer buttons"/></td>
+      <td width="20%"><img src="showcase/screenshot-4-search-filters.png" alt="NoFlix search with genre, year and rating filters"/></td>
+      <td width="20%"><img src="showcase/screenshot-5-wishlist.png" alt="NoFlix watchlist of saved movies and TV shows"/></td>
     </tr>
   </tbody>
 </table>
+
+![NoFlix full-screen ad-free player with subtitles](showcase/screenshot-6-player.png)
 
 ## FAQ
 
@@ -79,6 +105,9 @@ No. NoFlix works without sign-up or login.
 
 **Is NoFlix on the Google Play Store?**
 No. Download the APK from [GitHub Releases](https://github.com/zobaer53/NoFlix/releases/latest).
+
+**Can I use my own subtitles?**
+Yes. In the player, open the subtitles menu, tap **Upload .srt / .vtt** and pick the file from your phone. Built-in subtitle tracks are listed in the same menu.
 
 **Does NoFlix host any videos?**
 No. See the [disclaimer](#disclaimer) below.
@@ -95,7 +124,7 @@ NoFlix follows the [official Android architecture guidance](https://developer.an
 - **DataStore**, **Coil**, **Lottie**
 - **WebView** with an AdGuard-compatible ad-blocking engine (C++ via JNI)
 
-![NoFlix architecture diagram](architecture-1-overall.png)
+![NoFlix architecture diagram](showcase/architecture.png)
 
 ## Build from source
 
@@ -104,7 +133,7 @@ NoFlix follows the [official Android architecture guidance](https://developer.an
    ```properties
    API_KEY="yourApiKey"
    ```
-3. Install **CMake 3.10.2** and the **NDK** from *SDK Manager → SDK Tools* (needed by the native ad-block library; see [this Stack Overflow answer](https://stackoverflow.com/questions/71853200/cmake-3-10-2-not-found-in-sdk-path-or-by-cmake-dir-prop) if CMake isn't found).
+3. Install **CMake 3.22.1** and **NDK r28c** (`28.2.13676358`) from *SDK Manager → SDK Tools*. The native ad-block library needs them.
 4. Run `./gradlew :app:installDebug` or press Run in Android Studio.
 
 ## Contributing

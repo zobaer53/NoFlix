@@ -1,15 +1,20 @@
 package com.zobaer53.zedmovies.ui.webview
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
+import android.net.Uri
 import android.view.View
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,8 +50,18 @@ fun VideoWebView(
     var customViewCallback by remember { mutableStateOf<WebChromeClient.CustomViewCallback?>(null) }
     var pageUrl by remember { mutableStateOf(url) }
     var clearHistoryOnShowPage by remember { mutableStateOf<Int?>(null) }
+    var fileChooserCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
     val currentOnEpisodeOpened by rememberUpdatedState(onEpisodeOpened)
     val currentOnWatchProgress by rememberUpdatedState(onWatchProgress)
+
+    // The player's "Upload .srt / .vtt" button is an <input type="file">, which a WebView only
+    // opens through onShowFileChooser. Any file type is offered: Android has no MIME type for
+    // .srt/.ass, so the input's accept list would grey out the files it asks for. The callback
+    // must always be answered (null on cancel), or the input stops responding.
+    val fileChooser = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        fileChooserCallback?.onReceiveValue(uri?.let { arrayOf(it) })
+        fileChooserCallback = null
+    }
 
     // Videos (watch pages and full-screen players) play in landscape; every other page is
     // a phone layout, so it's locked to portrait. Unlocking instead would leave the app
@@ -173,6 +188,23 @@ fun VideoWebView(
                     override fun onHideCustomView() {
                         // Exit fullscreen mode here
                         hideCustomView()
+                    }
+
+                    override fun onShowFileChooser(
+                        webView: WebView?,
+                        filePathCallback: ValueCallback<Array<Uri>>?,
+                        fileChooserParams: FileChooserParams?
+                    ): Boolean {
+                        // Only one picker at a time: cancel a request that is still open.
+                        fileChooserCallback?.onReceiveValue(null)
+                        fileChooserCallback = filePathCallback
+                        return try {
+                            fileChooser.launch("*/*")
+                            true
+                        } catch (e: ActivityNotFoundException) {
+                            fileChooserCallback = null
+                            false
+                        }
                     }
                 }
 

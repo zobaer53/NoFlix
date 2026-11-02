@@ -22,12 +22,14 @@ const val STREAM_BRIDGE_NAME = "NoFlixBridge"
 
 // Runs in every stream-site frame before the site's own scripts.
 // - The site's welcome popup reads its flag once, when its scripts start, so it has to be set
-//   before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads).
+//   before they run (STREAM_PAGE_SCRIPT also sets it, but only after the page loads). The site
+//   now reads it from sessionStorage; localStorage is kept for older builds of the site.
 // - The top frame posts the site's resume data to the app whenever it changes. The player
 //   saves progress to localStorage, which the top frame posts via the bridge. Posts are coalesced to one a second.
 val STREAM_DOCUMENT_START_SCRIPT = """
 (function () {
   try {
+    sessionStorage.setItem('framextv_welcome_seen', 'true');
     localStorage.setItem('framextv_welcome_seen', 'true');
     var p = location.pathname || '';
     if (p.indexOf('/watch/') === 0 || p.indexOf('/embed') === 0) {
@@ -142,16 +144,16 @@ val STREAM_DOCUMENT_START_SCRIPT = """
 })();
 """
 
-// Hides the site's logo header, bottom menu bar and footer, plus the "Cast" and
-// "More Like This" sections (tagged nfx-hidden by the script below). On /watch/ and /embed/ pages
-// the player is stretched over the whole viewport so the video plays full screen.
-// Tailwind's h-screen uses 100vh which collapses to 0 inside Compose-hosted WebViews,
+// Hides the site's logo header, bottom menu bar and footer, the "Cast" and "More Like This"
+// sections, and the player menu's wallet items (the last two tagged nfx-hidden by the script below).
+// On /watch/ and /embed/ pages the player is stretched over the whole viewport so the video plays
+// full screen. Tailwind's h-screen uses 100vh which collapses to 0 inside Compose-hosted WebViews,
 // so explicit 100% height and fixed inset pinning are required.
 private const val STREAM_PAGE_CSS = """
 header.sticky.top-0,
 nav.fixed.bottom-0,
 #root footer,
-section.nfx-hidden { display: none !important; }
+.nfx-hidden { display: none !important; }
 
 html.nfx-watch, html.nfx-watch body {
   width: 100% !important;
@@ -189,7 +191,10 @@ html.nfx-watch iframe[data-testid="player-iframe"] {
 // changes are tracked through history.pushState/replaceState and popstate.
 val STREAM_PAGE_SCRIPT = """
 (function () {
-  try { localStorage.setItem('framextv_welcome_seen', 'true'); } catch (e) {}
+  try {
+    sessionStorage.setItem('framextv_welcome_seen', 'true');
+    localStorage.setItem('framextv_welcome_seen', 'true');
+  } catch (e) {}
   var d = document;
   if (!d.getElementById('nfx-style')) {
     var s = d.createElement('style');
@@ -201,13 +206,25 @@ val STREAM_PAGE_SCRIPT = """
     var p = location.pathname;
     d.documentElement.classList.toggle('nfx-watch', p.indexOf('/watch/') === 0 || p.indexOf('/embed') === 0);
   }
-  // These sections have no stable class names, so they are matched by heading text.
+  // These sections and menu items have no stable class names, so they are matched by text.
+  // The player's settings menu offers a token-gated "Download" and a "Connect Wallet" login,
+  // neither of which works in the app.
   function hideSections() {
     d.querySelectorAll('section h2, section h3').forEach(function (h) {
       if (/^(Cast\b|More Like This)/i.test(h.textContent.trim())) {
         h.closest('section').classList.add('nfx-hidden');
       }
     });
+    d.querySelectorAll('[role="menuitem"]').forEach(function (item) {
+      var label = item.querySelector('span');
+      if (label && /^(Download|Connect Wallet)$/i.test(label.textContent.trim())) {
+        item.classList.add('nfx-hidden');
+      }
+    });
+    // Fallback for the welcome popup if the site stops honouring the flag set above: press its
+    // "Continue" button, which closes it and records the dismissal like a user tap would.
+    var welcome = d.querySelector('[data-testid="welcome-modal"] [data-testid="welcome-continue-btn"]');
+    if (welcome) welcome.click();
   }
   sync();
   hideSections();
