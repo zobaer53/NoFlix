@@ -6,6 +6,8 @@
 cairosvg needs the cairo library (macOS: brew install cairo; may need
 DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib).
 """
+import shutil
+
 from PIL import Image
 import render
 import social
@@ -30,7 +32,11 @@ render.masked(192, 0.24).save(f"{WEB}/icon-192.png", optimize=True)
 render.masked(512, 0.24).save(f"{WEB}/icon-512.png", optimize=True)
 render.masked(180, 0).save(f"{WEB}/apple-touch-icon.png", optimize=True)
 render.masked(32, 0.24).save(f"{WEB}/favicon-32.png", optimize=True)
-# Website gallery, from the phone screenshots in showcase/.
+# Website gallery, from the phone screenshots in showcase/. GitHub Pages only serves docs/,
+# so the demo video is copied there too.
 for name in ("screenshot-1-home", "screenshot-2-lists", "screenshot-3-details", "screenshot-5-wishlist"):
     shot = Image.open(f"{SHOWCASE}/{name}.png").convert("RGB")
     shot.resize((432, 960), Image.LANCZOS).save(f"{WEB}/{name}.webp", quality=80, method=6)
+player = Image.open(f"{SHOWCASE}/screenshot-6-player.png").convert("RGB")
+player.resize((1200, 540), Image.LANCZOS).save(f"{WEB}/screenshot-6-player.webp", quality=80, method=6)
+shutil.copyfile(f"{SHOWCASE}/demo.mp4", f"{WEB}/demo.mp4")

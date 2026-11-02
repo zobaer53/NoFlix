@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NoFlix – Ad-Free Movies &amp; TV Series App for Android (Free APK)</title>
   <meta name="description" content="NoFlix is a free, open-source Android app to watch movies and TV series without ads, pop-ups or trackers. Built-in ad blocker, full-screen player, no sign-up. Download the APK.">
-  <meta name="keywords" content="ad free movies app, ad-free TV series app, watch movies without ads, free movie streaming app Android, no ads movie app APK, adblock movie player, open source Netflix alternative">
+  <meta name="keywords" content="ad free movies app, ad-free TV series app, watch movies without ads, free movie streaming app Android, no ads movie app APK, adblock movie player, movie app with subtitles, open source Netflix alternative">
   <meta name="theme-color" content="#1F1D2B">
   <meta name="google-site-verification" content="2Sm7QRIr3yZXo1Sx1q1oUcs1KKkrUul8AuvTgGyvFMk">
   <link rel="canonical" href="https://zobaer53.github.io/NoFlix/">
@@ -40,10 +40,16 @@
     "description": "Free, open-source Android app to watch movies and TV series without ads, pop-ups or trackers.",
     "applicationCategory": "EntertainmentApplication",
     "operatingSystem": "Android 8.0 or later",
+    "softwareVersion": "3.0.4",
+    "datePublished": "2026-11-02",
     "url": "https://zobaer53.github.io/NoFlix/",
     "downloadUrl": "https://github.com/zobaer53/NoFlix/releases/latest/download/NoFlix.apk",
     "image": "https://zobaer53.github.io/NoFlix/assets/icon-512.png",
-    "screenshot": "https://zobaer53.github.io/NoFlix/assets/screenshot-1-home.webp",
+    "screenshot": [
+      "https://zobaer53.github.io/NoFlix/assets/screenshot-1-home.webp",
+      "https://zobaer53.github.io/NoFlix/assets/screenshot-3-details.webp",
+      "https://zobaer53.github.io/NoFlix/assets/screenshot-6-player.webp"
+    ],
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "isAccessibleForFree": true,
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -171,6 +177,28 @@
     .faq details[open] summary::after { content: "–"; }
     .faq p { margin: 12px 0 0; color: var(--muted); }
 
+    .release { background: var(--surface); border-radius: var(--radius); padding: 28px; border: 1px solid rgba(18, 205, 217, .25); margin-bottom: 28px; }
+    .release-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 16px; }
+    .release-head h3 { color: var(--text); font-size: 1.3rem; margin: 0; }
+    .pill { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: .8rem; font-weight: 600; background: rgba(18, 205, 217, .15); color: var(--accent); }
+    .release ul { margin: 0 0 18px; padding-left: 20px; }
+    .release li { margin-bottom: 8px; }
+    .release li strong { color: var(--text); }
+    .release .btn { padding: 12px 20px; font-size: .95rem; }
+    .versions-wrap { overflow-x: auto; }
+    .versions { width: 100%; border-collapse: collapse; font-size: .95rem; min-width: 560px; }
+    .versions th, .versions td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(255, 255, 255, .07); vertical-align: top; }
+    .versions th { color: var(--text); font-weight: 600; }
+    .versions td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+    .versions .yes { color: var(--accent); font-weight: 600; }
+    .versions .warn { color: #F5B544; font-weight: 600; }
+
+    .demo { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 36px; align-items: center; margin-top: 40px; }
+    .demo video { width: 100%; border-radius: 22px; border: 1px solid rgba(255, 255, 255, .08); background: #000; }
+    .demo figure { margin: 0; }
+    .demo figure img { border-radius: 18px; border: 1px solid rgba(255, 255, 255, .08); }
+    .demo figcaption { color: var(--muted); font-size: .85rem; text-align: center; margin-top: 10px; }
+
     .alt { background: #1A1825; }
     .disclaimer { color: var(--muted); font-size: .9rem; max-width: 820px; }
     footer { padding: 32px 0 48px; color: var(--muted); font-size: .9rem; border-top: 1px solid rgba(255, 255, 255, .06); }
@@ -183,7 +211,16 @@
       .features { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
       .shots { grid-template-columns: repeat(2, 1fr); }
       .steps { grid-template-columns: 1fr; }
+      .demo { grid-template-columns: 1fr; }
+      .demo video { max-width: 300px; margin-inline: auto; }
       .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .versions { min-width: 0; }
+      .versions thead { display: none; }
+      .versions tr { display: block; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, .07); }
+      .versions td { display: block; border: 0; padding: 2px 0; }
+      .versions td:nth-child(2) { color: var(--muted); font-size: .85rem; }
     }
   </style>
 </head>
@@ -193,6 +230,7 @@
       <nav class="nav" aria-label="Main">
         <a class="brand" href="./"><img src="assets/icon-192.png" alt="" width="36" height="36">NoFlix</a>
         <div class="nav-links">
+          <a href="#whats-new">What's new</a>
           <a href="#features">Features</a>
           <a href="#install">Install</a>
           <a href="#faq">FAQ</a>
@@ -215,7 +253,7 @@
               View on GitHub
             </a>
           </div>
-          <p class="note">Android 8.0+ · Apache 2.0 license · Updated automatically on every release</p>
+          <p class="note"><a href="#whats-new">Latest version 3.0.4</a> · Android 8.0+ · Apache 2.0 license</p>
         </div>
         <div class="phones">
           <div class="phone"><img src="assets/screenshot-1-home.webp" alt="NoFlix home screen showing upcoming and top-rated movies" width="432" height="960" fetchpriority="high"></div>
@@ -226,7 +264,43 @@
   </header>
 
   <main>
-    <section id="features">
+    <section id="whats-new">
+      <div class="wrap">
+        <h2>What's new</h2>
+        <p class="section-lead">Every release, and whether you should install it.</p>
+        <article class="release">
+          <div class="release-head">
+            <h3>NoFlix 3.0.4</h3>
+            <span class="pill">Recommended update</span>
+            <span class="note">Released 2 November 2026</span>
+          </div>
+          <ul>
+            <li><strong>Upload your own subtitles.</strong> In the player's subtitle menu, <em>Upload .srt / .vtt</em> now opens your phone's files, and the subtitle you pick shows on the video (<a href="https://github.com/zobaer53/NoFlix/issues/3">#3</a>, <a href="https://github.com/zobaer53/NoFlix/issues/4">#4</a>).</li>
+            <li><strong>No more ad redirects.</strong> Ads can no longer send the player to other websites.</li>
+          </ul>
+          <p>Install it over your current version. Your watchlist and history are kept.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/zobaer53/NoFlix/releases/latest/download/NoFlix.apk">Download 3.0.4</a>
+            <a class="btn btn-secondary" href="https://github.com/zobaer53/NoFlix/releases/tag/3.0.4">Release notes</a>
+          </div>
+        </article>
+        <div class="versions-wrap">
+          <table class="versions">
+            <thead><tr><th scope="col">Version</th><th scope="col">Released</th><th scope="col">What changed</th><th scope="col">Should you update?</th></tr></thead>
+            <tbody>
+              <tr><td>3.0.4</td><td>2 Nov 2026</td><td>Subtitle upload works; ads can't redirect the player</td><td class="yes">Yes, everyone</td></tr>
+              <tr><td>3.0.3</td><td>22 Oct 2026</td><td>Smoother playback: the video fills the screen, and the watch position is saved more reliably</td><td>Update to 3.0.4</td></tr>
+              <tr><td>3.0.2</td><td>18 Oct 2026</td><td>TV shows resume at the last episode you watched</td><td>Update to 3.0.4</td></tr>
+              <tr><td>3.0.1</td><td>14 Oct 2026</td><td>Search filters (genre, year, rating and more) and a refreshed light theme</td><td>Update to 3.0.4</td></tr>
+              <tr><td>3.0.0</td><td>14 Oct 2026</td><td>Android 17 support, YouTube trailers, crash and freeze fixes; needs Android 8.0+</td><td>Update to 3.0.4</td></tr>
+              <tr><td>2.0.2 or older</td><td>2023</td><td>Signed with an old key</td><td class="warn">Uninstall it first, then install 3.0.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="alt">
       <div class="wrap">
         <h2>An ad-free way to stream movies and TV shows</h2>
         <p class="section-lead">Everything you need to find something to watch, and nothing you don't.</p>
@@ -248,8 +322,8 @@
           </article>
           <article class="feature">
             <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
-            <h3>Search</h3>
-            <p>Find any movie or TV show by title in seconds.</p>
+            <h3>Search &amp; filters</h3>
+            <p>Find any movie or TV show by title, or browse by genre, year and rating.</p>
           </article>
           <article class="feature">
             <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8Z"/></svg></div>
@@ -261,11 +335,26 @@
             <h3>Private by design</h3>
             <p>No account, no sign-up and no analytics. Lists are cached so you can browse offline.</p>
           </article>
+          <article class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 12h4m4 0h4M6 15h8"/></svg></div>
+            <h3>Subtitles</h3>
+            <p>Pick a built-in subtitle track, or upload your own <code>.srt</code> or <code>.vtt</code> file from your phone.</p>
+          </article>
+          <article class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg></div>
+            <h3>Resume where you left off</h3>
+            <p>TV shows reopen at the last episode you watched, and the details screen shows how much is left.</p>
+          </article>
+          <article class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5m8-5v5"/><path d="m10 12 4 2.5-4 2.5v-5Z"/></svg></div>
+            <h3>Trailers</h3>
+            <p>Watch the YouTube trailer right from the details screen before you press Play.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="alt" aria-labelledby="screens-title">
+    <section aria-labelledby="screens-title">
       <div class="wrap">
         <h2 id="screens-title">Screenshots</h2>
         <p class="section-lead">A clean, modern interface built with Jetpack Compose and Material 3.</p>
@@ -275,10 +364,14 @@
           <figure><img src="assets/screenshot-3-details.webp" alt="NoFlix movie details with cast and Play button" width="432" height="960" loading="lazy"><figcaption>Details</figcaption></figure>
           <figure><img src="assets/screenshot-5-wishlist.webp" alt="NoFlix watchlist of saved titles" width="432" height="960" loading="lazy"><figcaption>Watchlist</figcaption></figure>
         </div>
+        <div class="demo">
+          <video src="assets/demo.mp4" poster="assets/screenshot-1-home.webp" width="300" height="667" controls muted loop playsinline preload="none" aria-label="NoFlix demo: browse, open details, play, search with filters and the watchlist"></video>
+          <figure><img src="assets/screenshot-6-player.webp" alt="NoFlix full-screen ad-free player with subtitles" width="1200" height="540" loading="lazy"><figcaption>Full-screen player with subtitles</figcaption></figure>
+        </div>
       </div>
     </section>
 
-    <section id="install">
+    <section id="install" class="alt">
       <div class="wrap">
         <h2>How to install NoFlix</h2>
         <p class="section-lead">NoFlix isn't on the Play Store. Install the signed APK from GitHub in under a minute.</p>
@@ -287,10 +380,11 @@
           <li><strong>Allow the install</strong><br>Open the file and allow <em>Install unknown apps</em> for your browser if Android asks.</li>
           <li><strong>Press Play</strong><br>Open NoFlix, pick a movie or TV series and tap Play. No ads, no pop-ups.</li>
         </ol>
+        <p class="note" style="margin-top:20px">Updating? Install the new APK over the old one; your watchlist is kept. Coming from 2.0.2 or older? Uninstall that first, because newer releases are signed with a new key.</p>
       </div>
     </section>
 
-    <section id="faq" class="alt">
+    <section id="faq">
       <div class="wrap">
         <h2>Frequently asked questions</h2>
         <p class="section-lead">Quick answers about NoFlix.</p>
@@ -305,7 +399,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="disclaimer-title">
+    <section class="alt" aria-labelledby="disclaimer-title">
       <div class="wrap">
         <h2 id="disclaimer-title">Disclaimer</h2>
         <p class="disclaimer">NoFlix does not host, upload or store any video files. Movie and TV metadata comes from the TMDB API, and playback loads publicly available third-party web pages. This product uses the TMDB API but is not endorsed or certified by TMDB. You are responsible for complying with the laws in your country.</p>
