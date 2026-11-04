@@ -26,18 +26,19 @@
 
 ## What's new: should I update?
 
-> **Latest: [v3.0.4](https://github.com/zobaer53/NoFlix/releases/latest) (2 Nov 2026). Recommended for everyone.**
-> You can now upload your own subtitles in the player, and ads can no longer redirect the player to other websites.
+> **Latest: [v3.0.5](https://github.com/zobaer53/NoFlix/releases/latest) (4 Nov 2026). Recommended for everyone.**
+> If the player crashes, it reloads instead of closing the app, and the download is less than half the size.
 > [Download the APK](https://github.com/zobaer53/NoFlix/releases/latest/download/NoFlix.apk) and install it over your current version. Your watchlist and history are kept.
 
 | Version | Released | What changed | Should you update? |
 | --- | --- | --- | --- |
-| **3.0.4** | 2 Nov 2026 | **Fix:** "Upload .srt / .vtt" in the player's subtitle menu now opens your phone's files ([#3](https://github.com/zobaer53/NoFlix/issues/3), [#4](https://github.com/zobaer53/NoFlix/issues/4)). Ads can no longer redirect the player to other websites. | ✅ **Yes**, everyone |
-| 3.0.3 | 22 Oct 2026 | Smoother playback: the video fills the screen, and the watch position is saved more reliably | Update to 3.0.4 |
-| 3.0.2 | 18 Oct 2026 | TV shows resume at the last episode you watched | Update to 3.0.4 |
-| 3.0.1 | 14 Oct 2026 | Search filters (genre, year, rating and more) and a refreshed light theme | Update to 3.0.4 |
-| 3.0.0 | 14 Oct 2026 | Android 17 support, YouTube trailers, crash and freeze fixes; needs Android 8.0+ | Update to 3.0.4 |
-| 2.0.2 or older | 2023 | Signed with an old key | ⚠️ **Uninstall it first**, then install 3.0.4 (Android can't update across keys) |
+| **3.0.5** | 4 Nov 2026 | **Fix:** if the player crashes, it reloads the video instead of closing the whole app. The APK is less than half the size (about 7 MB instead of 16 MB). | ✅ **Yes**, everyone |
+| 3.0.4 | 2 Nov 2026 | "Upload .srt / .vtt" in the player's subtitle menu now opens your phone's files ([#3](https://github.com/zobaer53/NoFlix/issues/3), [#4](https://github.com/zobaer53/NoFlix/issues/4)). Ads can no longer redirect the player to other websites. | Update to 3.0.5 |
+| 3.0.3 | 22 Oct 2026 | Smoother playback: the video fills the screen, and the watch position is saved more reliably | Update to 3.0.5 |
+| 3.0.2 | 18 Oct 2026 | TV shows resume at the last episode you watched | Update to 3.0.5 |
+| 3.0.1 | 14 Oct 2026 | Search filters (genre, year, rating and more) and a refreshed light theme | Update to 3.0.5 |
+| 3.0.0 | 14 Oct 2026 | Android 17 support, YouTube trailers, crash and freeze fixes; needs Android 8.0+ | Update to 3.0.5 |
+| 2.0.2 or older | 2023 | Signed with an old key | ⚠️ **Uninstall it first**, then install 3.0.5 (Android can't update across keys) |
 
 Proof of the subtitle fix, recorded on a Pixel 6a: [video](showcase/fixes/subtitle-upload-fix.mp4). Every release is listed on the [Releases page](https://github.com/zobaer53/NoFlix/releases).
 
