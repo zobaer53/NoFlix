@@ -2,6 +2,7 @@ package com.zobaer53.zedmovies.ui.webview
 
 import android.graphics.Bitmap
 import android.util.Log
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -11,7 +12,8 @@ import io.github.edsuns.adfilter.AdFilter
 
 class MyWebClient(
     private val onUrlChange: (String) -> Unit = {},
-    private val onPageLoaded: (WebView, String) -> Unit = { _, _ -> }
+    private val onPageLoaded: (WebView, String) -> Unit = { _, _ -> },
+    private val onRendererGone: (WebView) -> Unit = {}
 ) : WebViewClient() {
 
     private val filter = AdFilter.get()
@@ -52,6 +54,15 @@ class MyWebClient(
 
     override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
         url?.let(onUrlChange)
+    }
+
+    // The renderer can die (a Chromium crash, or the system reclaiming its memory). Returning
+    // false kills the whole app; returning true keeps it alive, but this WebView is unusable
+    // from now on and must be removed and destroyed, which onRendererGone arranges.
+    override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
+        Log.w("NoFlixWebView", "renderer gone, crashed=${detail?.didCrash()}")
+        view?.let(onRendererGone)
+        return true
     }
 
     private fun injectStreamPageStyle(view: WebView?, url: String?) {
