@@ -21,6 +21,9 @@ android {
         // To start a new minor/major line, raise versionName here; CI releases it next.
         versionCode project.hasProperty("appVersionCode") ? project.property("appVersionCode").toInteger() : 3
         versionName project.findProperty("appVersionName") ?: "3.0.0"
+        // -PappIdSuffix=.test installs a test build next to a real install without touching
+        // its data (the Maestro flows expect the plain id, so don't use it for run.sh).
+        if (project.hasProperty("appIdSuffix")) applicationIdSuffix project.property("appIdSuffix")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -49,8 +52,12 @@ android {
             if (signingConfigs.release.storeFile != null) {
                 signingConfig signingConfigs.release
             }
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // R8 code + resource shrinking with proguard-android-optimize.txt (AGP 9.3+ DSL).
+            // Deobfuscate stack traces with build/outputs/mapping/release/mapping.txt.
+            optimization {
+                enable = true
+            }
+            proguardFiles 'proguard-rules.pro'
         }
     }
     compileOptions {

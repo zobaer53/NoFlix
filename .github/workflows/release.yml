@@ -100,6 +100,11 @@ jobs:
           "$apksigner" verify --print-certs "$apk" | grep -q "CN=zeD, O=NoFlix"
           cp "$apk" NoFlix.apk
 
+      # R8 obfuscates release builds; crash stack traces from this APK can only be read with
+      # its mapping file (retrace NoFlix-mapping.txt trace.txt). Missing means R8 didn't run.
+      - name: Keep the R8 mapping file
+        run: cp app/build/outputs/mapping/release/mapping.txt NoFlix-mapping.txt
+
       # Android 15+ devices with 16 KB memory pages need 16 KB-aligned native libraries;
       # otherwise the app runs in compat mode and shows a warning.
       - name: Check 16 KB page-size alignment
@@ -119,7 +124,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ steps.version.outputs.name }}" NoFlix.apk \
+          gh release create "${{ steps.version.outputs.name }}" NoFlix.apk NoFlix-mapping.txt \
             --target "$GITHUB_SHA" \
             --title "v${{ steps.version.outputs.name }}" \
             --generate-notes
