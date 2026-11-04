@@ -149,4 +149,5 @@
         <item quantity="one">%1$s isn\'t a TV genre on TMDB</item>
         <item quantity="other">%1$s aren\'t TV genres on TMDB</item>
     </plurals>
+    <string name="player_renderer_crashed">The player stopped working. Try again.</string>
 </resources>

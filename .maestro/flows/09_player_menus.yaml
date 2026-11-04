@@ -46,9 +46,7 @@ name: 09_player_menus
 - assertNotVisible: "Connect Wallet.*"
 - assertNotVisible: "Download.*"
 - tapOn: "Close settings"
-- tapOn:
-    point: "80%,93%"
-- tapOn: "Upload custom subtitle file"
+- runFlow: ../subflows/open_subtitle_upload.yaml
 - extendedWaitUntil:
     visible:
       id: "com.google.android.documentsui:id/.*"
@@ -60,9 +58,7 @@ name: 09_player_menus
     notVisible:
       id: "com.google.android.documentsui:id/.*"
     timeout: 10000
-- tapOn:
-    point: "80%,93%"
-- tapOn: "Upload custom subtitle file"
+- runFlow: ../subflows/open_subtitle_upload.yaml
 - extendedWaitUntil:
     visible:
       id: "com.google.android.documentsui:id/.*"

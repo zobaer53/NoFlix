@@ -1,21 +1,12 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# App-specific R8 rules. Libraries (Retrofit, kotlinx-serialization, Room, Hilt, WorkManager,
+# the ad-filter modules) ship their own consumer rules; add a rule here only for code that
+# is reached by name at runtime (reflection, JNI, JS bridges).
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Readable line numbers in release stack traces (deobfuscate them with mapping.txt).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Retrofit services return ZedMoviesResult<T> (suspend functions see it through Continuation's
+# signature) and ResultAdapterFactory reads T by reflection. R8 full mode strips the generic
+# signature of a type no keep rule covers, so T became Void and every body came back null.
+-keep,allowobfuscation,allowshrinking class com.zobaer53.zedmovies.data.common.result.ZedMoviesResult

@@ -1,0 +1,26 @@
+# Opens the player's subtitle menu and taps "Upload custom subtitle file". The item is the last
+# entry of the menu, so on titles with many subtitle tracks it is scrolled out of view. Maestro's
+# scrollUntilVisible swipes the middle of the screen (the video), so the swipes go inside the menu,
+# which sits on the right above the control bar. A clipped item can already count as visible
+# while it's still behind the control bar, so one more swipe brings it fully into the menu.
+appId: com.zobaer53.zedmovies
+---
+- tapOn:
+    point: "80%,93%"
+- extendedWaitUntil:
+    visible: "Subtitles.*|SUBTITLES|Upload custom subtitle file"
+    timeout: 10000
+- repeat:
+    while:
+      notVisible: "Upload custom subtitle file"
+    times: 20
+    commands:
+      - swipe:
+          start: "70%,75%"
+          end: "70%,35%"
+          duration: 400
+- swipe:
+    start: "70%,75%"
+    end: "70%,35%"
+    duration: 400
+- tapOn: "Upload custom subtitle file"
