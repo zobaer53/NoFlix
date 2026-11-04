@@ -35,6 +35,13 @@ Requirements:
 
 `.github/workflows/release.yml` runs on every push to `master` (except pushes that only touch `docs/`, `tools/` or Markdown): it computes the next version (latest `X.Y.Z` git tag with patch +1, or `versionName` from `app/build.gradle` if that is higher), passes `-PappVersionCode`/`-PappVersionName` to Gradle (versionCode = `X*10000 + Y*100 + Z`), verifies the APK is signed with the release cert (`CN=zeD, O=NoFlix`) and that it's 16 KB page-size aligned (`zipalign -P 16` + `llvm-objdump` on every 64-bit `.so`), and publishes a GitHub release with `NoFlix.apk` and `NoFlix-mapping.txt` (the R8 mapping for retracing that release's stack traces). To start a new minor/major line, bump `versionName` in `app/build.gradle`. Pushing to `master` therefore ships a public release.
 
+To decode a crash from a release, save the stack trace to `trace.txt` and run `retrace` (in `$ANDROID_HOME/cmdline-tools/latest/bin/`) with that release's mapping file. A different release's mapping gives wrong names.
+
+```bash
+gh release download X.Y.Z --pattern NoFlix-mapping.txt
+retrace NoFlix-mapping.txt trace.txt
+```
+
 The root `.gitignore` ignores `/app/` (existing files are tracked anyway), so new files under `app/` must be added with `git add -f`.
 
 `docs/` is the GitHub Pages site (https://zobaer53.github.io/NoFlix/) served from `master` `/docs`: a single static `index.html` with SEO meta tags and JSON-LD, plus `sitemap.xml`/`robots.txt`. Keep its FAQ text in sync with the README's FAQ and the `FAQPage` JSON-LD in the same file, and on every release update its "What's new" section, hero version note and `softwareVersion` to match the README's "What's new" table. `generate.py` also writes the site's screenshots and copies `showcase/demo.mp4` to `docs/assets/` (Pages only serves `docs/`).
